@@ -21,6 +21,7 @@
                             <th>Exam Name</th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th>Exam Mode</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -32,12 +33,30 @@
                             <tr>
                                 <td></td>
                                 <td><?php echo $exam->em_name; ?></td>
-                                <td><?php echo date_formats($exam->em_start_time); ?></td>
+                                <td><?php echo date_formats($exam->em_date); ?></td>
                                 <td><?php echo date_formats($exam->em_end_time); ?></td>
+                                <td>
+                                    <?php
+                                    if($exam->exam_mode=="mcq")
+                                    {
+                                        ?>
+                                    <a href="#"><span class="label label-primary mr6 mb6">
+                                            <i class="fa fa-pencil"></i>MCQ</span></a>
+                                    <?php
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                    <a href="#"><span class="label label-primary mr6 mb6">
+                                            <i class="fa fa-pencil"></i>Written</span></a>
+                                    <?php
+                                    }
+                                    ?>
+                                </td>
                                 <td>
                                     <a href="<?php echo base_url('exam/exam_schedule/' . $exam->em_id); ?>"><span class="label label-primary mr6 mb6">
                                             <i class="fa fa-pencil"></i>Schedule</span></a>
-                                </td>
+                                 </td>
                             </tr>
                         <?php } ?>
                     </tbody>

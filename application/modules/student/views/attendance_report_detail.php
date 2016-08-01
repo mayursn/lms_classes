@@ -9,8 +9,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Class Date</th>
-                            <th>Time</th>
+                            <th>Class Date</th>                            
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -21,10 +20,7 @@
                         <?php foreach ($report as $row) { ?>
                             <tr>
                                 <td><?php echo $counter++; ?></td>
-                                <td><?php echo date('d-m-Y', strtotime($row->date_taken)); ?></td>
-                                <td>
-                                    <?php echo date('h:i A', strtotime($row->Start)) . ' - ' . date('h:i A', strtotime($row->End)); ?>
-                                </td>
+                                <td><?php echo date_formats($row->date_taken); ?></td>
                                 <td>
                                     <?php
                                     if ($row->is_present)

@@ -29,8 +29,9 @@
 
                                     <td>
                                         <?php
-                                        $user_ids = explode(',', $row->email_to);
+                                        $user_ids = explode(',', $row->email_to);                                        
                                         if(count($user_ids) > 1) {
+                                            
                                             $user = $this->user_model->get($user_ids[0]);
                                             echo $user->first_name . ' ' . $user->last_name . '...';
                                         } else {
@@ -46,7 +47,7 @@
                                     </td>
                                     <td class="menu-action">
                                         <a href="<?php echo base_url('email/view_sent/' . $row->email_id); ?>"><span class="label label-primary mr6 mb6"><i class="fa fa-desktop" ></i>View</span></a>
-                                        <a href="<?php echo base_url('email/delete/' . $row->email_id) ?>" onclick="return confirm('Are you sure to delete this email?');"><span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span></a>
+                                        <a href="<?php echo base_url('email/sentdelete/' . $row->email_id) ?>" onclick="return confirm('Are you sure to delete this email?');"><span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span></a>
                                     </td>
                                 </tr>
 

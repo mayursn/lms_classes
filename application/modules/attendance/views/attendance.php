@@ -10,27 +10,27 @@
                         <h4>Class Routine Details</h4>
                         <table class="table table-condensed ex1">
                             <tr>
-                                <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Department</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $department_name; ?></td>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Branch</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $branch_name; ?></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $branch_name->branch_name; ?></td>
+                                <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Course</strong></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $course_name->c_name; ?></td>
                             </tr>
                             <tr>
-                                <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Semester</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $semester_name; ?></td>
+                                <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Admission Plan</strong></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $admission_duration->admission_duration; ?></td>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Class</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $class_name_detail; ?></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $class_name->class_name; ?></td>
                             </tr>
                             <tr>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Subject</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $subject_name; ?></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $subject_name->subject_name; ?></td>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Date</strong></td>
                                 <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo date('M d, Y', strtotime($date)); ?></td>
                             </tr>
-                            <tr>
+                            <tr style="display: none;">
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Time</strong></td>
                                 <td colspan="3" class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <?php echo date('h:i A', strtotime($start_time)) . ' - ' . date('h:i A', strtotime($end_time)); ?>
+                                    <?php //echo date('h:i A', strtotime($start_time)) . ' - ' . date('h:i A', strtotime($end_time)); ?>
                                 </td>
                             </tr>
                         </table>
@@ -41,14 +41,12 @@
                             <br/>
                             <form method="post" action="<?php echo base_url(); ?>attendance/take_class_routine_attendance"
                                   class="form-groups-bordered">
-                                <input type="hidden" name="department" value="<?php echo $department; ?>"/>
-                                <input type="hidden" name="branch" value="<?php echo $branch; ?>"/>
-                                <input type="hidden" name="batch" value="<?php echo $batch; ?>"/>
-                                <input type="hidden" name="semester" value="<?php echo $semester; ?>"/>
-                                <input type="hidden" name="class" value="<?php echo $class_name; ?>"/>
-                                <input type="hidden" name="professor" value="<?php echo $professor; ?>"/>
-                                <input type="hidden" name="class_routine" value="<?php echo $class_routine; ?>"/>
+                                <input type="hidden" name="branch" value="<?php echo $branch_name->branch_id; ?>"/>
+                                <input type="hidden" name="course" value="<?php echo $course_name->course_id; ?>"/>
+                                <input type="hidden" name="admission_plan" value="<?php echo $admission_duration->admission_plan_id; ?>"/>
+                                <input type="hidden" name="class" value="<?php echo $class_name->class_id; ?>"/>                                                                                                
                                 <input type="hidden" name="date" value="<?php echo $date; ?>"/>
+                                <input type="hidden" name="subject" value="<?php echo $subject_name->sm_id; ?>"/>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div class="panel-title">
@@ -74,7 +72,7 @@
                                                         <td><?php echo $row->std_roll; ?></td>
                                                         <td><?php echo $row->std_first_name . ' ' . $row->std_last_name; ?></td>
                                                         <?php
-                                                        $status = $this->Crud_model->check_attendance_status($department, $branch, $batch, $semester, $class_name, $class_routine, $date, $row->std_id);
+                                                        $status = $this->Crud_model->check_attendance_status($branch_name->branch_id, $course_name->course_id, $admission_duration->admission_plan_id, $class_name->class_id, $date, $row->std_id);
                                                         ?>
                                                         <td>
                                                             <?php if (isset($status)) { ?>

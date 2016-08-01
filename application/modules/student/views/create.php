@@ -2,9 +2,11 @@
 $this->load->model('department/Degree_model');
 $this->load->model('admission_type/Admission_type_model');
 $this->load->model('classes/Class_model');
+$this->load->model('branch/Branch_location_model');
+$this->load->model('courses/Course_model');
 
-$department = $this->Degree_model->order_by_column('d_name');
-$admission_type = $this->Admission_type_model->order_by_column('at_name');
+$branch = $this->Branch_location_model->order_by_column('branch_name');
+$course = $this->Course_model->order_by_column('c_name');
 $class = $this->Class_model->order_by_column('class_name');
 ?>
 <div class=row>                      
@@ -52,25 +54,7 @@ $class = $this->Class_model->order_by_column('class_name');
                         <div class="col-sm-5">
                             <label for="gen" class="error"></label></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Parent Name"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="parentname" id="parentname"  />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Parent Contact No"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="parentcontact" id="parentcontact"  />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Parent Email Id"); ?><span style="color:red"></span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="parent_email_id" id="parent_email_id"  />
-                            <span id="emailerror" style="color: red"></span>
-                        </div>
-                    </div>
+                    
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><?php echo ucwords("Address"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
@@ -95,54 +79,38 @@ $class = $this->Class_model->order_by_column('class_name');
                             <input type="text" class="form-control datepicker-normal" name="birthdate"/>
                         </div>
                     </div>	
+                    	
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Marital Status"); ?></label>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
-                            <select name="maritalstatus" class="form-control" id="maritalstatus">
+                            <select name="branch" class="form-control" id="create-branch">
                                 <option value="">Select</option>
-                                <option value="single">Single</option>
-                                <option value="married">Married</option>
-                                <option value="separated">Separated</option>
-                                <option value="widowed">Widowed</option>
-                            </select>
-                        </div>
-                    </div>	
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <select name="degree" class="form-control" id="degree">
-                                <option value="">Select</option>
-                                <?php foreach ($department as $row) { ?>
-                                    <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                                <?php foreach ($branch as $row) { ?>
+                                    <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                                 <?php } ?>                                
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
-                            <select name="course" class="form-control" id="course">
+                            <select name="course" class="form-control" id="create-course">
                                 <option value="">Select</option>
+                                <?php foreach($course as $rowcourse): ?>
+                                <option value="<?php echo $rowcourse->course_id; ?>"><?php echo $rowcourse->c_name; ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Batch"); ?><span style="color:red">*</span></label>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
-                            <select name="batch" class="form-control" id="batch">
+                            <select name="admission_plan" class="form-control" id="create-admission_plan">
                                 <option value="">Select</option>
                             </select>
                         </div>
                     </div>	
 
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <select name="semester" class="form-control" id="semester">
-                                <option value="">Select</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><?php echo ucwords("class"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
@@ -160,30 +128,8 @@ $class = $this->Class_model->order_by_column('class_name');
                             <input type="text" class="form-control" name="mobileno" id="mobileno" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Facebook URL"); ?></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="facebook" id="facebook" />
-                        </div>
-                    </div>	
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Twitter URL"); ?></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="twitter" id="twitter" />
-                        </div>
-                    </div>	
-                   	
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Type"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <select name="admissiontype" class="form-control" id="admissiontype">
-                                <option value="">Select</option>
-                                <?php foreach ($admission_type as $row) { ?>
-                                    <option value="<?php echo $row->at_id; ?>"><?php echo $row->at_name; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
+                    
+                    
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><?php echo ucwords("Profile Photo"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
@@ -219,62 +165,34 @@ $class = $this->Class_model->order_by_column('class_name');
     </div>
 </div>
 <script type="text/javascript">
-    $('#degree').on('change', function () {
-        var department_id = $(this).val();
-        department_branch(department_id);
-    });
-    $('#course').on('change', function () {
+    $('#branch').on('change', function () {
         var branch_id = $(this).val();
-        var department = $('#degree').val();
-        batch_from_department_branch(department, branch_id);
-        semester_from_branch(branch_id);
+       // get_branch(department_id);
     });
-
-    function department_branch(department_id) {
-        $('#course').find('option').remove().end();
-        $('#course').append('<option value>Select</option>');
+    $('#create-course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);
+        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#create-admission_plan').find('option').remove().end();
+        $('#create-admission_plan').append('<option value>Select</option>');
         $.ajax({
-            url: '<?php echo base_url(); ?>branch/department_branch/' + department_id,
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
             type: 'GET',
             success: function (content) {
-                var branch = jQuery.parseJSON(content);
-                console.log(branch);
-                $.each(branch, function (key, value) {
-                    $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#create-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
                 });
             }
         });
     }
-
-    function batch_from_department_branch(department, branch) {
-        $('#batch').find('option').remove().end();
-        $('#batch').append('<option value>Select</option>');
-        $.ajax({
-            type: "GET",
-            url: "<?php echo base_url(); ?>batch/department_branch_batch/" + department + '/' + branch,
-            success: function (response) {
-                var branch = jQuery.parseJSON(response);
-                $.each(branch, function (key, value) {
-                    $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                });
-            }
-        });
-    }
-
-    function semester_from_branch(branch) {
-        $('#semester').find('option').remove().end();
-        $('#semester').append('<option value>Select</option>');
-        $.ajax({
-            url: '<?php echo base_url(); ?>semester/semester_branch/' + branch,
-            type: 'GET',
-            success: function (content) {
-                var semester = jQuery.parseJSON(content);
-                $.each(semester, function (key, value) {
-                    $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                });
-            }
-        });
-    }
+    
 
     $.validator.setDefaults({
         submitHandler: function (form) {
@@ -285,6 +203,7 @@ $class = $this->Class_model->order_by_column('class_name');
         }
     });
 
+        
     $(".basic-datepicker").datepicker({format: 'MM d, yyyy', autoclose: true});
     $(document).ready(function () {
         $(".datepicker-normal").datepicker({
@@ -375,10 +294,9 @@ $class = $this->Class_model->order_by_column('class_name');
                             zip_code: true,
                         },
                 address: "required",
-                degree: "required",
+                branch: "required",
                 course: "required",
-                batch: "required",
-                semester: "required",
+                admission_plan: "required",                
                 class: "required",
                 facebook:
                         {
@@ -387,8 +305,7 @@ $class = $this->Class_model->order_by_column('class_name');
                 twitter:
                         {
                             url2: true,
-                        },
-                admissiontype: "required",
+                        },                
                 profilefile: {
                     required: true,
                     extension: 'gif|png|jpg|jpeg',
@@ -448,12 +365,10 @@ $class = $this->Class_model->order_by_column('class_name');
                         {
                             required: "Enter zip code",
                         },
-                degree: "Select department",
+                branch: "Select department",
                 course: "Select branch",
-                batch: "Select batch",
-                semester: "Select semester",
-                class: "Select class",
-                admissiontype: "Select admission type",
+                admission_plan: "Select batch",                
+                class: "Select class",                
                 profilefile: {
                     required: "Upload image",
                     extension: "Upload valid file",

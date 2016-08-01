@@ -30,4 +30,13 @@ class Quiz_questions_model extends MY_Model {
         
         return $quiz_questions;
     }
+    
+    function quiz_questions_detail($quiz_id)
+    {
+        $this->db->select();        
+        $this->db->where('qq.quiz_id',$quiz_id);
+        return $this->db->get('quiz_questions qq')->result();     
+    }
+    
+    
 }

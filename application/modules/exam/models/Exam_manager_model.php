@@ -23,13 +23,12 @@ class Exam_manager_model extends MY_Model {
      * @return array
      */
     function exam_details() {
-        return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*, batch.*, degree.*')
+        return $this->db->select('exam_manager.*, exam_type.*, course.*, admission_plan.*, branch_location.*')
                         ->from('exam_manager')
                         ->join('exam_type', 'exam_type.exam_type_id = exam_manager.em_type')
-                        ->join('course', 'course.course_id = exam_manager.course_id')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
-                        ->join('batch', 'batch.b_id = exam_manager.batch_id')
-                        ->join('degree', 'degree.d_id = exam_manager.degree_id')
+                        ->join('course', 'course.course_id = exam_manager.course_id')                        
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
+                        ->join('branch_location', 'branch_location.branch_id = exam_manager.branch_id')
                         ->order_by('em_date', 'DESC')
                         ->get()
                         ->result();
@@ -56,12 +55,11 @@ class Exam_manager_model extends MY_Model {
      * @param string $title
      * @return object
      */
-    function exam_duplication_check($degree, $course, $batch, $sem, $title) {
+    function exam_duplication_check($branch, $course, $admission_plan, $title) {
         return $this->db->get_where('exam_manager', array(
-                    'degree_id' => $degree,
+                    'branch_id' => $branch,
                     'course_id' => $course,
-                    'batch_id' => $batch,
-                    'em_semester' => $sem,
+                    'admission_plan_id' => $admission_plan,                    
                     'em_name' => $title
                 ))->row();
     }
@@ -69,11 +67,11 @@ class Exam_manager_model extends MY_Model {
     function get_exam_details($param2)
     {
     
-return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
+return $this->db->select('exam_manager.*, exam_type.*, course.*, admission_plan.admission_plan_id')
         ->from('exam_manager')
         ->join('exam_type', 'exam_type.exam_type_id = exam_manager.em_type')
         ->join('course', 'course.course_id = exam_manager.course_id')
-        ->join('semester', 'semester.s_id = exam_manager.em_semester')
+        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
         ->where('exam_manager.em_id', $param2)
         ->get()
         ->row();
@@ -87,20 +85,17 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
      * @param type $semester
      * @return type
      */
-    function get_exam_filter($degree, $course, $batch, $semester) {
-        return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*, batch.*, degree.*')
+    function get_exam_filter($branch, $course, $admission_plan) {
+        return $this->db->select('exam_manager.*, exam_type.*, course.*, branch_location.*, admission_plan.*')
                         ->from('exam_manager')
                         ->join('exam_type', 'exam_type.exam_type_id = exam_manager.em_type')
                         ->join('course', 'course.course_id = exam_manager.course_id')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
-                        ->join('batch', 'batch.b_id = exam_manager.batch_id')
-                        ->join('degree', 'degree.d_id = exam_manager.degree_id')
+                        ->join('branch_location', 'branch_location.branch_id = exam_manager.branch_id')
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')                        
                         ->where(array(
-                            'exam_manager.degree_id' => $degree,
+                            'exam_manager.branch_id' => $branch,
                             'exam_manager.course_id' => $course,
-                            'exam_manager.batch_id' => $batch,
-                            'exam_manager.em_semester' => $semester
-                        ))
+                            'exam_manager.admission_plan_id' => $admission_plan))
                         ->order_by('em_date', 'DESC')
                         ->get()
                         ->result();
@@ -152,12 +147,11 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
      * @param int $semester_id
      * @return array
      */
-    function get_exam_list($degree_id, $course_id, $batch_id, $semester_id) {
+    function get_exam_list($branch_id, $course_id, $admission_plan_id) {
         return $this->db->get_where('exam_manager', array(
                             'course_id' => $course_id,
-                            'em_semester' => $semester_id,
-                            'degree_id' => $degree_id,
-                            'batch_id' => $batch_id,
+                            'branch_id' => $branch_id,
+                            'admission_plan_id' => $admission_plan_id,
                             'exam_ref_name' => 'reguler'
                         ))
                         ->result();
@@ -169,14 +163,15 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
      * @param string $semeseter
      * @return array
      */
-    function student_exam_list($course, $semeseter) {
+    function student_exam_list($branch,$course, $admission_plan) {
         return $this->db->select()
                         ->from('exam_manager')
                         ->join('exam_type', 'exam_type.exam_type_id = exam_manager.em_type')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
                         ->where(array(
                             'exam_manager.course_id' => $course,
-                            'exam_manager.em_semester' => $semeseter,
+                            'exam_manager.branch_id' => $branch,
+                            'exam_manager.admission_plan_id' => $admission_plan,
                             'exam_manager.exam_ref_name' => 'reguler'
                         ))
                         ->order_by('exam_manager.em_start_time', 'DESC')

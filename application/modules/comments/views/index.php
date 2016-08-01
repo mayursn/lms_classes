@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-<!-- Start .row -->	
-=======
 <?php 
 
 $create = create_permission($permission, 'Forum_Comments');
@@ -8,7 +5,6 @@ $read = read_permission($permission, 'Forum_Comments');
 $update = update_permisssion($permission, 'Forum_Comments');
 $delete = delete_permission($permission, 'Forum_Comments');
 ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
 <div class=row>                      
 
     <div class=col-lg-12>
@@ -16,14 +12,11 @@ $delete = delete_permission($permission, 'Forum_Comments');
         <div class=" panel-default toggle panelMove panelClose panelRefresh">
             <!-- Start .panel -->           
             <div class=panel-body>
-<<<<<<< HEAD
-                <a href="#" class="links" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/comments_create/<?php echo $param; ?>');" data-toggle="modal"><i class="fa fa-plus"></i> Forum Comment</a>
-=======
                 <?php if($create){ ?>
                 <a href="#" class="links" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/comments_create/<?php echo $param; ?>');" data-toggle="modal"><i class="fa fa-plus"></i> Forum Comment</a>
                 <?php } ?>
                 <?php if($create || $read || $update || $delete){ ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
+
                 <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                     <thead>
                         <tr>
@@ -34,13 +27,9 @@ $delete = delete_permission($permission, 'Forum_Comments');
                             <th>Duration</th>
                             <th>File</th>
                             <th>Status</th>
-<<<<<<< HEAD
-                            <th>Action</th>                            
-=======
                             <?php if($update || $delete){ ?>
                             <th>Action</th>              
                             <?php } ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                         </tr>
                     </thead>
 
@@ -63,7 +52,8 @@ $delete = delete_permission($permission, 'Forum_Comments');
                                     } else {
                                         echo $date;
                                     }
-                                    ?></td>
+                                    ?>
+                                </td>
                                 <td>
                                     <?php if (!empty($row->topic_file)) { ?>
                                         <a href="<?php echo base_url() . 'uploads/forum_file/' . $row->topic_file; ?>" download=""><i class="fa fa-download"></i></a>
@@ -77,13 +67,6 @@ $delete = delete_permission($permission, 'Forum_Comments');
                                         <span class="label label-danger mr6 mb6" >InActive</span>
                                     <?php } ?>
                                 </td>                               
-<<<<<<< HEAD
-                                <td class="menu-action">                                                            
-                                    <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/comments_edit/<?php echo $row->forum_comment_id; ?>/<?php echo $row->forum_topic_id; ?>');"  data-toggle="tooltip" data-placement="top"><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
-                                    <a href="#" onclick="confirm_modal('<?php echo base_url(); ?>comments/delete/<?php echo $row->forum_comment_id; ?>/<?php echo $row->forum_topic_id; ?>');"  data-toggle="tooltip" data-placement="top" ><span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span></a>
-                                </td>
-
-=======
                                 <?php if($update || $delete){ ?>
                                 <td class="menu-action">                                                            
                                     <?php if($update){ ?>
@@ -94,16 +77,11 @@ $delete = delete_permission($permission, 'Forum_Comments');
                                     <?php } ?>
                                 </td>
                                 <?php } ?>
-                                    
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                             </tr>
                         <?php endforeach; ?>		
                     </tbody>
                 </table>
-<<<<<<< HEAD
-=======
                 <?php } ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
             </div>
         </div>
         <!-- End .panel -->

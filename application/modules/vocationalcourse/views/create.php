@@ -106,29 +106,25 @@
          $(this).prop('readonly', false);
       });
         
+        var js_format = '<?php echo js_dateformat(); ?>';
         $("#startdate").datepicker({
-             format: ' MM d, yyyy', startDate : new Date(),
-            startDate:'0',
+             format: js_format,
+             startDate : new Date(),           
             changeMonth: true,
             changeYear: true,
-            autoclose:true,
-            onClose: function (selectedDate) {
-                
-                $("#enddate").datepicker("option", "startDate", selectedDate);
-            }
+            autoclose:true
+        }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+        $('#enddate').datepicker('setStartDate', minDate);
         });
         var start = $("#startdate").val();
         
 
         $("#enddate").datepicker({
-             format: ' MM d, yyyy', startDate : new Date(),
+             format: js_format,             
             changeMonth: true,
             changeYear: true,
-            autoclose:true,
-            startDate:new Date(),
-            onClose: function (selectedDate) {
-                $("#startdate").datepicker("option", "endDate", selectedDate);
-            }
+            autoclose:true
         });
 
         $("#frmvocationalcourse").validate({

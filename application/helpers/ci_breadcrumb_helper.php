@@ -14,7 +14,7 @@ if (!function_exists('create_breadcrumb')) {
             for ($j = 1; $j <= $i; $j++) {
                 $prep_link .= $ci->uri->segment($j) . '/';
             }
-
+            
             if ($ci->uri->segment($i + 1) == '') {
                 if (!(int) $ci->uri->segment($i)) {
                     $link.='<span class="divider"><i class="s16 icomoon-icon-arrow-right-3"></i></span>';

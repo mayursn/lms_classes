@@ -13,6 +13,10 @@ class Academic_year extends MY_Controller {
         parent::__construct();
 
         $this->load->model("academic_year/Academic_year_model");
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**

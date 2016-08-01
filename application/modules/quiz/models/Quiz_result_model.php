@@ -43,4 +43,21 @@ class Quiz_result_model extends MY_Model {
     }   
     
 
+    /**
+     * 
+     * @param int $quiz_id
+     * @return mixed array
+     */
+    function get_quiz_history($quiz_id)
+    {
+        return $this->db->select('')
+                        ->from('quiz_result')
+                        ->join("quiz", "quiz.quiz_id = quiz_result.quiz_id")
+                        ->join('user', 'user.user_id = quiz_result.user_id')
+                        ->join('student', 'student.user_id = user.user_id')
+                        ->where('quiz_result.quiz_id', $quiz_id)
+                        ->group_by('quiz_result.user_id')
+                        ->get()->result();
+        
+    }
 }

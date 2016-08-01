@@ -12,6 +12,10 @@ class Payment_gateway_config extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('payment_gateway_config/Authorize_net_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {

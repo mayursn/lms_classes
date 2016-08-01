@@ -8,7 +8,7 @@
                             <h4 class=panel-title>Add CMS Page</h4>
                         </div>-->
             <div class=panel-body>
-                <?php echo form_open(base_url() . 'cms_pages/create', array('class' => 'form-horizontal form-groups-bordered validate', 'role' => 'form', 'id' => 'cmsform', 'target' => '_top')); ?>
+                <?php echo form_open(base_url() . 'cms/create', array('class' => 'form-horizontal form-groups-bordered validate', 'role' => 'form', 'id' => 'cmsform', 'target' => '_top')); ?>
                 <div class="padded">
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><?php echo ucwords("Page Name"); ?><span style="color:red">*</span></label>

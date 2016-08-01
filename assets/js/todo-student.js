@@ -81,11 +81,10 @@ jQuery('#addnewtodo').on('click', function (event) {
                      $("#basic-datepicker").css({'border-color':'red'});
                      return false;
                 }
-                        var dataString = "title=" + encodeURIComponent(title) + "&todo_date=" + todo_date + "&todo_time=" + todo_time;
-                        $.post(base_url+"todo/add_to_do_student", dataString
-                         ,                        
+                        var dataString = "title=" + encodeURIComponent(title) + "&todo_date=" + todo_date + "&todo_time=" + todo_time;                        
+                        $.post(base_url+"todo/add_to_do_student", dataString,                        
                         function(data){                            
-                          $(".todo-list").html(data);
+                          $("#today").html(data);
                           $('#frmtodo #todo_title').val('');
                           $('#frmtodo #basic-datepicker').val('');
                         });

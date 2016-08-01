@@ -29,11 +29,11 @@
                                     <td><?php echo $exam->total_marks; ?></td>
                                     <td><?php echo $exam->passing_mark; ?></td>
                                     <td>
-                                        <a title="view" href="<?php echo base_url('student/exam_marks/' . $exam->em_id); ?>">
+                                        <a title="view" href="<?php echo base_url('student/exam_marks/' . $exam->em_id); ?>" class="label label-primary mr6 mb6">
                                             Exam Marks
                                         </a>
                                         &nbsp;<a href="<?php echo base_url('marks/download_statement_marks/' . $exam->em_id) ?>" title="download report">
-                                           Download
+                                            <i class="fa fa-download"></i>
                                         </a>
                                     </td>
                                 </tr>

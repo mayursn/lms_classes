@@ -56,12 +56,7 @@ $config = array(
             'field' => 'course',
             'label' => 'Course',
             'rules' => $base_rule
-        ),
-        array(
-            'field' => 'semester',
-            'label' => 'Semester',
-            'rules' => $base_rule
-        ),
+        ),        
         array(
             'field' => 'exam',
             'label' => 'Exam',

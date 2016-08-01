@@ -19,14 +19,22 @@ class Project extends MY_Controller {
         $this->load->model('semester/Semester_model');
         $this->load->model('classes/Class_model');
         $this->load->model('student/Student_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
+        if($this->session->userdata('std_id'))
+        {
+            redirect(base_url().'project/submission');
+        }
         $this->data['title'] = 'Project';
         $this->data['page'] = 'project';
         $this->data['project'] = $this->Project_manager_model->order_by_column('pm_dos');
         $this->data['submitedproject'] = $this->Project_document_submission_model->get_all_submitted_project();
-        $this->data['degree'] = $this->Degree_model->get_all();
+        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
         $this->data['batch'] = $this->Batch_model->order_by_column('b_name');
         $this->data['course'] = $this->Course_model->order_by_column('c_name');;
         $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
@@ -438,6 +446,10 @@ class Project extends MY_Controller {
     }
 
     function submission() {
+        if(!$this->session->userdata('std_id'))
+        {
+            redirect(base_url().'project');
+        }
         $this->load->model('student/Student_model');
         $std_id = $this->session->userdata('std_id');        
         $std = $this->Student_model->get($std_id);

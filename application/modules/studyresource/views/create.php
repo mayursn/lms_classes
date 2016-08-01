@@ -17,15 +17,13 @@
                             <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?> <span style="color:red">*</span></label>
                             <div class="col-sm-8">
 
-                                <select name="degree" id="degree" class="form-control">
-
-                                    <option value="">Select department</option>
-                                    <option value="All">All</option>
+                                <select name="branch" id="branch_id" class="form-control">
+                                    <option value="">Select department</option>                                    
                                     <?php
-                                    $datadegree = $this->db->get_where('degree', array('d_status' => 1))->result();
-                                    foreach ($datadegree as $rowdegree) {
+                                    $branch = $this->db->get('branch_location')->result();
+                                    foreach ($branch as $rowdegree) {
                                         ?>
-                                        <option value="<?= $rowdegree->d_id ?>"><?= $rowdegree->d_name ?></option>
+                                        <option value="<?php echo  $rowdegree->branch_id ?>"><?php echo  $rowdegree->branch_name.' - '.$rowdegree->branch_location; ?></option>
                                         <?php
                                     }
                                     ?>
@@ -33,62 +31,34 @@
                             </div>
                         </div>	
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Branch "); ?><span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select name="course" id="course" class="form-control">
 
                                     <option value="">Select Branch</option>
-                                    <option value="All">All</option>
+                                    
                                     <?php
-                                    /*
-                                     * $course = $this->db->get_where('course', array('course_status' => 1))->result();
+                                    $course = $this->db->get_where('course')->result();
                                       foreach ($course as $crs) {
                                       ?>
-                                      <!--  <option value="<?= $crs->course_id ?>"><?= $crs->c_name ?></option>-->
+                                        <option value="<?php echo  $crs->course_id; ?>"><?php echo  $crs->c_name ?></option>
                                       <?php
-                                      } */
+                                      } 
                                     ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Batch "); ?><span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan "); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
 
-                                <select name="batch" id="batch" onchange="get_student2(this.value);" class="form-control" >
+                                <select name="admission_plan" id="admission_plan" onchange="get_student2(this.value);" class="form-control" >
 
-                                    <option value="">Select batch</option>
-                                    <option value="All">All</option>
-                                    <?php
-                                    /* $databatch = $this->db->get_where('batch', array('b_status' => 1))->result();
-                                      foreach ($databatch as $row) {
-                                      ?>
-                                      <option value="<?= $row->b_id ?>"><?= $row->b_name ?></option>
-                                      <?php
-                                      } */
-                                    ?>
+                                    <option value="">Select </option>
                                 </select>
                             </div>
                         </div>	
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Semester "); ?><span style="color:red">*</span></label>
-                            <div class="col-sm-8">
-
-                                <select name="semester" id="semester" onchange="get_students2(this.value);" class="form-control">
-
-                                    <option value="">Select Semester</option>
-                                    <option value="All">All</option>
-                                    <?php
-                                    $datasem = $this->db->get_where('semester', array('s_status' => 1))->result();
-                                    foreach ($datasem as $rowsem) {
-                                        ?>
-                                        <option value="<?= $rowsem->s_id ?>"><?= $rowsem->s_name ?></option>
-                                        <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
+                     
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("Title "); ?><span style="color:red">*</span></label>
@@ -96,12 +66,7 @@
                                 <input type="text" class="form-control" name="title" id="title" />
                             </div>
                         </div>   
-                        <!--  <div class="form-group">
-                              <label class="col-sm-3 control-label">Page URL</label>
-                              <div class="col-sm-5">
-                                  <input type="text" class="form-control" name="pageurl" id="pageurl" />
-                              </div>
-                          </div>-->
+                        
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("File Upload "); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
@@ -135,93 +100,30 @@
 
 
 
-
-
-    $("#degree").change(function () {
-        var degree = $(this).val();
-
-        var dataString = "degree=" + degree;
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'studyresource/get_cource/'; ?>",
-            data: dataString,
-            success: function (response) {
-                $('#course').find('option').remove().end();
-                $('#course').append('<option value>Select</option>');
-                $('#course').append('<option value="All">All</option>');
-                if (degree == "All")
-                {
-
-                    $("#batch").val($("#batch option:eq(1)").val());
-                    $("#course").val($("#course option:eq(1)").val());
-                    $("#semester").val($("#semester option:eq(1)").val());
-                    //  $("#course")..val($("#semester option:second").val());
-                    // $("#semester").prepend(response);
-                    // $('#semester option:selected').text();
-
-
-                } else {
-                    var branch = jQuery.parseJSON(response);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-
-                    // $("#course").html(response);
-                }
-            }
-
-        });
-
+  $('#course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
     });
-
-    $("#batch").change(function () {
-        var batches = $("#batch").val();
-        if (batches == 'All')
-        {
-            $("#semester").val($("#semester option:eq(1)").val());
-        }
-    });
-
-    $("#course").change(function () {
-        var course = $(this).val();
-        var degree = $("#degree").val();
-        var dataString = "course=" + course + "&degree=" + degree;
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value>Select</option>');
         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'studyresource/get_batchs/'; ?>",
-            data: dataString,
-            success: function (response) {
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url() . 'studyresource/get_semesterall/'; ?>",
-                    data: {'course': course},
-                    success: function (response1) {
-                        $("#semester").html(response1);
-
-                        $("#semester").val($("#semester option:eq(1)").val());
-
-                    }
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
                 });
-                $('#batch').find('option').remove().end();
-                $('#batch').append('<option value>Select</option>');
-                $('#batch').append('<option value="All">All</option>');
-                if (course == "All")
-                {
-                    $("#batch").val($("#batch option:eq(1)").val());
-                    $("#semester").val($("#semester option:eq(1)").val());
-                } else {
-
-                    var batch_value = jQuery.parseJSON(response);
-                    console.log(batch_value);
-                    $.each(batch_value, function (key, value) {
-                        $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                    });
-                }
             }
         });
-    });
+    }
 
+    
 
     $.validator.setDefaults({
         submitHandler: function (form) {

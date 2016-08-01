@@ -12,6 +12,10 @@ class Courseware extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('courseware/Courseware_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**

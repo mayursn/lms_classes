@@ -198,7 +198,7 @@
                 <div class="xe-widget xe-counter-block xe-counter-block-red attendance-box" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
                     <div class="xe-upper">
                         <div class="xe-icon"> <i aria-hidden="true" class=" icomoon-icon-notebook"></i> </div>
-                        <div class="xe-label"> <strong class="num">Admission</strong></div>
+                        <div class="xe-label"> <strong class="num"></strong></div>
                     </div>
                     <div class="border"></div>
                     <div class="xe-lower scroll-bar-box">

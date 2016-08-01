@@ -1,6 +1,11 @@
 <?php
 $this->load->model('quiz/Quiz_question_options_model');
 $this->load->model('quiz/Quiz_questions_model');
+$this->load->model('department/Degree_model');
+$this->load->model('branch/Course_model');
+$this->load->model('semester/Semester_model');
+$this->load->model('batch/Batch_model');
+$this->load->model('subject/Subject_manager_model');
 ?>
 <!-- Start .row -->
 <div class=row>                      
@@ -21,15 +26,56 @@ $this->load->model('quiz/Quiz_questions_model');
                     </tr>
                     <tr>
                         <td><strong>Department</strong></td>
-                        <td><?php echo $quiz->d_name; ?></td>
+                        <td><?php if($quiz->department_id!="All"){
+                        $name = $this->Degree_model->get($quiz->department_id);
+                            echo $name->d_name;
+                            
+                        }else{ echo "All"; } ?></td>
                         <td><strong>Branch</strong></td>
-                        <td><?php echo $quiz->c_name; ?></td>
+                        <td><?php if($quiz->branch_id!="All")
+                        { 
+                            $course = $this->Course_model->get($quiz->branch_id);
+                            echo $course->c_name;
+                        }else{
+                            echo "All";
+                        }    
+                        
+                            ?></td>
                     </tr>
                     <tr>
                         <td><strong>Batch</strong></td>
-                        <td><?php echo $quiz->b_name; ?></td>
+                        <td><?php if($quiz->batch_id!="All"){
+                            $batch = $this->Batch_model->get($quiz->batch_id);
+                           echo $batch->b_name;
+                        }else{
+                            echo "All"; 
+                        }
+                            ?></td>
+                        
                         <td><strong>Semester</strong></td>
-                        <td><?php echo $quiz->s_name; ?></td>
+                        <td><?php if($quiz->semester_id!="All")
+                            {
+                            $semester = $this->Semester_model->get($quiz->semester_id);
+                            echo $semester->s_name;
+                            }
+                            else{
+                                echo "All";
+                            }
+                            ?></td>
+                        <td><strong>Subject</strong></td>
+                         <td><?php
+                         if($quiz->sm_id!="")
+                         {
+                         if($quiz->sm_id!="All")
+                            {
+                            $subject = $this->Subject_manager_model->get($quiz->sm_id);
+                            echo $subject->subject_name;
+                            }
+                            else{
+                                echo "All";
+                            }
+                         }
+                            ?></td>
                     </tr>
                 </table>
             </div>
@@ -39,7 +85,11 @@ $this->load->model('quiz/Quiz_questions_model');
     <!-- col-lg-12 end here -->
     <form id="play-online-quiz" class="form-horizontal form-groups-bordered validate" 
           method="post">
-        <input type="hidden" name="user_quiz_id" value="<?php echo hash('sha1', $quiz->quiz_id); ?>"/>
+        <input type="hidden" name="user_quiz_id" id="user_quiz_id" value="<?php echo hash('sha1', $quiz->quiz_id); ?>"/>
+        <input type="hidden" name="user_quiz_id1" id="user_quiz_id1" value="<?php echo  $quiz->quiz_id; ?>"/>
+       
+       <input type="hidden" id="quiz_result_id" name="quiz_result_id" value="<?php echo $quiz_result_id;?>">
+        
         <div class="col-lg-12">
             <div class="col-lg-8">
                 <div class="panel-default">
@@ -56,8 +106,10 @@ $this->load->model('quiz/Quiz_questions_model');
 
                     <div class="panel-body">
                         <?php for ($i = 1; $i <= $quiz->total_questions; $i++) { ?>
+                       
                             <div id="panel<?php echo $i; ?>" class="question inactive"
                                  question_no="<?php echo $i; ?>">
+                                 <input type="hidden" name="quiz_exam_id_<?php echo $i; ?>" id="quiz_exam_id_<?php echo $i; ?>" value="<?php echo $quiz_exam_id[$i-1]?>" />
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"><strong><?php echo ucwords("question $i:"); ?></strong></label>
                                     <div class="col-sm-9">
@@ -387,19 +439,36 @@ $this->load->model('quiz/Quiz_questions_model');
             }
         });
 
+            function closeWindow(){
+                
+                       var quiz_id = $("#user_quiz_id1").val();
+                      // $("#play-online-quiz").submit();
+               var Data = $.ajax({
+                   type : "POST",
+                   url : "<?php echo base_url(); ?>quiz/insertquizunload/"+quiz_id,  //loading a simple text file for sample.
+                   data:$("#play-online-quiz").serialize(),
+                   success : function(data) {
+//                       alert(data);
+//                       return data;
+                   }
 
-        window.onbeforeunload = function (e) {
-            e = e || window.event;
+               });
+               return "Are you sure you want to leave the page? You still have items in your quiz history";
+           }
 
-            // For IE and Firefox prior to version 4
-            if (e) {
-                e.returnValue = 'Are you sure you want to quit the exam?';
-                console.log(e);
-            }
-            //alert(1);
-            // For Safari
-            return 'Are you sure you want to quit the exam?';
-        };
+        window.onbeforeunload = closeWindow;
+        
+//        window.onbeforeunload = function (e) {
+//            e = e || window.event;
+//            // For IE and Firefox prior to version 4
+//            if (e) {
+//                e.returnValue = 'Are you sure want to quit the exam?';
+//                console.log(e);
+//            }
+//            //alert(1);
+//            // For Safari
+//            return 'Are you sure want to quit the exam?';
+//        };
 
         function show_submit() {
             $('#submit-quiz').removeClass('hide');

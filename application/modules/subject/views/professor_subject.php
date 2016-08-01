@@ -25,9 +25,9 @@ $delete = delete_permission($permission, 'Subject');
                             <th>No</th>											
                             <th>Subject Name</th>											
                             <th>Subject Code</th>											
-                            <th>Department</th>											
                             <th>Branch</th>											
-                            <th>Semester</th>	
+                            <th>Course</th>											
+                            <th>Admission Plan</th>	
                              <?php 
                                 if($update || $delete) { ?>
                             <th>Action</th>
@@ -43,9 +43,9 @@ $delete = delete_permission($permission, 'Subject');
                                 <td></td>	
                                 <td><?php echo $row->subject_name; ?></td>												
                                 <td><?php echo $row->subject_code; ?></td>
-                                <td><?php echo $row->d_name; ?> </td>
+                                <td><?php echo $row->branch_name.' - '.$row->branch_location; ?> </td>
                                 <td><?php echo $row->c_name; ?> </td>
-                                <td><?php echo $row->s_name; ?> </td>
+                                <td><?php echo $row->admission_duration; ?> </td>
                                   <?php 
                                 if($update || $delete) { ?>
                                 <td>

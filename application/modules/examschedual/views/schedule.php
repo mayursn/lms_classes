@@ -27,7 +27,7 @@
                         </tr>
                         <tr>
                             <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Semester: </strong></td>
-                            <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo @$exam_details->s_name; ?></td>
+                            <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo @$exam_details->admission_duration; ?></td>
                             <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Course Name: </strong></td>
                             <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo @$exam_details->c_name; ?></td>
                         </tr> 

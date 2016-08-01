@@ -24,18 +24,22 @@
                                 <td></td>
                                 <td><?php echo $row->subject_name; ?></td>
                                 <td>
-                                    <?php                                   
-                                    $total_class = $this->Student_model->total_class_of_subject($row->sm_id,
-                                            $this->session->userdata('std_id')); 
-                                    echo $total_class;
+                                    <?php       
+                                    $branch = $student->branch_id;
+                                    $course = $student->course_id;
+                                    $admission_plan = $student->admission_plan_id;
+                                    $class = $student->class_id;
+                                    $total_class = $this->Student_model->get_student_total_class($branch,
+                                            $course,$admission_plan,$class,$row->sm_id,$this->session->userdata('std_id')); 
+                                    echo $total_class = count($total_class);
                                     ?>
                                 </td>
                                 <td>
                                     <?php 
                                     
-                                    $total_present = $this->Student_model->total_present_class_of_subject($row->sm_id,
-                                            $this->session->userdata('std_id')); 
-                                    echo $total_present;
+                                    $total_present = $this->Student_model->get_present_class_student($branch,
+                                            $course,$admission_plan,$class,$row->sm_id,$this->session->userdata('std_id')); 
+                                    echo $total_present = count($total_present);
                                     ?>
                                 </td>
                                 <td>

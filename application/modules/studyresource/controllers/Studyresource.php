@@ -14,18 +14,22 @@ class Studyresource extends MY_Controller {
         parent::__construct();
         $this->load->model('studyresource/Study_resources_model');
         $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
+        $this->load->model('courses/Course_model');
         $this->load->model('batch/Batch_model');
         $this->load->model('semester/Semester_model');
         $this->load->model('classes/Class_model');     
        // $this->load->model('notification');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
         $this->data['title'] = 'Study Resource';
         $this->data['page'] = 'studyresource';
         $this->data['studyresource'] = $this->Study_resources_model->order_by_column('created_date');        
-         $this->data['course'] = $this->Course_model->order_by_column('c_name');
+        $this->data['course'] = $this->Course_model->order_by_column('c_name');
         $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
         $this->data['batch'] = $this->Batch_model->order_by_column('b_name');
         $this->data['degree'] = $this->Degree_model->order_by_column('d_name');          
@@ -55,46 +59,23 @@ class Studyresource extends MY_Controller {
 
                     $file_url = '';
                 }
-                $data['study_degree'] = $this->input->post('degree');
+                $data['branch_id'] = $this->input->post('branch');
                 $data['study_title'] = $this->input->post('title');
-                $data['study_batch'] = $this->input->post('batch');
-                $data['study_url'] = $file_url;
-                $data['study_sem'] = $this->input->post('semester');
-                $data['study_course'] = $this->input->post('course');
+                $data['course_id'] = $this->input->post('course');
+                $data['study_url'] = $file_url;                
+                $data['admission_plan_id'] = $this->input->post('admission_plan');
                 $data['study_status'] = $this->input->post('status');
                 $data['created_date'] = date('Y-m-d');               
                 $last_id = $this->Study_resources_model->insert($data);                 
-                $batch = $data['study_batch'];
-                $degree = $data['study_degree'];
-                $semester = $data['study_sem'];
-                $course = $data['study_course'];
-                if ($degree == 'All') {
-                    $students = $this->db->get('student')->result();
-                } else {
-                    if ($course == 'All') {
-                        $this->db->where('std_degree', $degree);
-                        $students = $this->db->get('student')->result();
-                    } else {
-                        if ($batch == 'All') {
-                            $this->db->where('std_degree', $degree);
-                            $this->db->where('course_id', $course);
-                            $students = $this->db->get('student')->result();
-                        } else {
-                            if ($semester == 'All') {
-                                $this->db->where('std_batch', $batch);
-                                $this->db->where('std_degree', $degree);
-                                $this->db->where('course_id', $course);
-                                $students = $this->db->get('student')->result();
-                            } else {
-                                $this->db->where('std_batch', $batch);
-                                $this->db->where('std_degree', $degree);
-                                $this->db->where('course_id', $course);
-                                $this->db->where('semester_id', $semester);
-                                $students = $this->db->get('student')->result();
-                            }
-                        }
-                    }
-                }
+                $admission_plan = $data['admission_plan_id'];
+                $branch = $data['branch_id'];
+                $course = $data['course_id'];               
+                
+                  $this->db->where('branch_id', $branch);                  
+                  $this->db->where('course_id', $course);
+                  $this->db->where('admission_plan_id', $admission_plan);
+                  $students = $this->db->get('student')->result();
+                
                 $std_id = '';
                 foreach ($students as $std) {
                     $id = $std->std_id;
@@ -113,10 +94,9 @@ class Studyresource extends MY_Controller {
                     $notification_id = $res->notification_type_id;
                     $notify['notification_type_id'] = $notification_id;
                     $notify['student_ids'] = $student_ids;
-                    $notify['degree_id'] = $degree;
+                    $notify['branch_id'] = $branch;
                     $notify['course_id'] = $course;
-                    $notify['batch_id'] = $batch;
-                    $notify['semester_id'] = $semester;
+                    $notify['admission_plan_id'] = $admission_plan;                    
                     $notify['data_id'] = $last_id;
                     $this->db->insert("notification", $notify);
                  
@@ -157,12 +137,11 @@ class Studyresource extends MY_Controller {
                 } else {
                     $file_url = $this->input->post('pageurl');
                 }
-                $data['study_degree'] = $this->input->post('degree');
+                $data['branch_id'] = $this->input->post('branch');
                 $data['study_title'] = $this->input->post('title');
-                $data['study_batch'] = $this->input->post('batch');
+                $data['course_id'] = $this->input->post('course');
                 $data['study_url'] = $file_url;
-                $data['study_sem'] = $this->input->post('semester');
-                $data['study_course'] = $this->input->post('course');
+                $data['admission_plan_id'] = $this->input->post('admission_plan');                
                 $data['study_status'] = $this->input->post('status');
   
                $this->Study_resources_model->update($id,$data);
@@ -248,50 +227,17 @@ class Studyresource extends MY_Controller {
     }
     
      function getstudyresource() {
-        $degree = $this->input->post('degree');
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('admission_plan/Admission_plan_model');
+        $this->load->model('courses/Course_model');
+        $branch = $this->input->post('branch');
         $course = $this->input->post('course');
-        $batch = $this->input->post('batch');
-        $semester = $this->input->post("semester");
-        $this->data['course'] = $this->Course_model->order_by_column('c_name');
-        $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
-        $this->data['batch'] = $this->Batch_model->order_by_column('b_name');
-        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        $admission_plan = $this->input->post('admission_plan');        
+        $this->data['course'] = $this->Course_model->order_by_column('c_name');        
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+        $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');
         //   $data['student'] = $this->db->get('student')->result();
-
-        if ($degree == "All") {
-            
-            $this->data['studyresource'] = $this->Study_resources_model->order_by_column('study_id');
-        } else {
-            if ($course == "All") {
-                $this->db->select('study_id,study_title,study_degree,study_course,study_batch,study_sem,study_dos,study_filename');
-                $this->db->where("study_degree", $degree);
-                $array = array("study_degree"=> $degree);
-                $this->Study_resources_model->get_many_by('study_id');
-                $this->data['studyresource'] = $this->db->get('study_resources')->result();
-            } else {
-                if ($batch == 'All') {
-                    $this->db->select('study_id,study_title,study_degree,study_course,study_batch,study_sem,study_dos,study_filename');
-                    $this->db->where("study_course", $course);
-                    $this->db->where("study_degree", $degree);
-                    $this->data['studyresource'] = $this->db->get('study_resources')->result();
-                } else {
-                    if ($semester == "All") {
-                        $this->db->select('study_id,study_title,study_degree,study_course,study_batch,study_sem,study_dos,study_filename');
-                        $this->db->where("study_batch", $batch);
-                        $this->db->where("study_course", $course);
-                        $this->db->where("study_degree", $degree);
-                        $this->data['studyresource'] = $this->db->get('study_resources')->result();
-                    } else {
-                        $this->db->select('study_id,study_title,study_degree,study_course,study_batch,study_sem,study_dos,study_filename');
-                        $this->db->where("study_sem", $semester);
-                        $this->db->where("study_batch", $batch);
-                        $this->db->where("study_course", $course);
-                        $this->db->where("study_degree", $degree);
-                        $this->data['studyresource'] = $this->db->get('study_resources')->result();
-                    }
-                }
-            }
-        }
+        $this->data['studyresource'] = $this->Study_resources_model->get_many_by(array('branch_id'=>$branch,'course_id'=>$course,'admission_plan_id'=>$admission_plan)); 
         $this->load->view("studyresource/getstudyresource", $this->data);
     }
     

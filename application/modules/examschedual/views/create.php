@@ -1,12 +1,9 @@
 <?php 
- $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
-        $this->load->model('batch/Batch_model');
-        $this->load->model('semester/Semester_model');
+ $this->load->model('branch/Branch_location_model');
+ $this->load->model('courses/Course_model');        
+ $this->load->model('admission_plan/Admission_plan_model');
         $course = $this->Course_model->order_by_column('c_name');
-        $semester = $this->Semester_model->order_by_column('s_name');
-        $batch = $this->Batch_model->order_by_column('b_name');
-        $degree = $this->Degree_model->order_by_column('d_name');
+        $branch = $this->Branch_location_model->order_by_column('branch_name');
         
 ?>
 <div class="row">
@@ -27,41 +24,38 @@
                         </div>                                            
                     <?php } ?>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("branch"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
-                            <select name="degree" id="degree" class="form-control">
+                            <select name="branch" id="branch" class="form-control">
                                 <option value="">Select</option>
-                                <?php foreach ($degree as $row) { ?>
-                                    <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                                <?php foreach ($branch as $row) { ?>
+                                    <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
                             <select name="course" id="course" class="form-control">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Batch"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <select class="form-control" name="batch" id="batch">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                        <div class="col-sm-8">
-                            <select class="form-control" id="semester" name="semester">
                                 <option value="">Select</option>
+                                <?php foreach ($course as $crs): ?>
+                                <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
+                                <?php endforeach; ?>
 
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="admission_plan" id="admission_plan">
+                                <option value="">Select</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><?php echo ucwords("Exam"); ?><span style="color:red">*</span></label>
                         <div class="col-sm-8">
@@ -168,7 +162,7 @@
     });
 </script>
 <script type="text/javascript">
-    $('#exam_date').datepicker({format: js_date_format, autoclose: true});
+ //   $('#exam_date').datepicker({format: js_date_format, autoclose: true});
 
 </script>
 
@@ -236,86 +230,41 @@
 
 <script>
     $(document).ready(function () {
-        //course by degree
-        $('#degree').on('change', function () {
-            var course_id = $('#course').val();
-            var degree_id = $(this).val();
-            var batch_id = $('#batch').val();
-            var semester = $('#semester').val();
-
-            //remove all present element
-            $('#course').find('option').remove().end();
-            $('#course').append('<option value="">Select</option>');
-            var degree_id = $(this).val();
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + degree_id,
-                type: 'get',
-                success: function (content) {
-                    var course = jQuery.parseJSON(content);
-                    $.each(course, function (key, value) {
-                        $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    })
-                }
-            })
-            batch_from_degree_and_course(degree_id, course_id);
-            exam_list_from_degree_and_course(degree_id, course_id, batch_id, semester);
-            subject_list(course_id, semester);
-        });
-
-        //batch from course and degree
         $('#course').on('change', function () {
-            var degree_id = $('#degree').val();
-            var course_id = $(this).val();
-            var batch_id = $('#batch').val();
-            var semester = $('#semester').val();
-            batch_from_degree_and_course(degree_id, course_id);
-            exam_list_from_degree_and_course(degree_id, course_id, batch_id, semester);
-            subject_list(course_id, semester);
-            get_semester_from_branch(course_id);
-        })
-
-        //exam list from degree, course, batch, and sem
-        $('#batch').on('change', function () {
-            var degree = $('#degree').val();
-            var course = $('#course').val();
-            var batch = $(this).val();
-            var semester = $('#semester').val();
-            exam_list_from_degree_and_course(degree, course, batch, semester);
-            subject_list(course, semester);
-        })
-
-        $('#semester').on('change', function () {
-            var degree = $('#degree').val();
-            var course = $('#course').val();
-            var batch = $('#batch').val();
-            var semester = $(this).val();
-            exam_list_from_degree_and_course(degree, course, batch, semester);
-            subject_list(course, semester);
-        })
-
-        //find batch from degree and course
-        function batch_from_degree_and_course(degree_id, course_id) {
-            //remove all element from batch
-            $('#batch').find('option').remove().end();
-            $.ajax({
-                url: '<?php echo base_url(); ?>batch/department_branch_batch/' + degree_id + '/' + course_id,
-                type: 'get',
-                success: function (content) {
-                    $('#batch').append('<option value="">Select</option>');
-                    var batch = jQuery.parseJSON(content);
-                    console.log(batch);
-                    $.each(batch, function (key, value) {
-                        $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                    })
-                }
-            })
-        }
-
-        //exam list from degree and course
-        function exam_list_from_degree_and_course(d_id, c_id, b_id, s_id) {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
+    
+    $("#admission_plan").on('change',function(){
+        var admission_plan = $(this).val();
+        var course = $("#course").val();
+        var branch = $("#branch").val();
+        exam_list_from_degree_and_course(branch,course,admission_plan);
+        subject_list(branch,course, admission_plan);
+    });
+    //exam list from degree and course
+        function exam_list_from_degree_and_course(branch, course, admission_plan) {
             $('#exam').find('option').remove().end();
             $.ajax({
-                url: '<?php echo base_url(); ?>exam/exam_list_from_degree_and_course/' + d_id + '/' + c_id + '/' + b_id + '/' + s_id + '/reguler',
+                url: '<?php echo base_url(); ?>exam/exam_list_from_degree_and_course/' + branch + '/' + course + '/' + admission_plan +'/reguler',
                 type: 'get',
                 success: function (content) {
                     $('#exam').append('<option value="">Select</option>');
@@ -326,12 +275,11 @@
                 }
             })
         }
-
         // subject list from course and semester
-        function subject_list(course, semester) {
+        function subject_list(branch,course, admission_plan) {
             $('#subject').find('option').remove().end();
             $.ajax({
-                url: '<?php echo base_url(); ?>subject/subject_list_from_course_and_semester/' + course + '/' + semester,
+                url: '<?php echo base_url(); ?>subject/subject_list_admission_plan/' + branch + '/' + course + '/' + admission_plan,
                 type: 'get',
                 success: function (content) {
                     $('#subject').append('<option value="">Select</option>');
@@ -342,21 +290,6 @@
                 }
             })
         }
-
-        //get semester from brach
-        function get_semester_from_branch(branch_id) {
-            $('#semester').find('option').remove().end();
-            $.ajax({
-                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch_id,
-                type: 'get',
-                success: function (content) {
-                    $('#semester').append('<option value="">Select</option>');
-                    var semester = jQuery.parseJSON(content);
-                    $.each(semester, function (key, value) {
-                        $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                    })
-                }
-            })
-        }
-    })
+    });
+    
 </script>

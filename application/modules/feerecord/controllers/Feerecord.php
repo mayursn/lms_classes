@@ -13,6 +13,10 @@ class Feerecord extends MY_Controller {
         parent::__construct();
         $this->load->model('feerecord/Student_fees_model');
         $this->load->model('student/Student_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
        
       
     }
@@ -66,6 +70,7 @@ class Feerecord extends MY_Controller {
                 $total_paid += $paid->paid_amount;
             }
         }
+        $this->data['title'] = 'Invoice';
         $this->data['due_amount'] = $this->data['invoice']->total_fee - $total_paid;
         $this->data['total_paid'] = $total_paid;
         $html = utf8_encode($this->load->view('feerecord/invoice_print', $this->data, true));

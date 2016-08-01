@@ -158,8 +158,8 @@ $row = $this->Library_manager_model->get($param2);
                                 <label class="col-sm-4 control-label"><?php echo ucwords("status");?></label>
                                 <div class="col-sm-8">
                                     <select name="status"  class="form-control">
-                                      <option value="1" <?php if($row['lm_status'] == '1'){ echo "selected"; } ?>>Active</option>
-                                        <option value="0" <?php if($row['lm_status'] == '0'){ echo "selected"; } ?>>Inactive</option>	
+                                      <option value="1" <?php if($row->lm_status == '1'){ echo "selected"; } ?>>Active</option>
+                                        <option value="0" <?php if($row->lm_status == '0'){ echo "selected"; } ?>>Inactive</option>	
                                     </select>
                                     <lable class="error" id="error_lable_exist" style="color:red"></lable>
 

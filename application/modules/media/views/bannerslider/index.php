@@ -1,6 +1,5 @@
 <!-- Start .row -->
-<<<<<<< HEAD
-=======
+
 <?php 
 
 $create = create_permission($permission, 'Banner_Slider');
@@ -8,7 +7,6 @@ $read = read_permission($permission, 'Banner_Slider');
 $update = update_permisssion($permission, 'Banner_Slider');
 $delete = delete_permission($permission, 'Banner_Slider');
 ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
 <div class=row>                      
 
     <div class=col-lg-12>
@@ -27,29 +25,19 @@ $delete = delete_permission($permission, 'Banner_Slider');
                     </ul>
                     <div id="import-tab-content" class="tab-content">
                         <div class="tab-pane fade active in" id="import-data">
-<<<<<<< HEAD
-                            <a href="#" class="links" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/media_bannerslider_create/');" ><i class="fa fa-plus"></i> Banner</a>
-                    <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
-=======
                             <?php if($create){ ?>
                             <a href="#" class="links" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/media_bannerslider_create/');" ><i class="fa fa-plus"></i> Banner</a>
                             <?php } ?>
-                            <?php if($create || $update || $read || $delete){ ?>
-                            <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
+                            <?php if($create || $read || $update || $delete){ ?>
+                    <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                     <thead>
                         <tr>
                             <th>No</th>
                             <th><div>Title</div></th>  
-<<<<<<< HEAD
-                            <th><div>Description</div></th>                                                                                  
-                            <th><div>Action</div></th>
-=======
-                            <th><div>Description</div></th>      
-                            <?php if($delete || $update){ ?>
+                            <th><div>Description</div></th> 
+                            <?php if($update || $delete){ ?>
                             <th><div>Action</div></th>
                             <?php } ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                         </tr>
                     </thead>
 
@@ -60,46 +48,30 @@ $delete = delete_permission($permission, 'Banner_Slider');
                                 <td><?php echo $count++; ?></td>    
                                 <td><?php if($row->banner_title!=""){ echo $row->banner_title; }else{ echo "No-Title"; } ?></td>    
                                 <td><?php echo $row->banner_desc; ?></td>  
-<<<<<<< HEAD
-                                <td class="menu-action">
-                                    <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/media_bannerslider_edit/<?php echo $row->banner_id; ?>');"  data-toggle="tooltip" data-placement="top"><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
-                                   <a href="#" onclick="confirm_modal('<?php echo base_url(); ?>media/banner_slider/delete/<?php echo $row->banner_id; ?>');"  data-toggle="tooltip" data-placement="top">                                       
-                                       <span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span>
-                                   </a>
-                                </td>
-=======
-                                <?php if($delete || $update){ ?>
-                                
+                                <?php if($update || $delete){ ?>
                                 <td class="menu-action">
                                     <?php if($update){ ?>
                                     <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/media_bannerslider_edit/<?php echo $row->banner_id; ?>');"  data-toggle="tooltip" data-placement="top"><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
                                     <?php } ?>
                                     <?php if($delete){ ?>
-                                   <a href="#" onclick="confirm_modal('<?php echo base_url(); ?>media/banner_slider/delete/<?php echo $row->banner_id; ?>');"  data-toggle="tooltip" data-placement="top">                                       
+                                   <a href="#" onclick="confirm_modal('<?php echo base_url(); ?>media/banner_slider/delete/<?php echo $row->banner_id; ?>');"  data-toggle="tooltip" data-placement="top">                                                                           
                                        <span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span>
                                    </a>
                                     <?php } ?>
                                 </td>
                                 <?php } ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                             </tr>
                             <?php endforeach;  ?>                                    
                     </tbody>
                 </table>
-<<<<<<< HEAD
-=======
                             <?php } ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                         </div>
                         
                         <!-- tab content -->
                         <div class="tab-pane fade" id="download-sample-sheet">
-<<<<<<< HEAD
                             
-=======
-                            <?php if($update){ ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                 <div class="box-content">  
+                                    <?php if($update){ ?>
                                 <div class="">
                                     <span style="color:red">* is mandatory field</span> 
                                 </div>                                      
@@ -149,11 +121,8 @@ $delete = delete_permission($permission, 'Banner_Slider');
                                     </div> 
                                     <div id="dvPreview">
                                   </div>
+                                    <?php } ?>
                                 </div>
-<<<<<<< HEAD
-=======
-                            <?php } ?>
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                             
                         </div> <!-- End Tab   -->
 

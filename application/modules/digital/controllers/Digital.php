@@ -17,6 +17,10 @@ class Digital extends MY_Controller {
         $this->load->model('batch/Batch_model');
         $this->load->model('semester/Semester_model');
         $this->load->model('classes/Class_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     
     }
     

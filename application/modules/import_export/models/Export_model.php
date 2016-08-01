@@ -22,7 +22,7 @@ class Export_model extends CI_Model {
         //degree d
         //batch b
         $this->db->select('em.em_name AS Exam Name, '
-                . 'em.total_marks AS Total Marks, em.passing_mark AS Passing Marks');
+                . 'em.total_marks AS Total Marks, em.passing_mark AS Passing Marks,em.em_date as Start Date,em.em_end_time as End Date');
         $this->db->select('et.exam_type_name AS ExamType');
         $this->db->select('d.d_name AS Department');
         $this->db->select('c.c_name AS Branch, c.course_alias_id AS Branch Id');
@@ -182,9 +182,11 @@ class Export_model extends CI_Model {
         $this->db->select('d.d_name AS Department');
         $this->db->select('c.c_name AS Branch');
         $this->db->from('batch b');
-        $this->db->join('degree d', 'd.d_id = b.degree_id');
-        $this->db->join('course AS c', 'c.course_id = b.course_id');
-        return $this->db->get();
+        $this->db->join('degree d', 'b.degree_id IN(d.d_id )','right');
+        $this->db->join('course AS c', 'd.d_id=c.degree_id','right');
+        return  $this->db->get();
+        
+        
     }
     
     /**
@@ -224,10 +226,22 @@ class Export_model extends CI_Model {
         $this->db->select('s.subject_name AS Subject Name, s.subject_code AS Subject Code');
         $this->db->select('c.c_name AS Branch');
         $this->db->select('sm.s_name AS Semester');
-        $this->db->from('subject_manager s');
-        $this->db->join('course AS c', 'c.course_id = s.sm_course_id');
-        $this->db->join('semester AS sm', 'sm.s_id = s.sm_sem_id');
+        $this->db->select('p.name AS Professor');
+        $this->db->from('subject_manager s');        
+        $this->db->join('subject_association sa','sa.sm_id=s.sm_id');
+        $this->db->join('course AS c', 'c.course_id = sa.course_id');
+        $this->db->join('semester AS sm', 'sm.s_id = sa.sem_id');
+        $this->db->join('professor AS p', 'FIND_IN_SET(sa.professor_id, p.professor_id)');
+        //$this->db->group_by('sa.sm_id');        
+        return $this->db->get();
         
+        
+    }
+    
+    function subject_list_export()
+    {
+        $this->db->select('s.subject_name AS Subject Name, s.subject_code AS Subject Code');
+        $this->db->from('subject_manager s');  
         return $this->db->get();
     }
 }

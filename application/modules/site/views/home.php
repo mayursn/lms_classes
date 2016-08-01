@@ -72,12 +72,12 @@ if (count($slide_setting))
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <ul class="cs-top-categories">
-                        <li><a href="<?php echo base_url('index.php?branch/2'); ?>" style="background:#8a9045;"><i class="icon-uniF1032"></i>Master Of Engg.</a></li>
-                        <li><a href="<?php echo base_url('index.php?branch/1'); ?>" style="background:#a88b60;"><i class="icon-uniF1022"></i>Bachelor Of Business</a></li>
-                        <li><a href="<?php echo base_url('index.php?branch/9'); ?>" style="background:#3e769a;"><i class="icon-uniF1052"></i>Bachelor Of Engg.</a></li>
-                        <li><a href="<?php echo base_url('index.php?branch/3'); ?>" style="background:#c16622;"><i class="icon-uniF1012"></i>Mba Double Masters</a></li>
-                        <li><a href="<?php echo base_url('index.php?branch/7'); ?>" style="background:#896ca9;"><i class="icon-uniF1042"></i>IT</a></li>
-                        <li><a href="<?php echo base_url('index.php?branch/5'); ?>" style="background:#dd9d13;"><i class="icon-uniF1002"></i>Business</a></li>
+                        <li><a href="<?php echo base_url('site/branch_details/2'); ?>" style="background:#8a9045;"><i class="icon-uniF1032"></i>Master Of Engg.</a></li>
+                        <li><a href="<?php echo base_url('site/branch_details/1'); ?>" style="background:#a88b60;"><i class="icon-uniF1022"></i>Bachelor Of Business</a></li>
+                        <li><a href="<?php echo base_url('site/branch_details/9'); ?>" style="background:#3e769a;"><i class="icon-uniF1052"></i>Bachelor Of Engg.</a></li>
+                        <li><a href="<?php echo base_url('site/branch_details/3'); ?>" style="background:#c16622;"><i class="icon-uniF1012"></i>Mba Double Masters</a></li>
+                        <li><a href="<?php echo base_url('site/branch_details/7'); ?>" style="background:#896ca9;"><i class="icon-uniF1042"></i>IT</a></li>
+                        <li><a href="<?php echo base_url('site/branch_details/5'); ?>" style="background:#dd9d13;"><i class="icon-uniF1002"></i>Business</a></li>
                     </ul>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 <link href="<?php echo base_url(); ?>assets/css/event_calendar/eventCalendar_theme_responsive.css" />
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/event_calendar/moment.js"></script>
 <script type="text/javascript" >
-    
+
     ;
     (function ($) {
         $.fn.eventCalendar = function (options) {
@@ -475,34 +475,43 @@
     <!-- .row -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                <a href="<?php echo base_url(); ?>class_routine" class="stats-btn mb20 lead-stats color_green">
-                    <span data-to="568" data-from="0" class="stats-number dolar">Class Routine</span>
-                    <span class="stats-icon"><i class="fa fa-book color-green"></i></span>
-                    <h5>Daily class routine</h5>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                <a href="<?php echo base_url(); ?>exam" class="stats-btn mb20 lead-stats news_icon">
-                    <span data-to="568" data-from="0" class="stats-number dolar">Exam</span>
-                    <span class="stats-icon"><i class="fa fa-newspaper-o news-icon"></i></span>
-                    <h5>Exam and it's schedule</h5>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                <a href="<?php echo base_url(); ?>assignment/submission" class="stats-btn mb20 lead-stats attendant_green">
-                    <span data-to="568" data-from="0" class="stats-number dolar">Assignment</span>
-                    <span class="stats-icon"><i class="fa fa-file attendant-color"></i></span>
-                    <h5>Daily assignments</h5>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                <a href="<?php echo base_url(); ?>feerecord" class="stats-btn mb20 lead-stats admissions_color">
-                    <span data-to="568" data-from="0" class="stats-number dolar">Fee Records</span>
-                    <span class="stats-icon"><i class="fa fa-universal-access admissions-color"></i></span>
-                    <h5>Recent fee records</h5>
-                </a>
-            </div>
+            <?php if (check_permission($permission, 'Class_Routine')) { ?>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="display:none;">
+                    <a href="<?php echo base_url(); ?>student/class_routine" class="stats-btn mb20 lead-stats color_green">
+                        <span data-to="568" data-from="0" class="stats-number dolar">Class Routine</span>
+                        <span class="stats-icon"><i class="fa fa-book color-green"></i></span>
+                        <h5>Daily class routine</h5>
+                    </a>
+                </div>
+            <?php } ?>
+
+            <?php if (check_permission($permission, 'Exam')) { ?>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                    <a href="<?php echo base_url(); ?>exam" class="stats-btn mb20 lead-stats news_icon">
+                        <span data-to="568" data-from="0" class="stats-number dolar">Exam</span>
+                        <span class="stats-icon"><i class="fa fa-newspaper-o news-icon"></i></span>
+                        <h5>Exam and it's schedule</h5>
+                    </a>
+                </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Assignment')) { ?>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6"  style="display:none;">
+                    <a href="<?php echo base_url(); ?>assignment/submission" class="stats-btn mb20 lead-stats attendant_green">
+                        <span data-to="568" data-from="0" class="stats-number dolar">Assignment</span>
+                        <span class="stats-icon"><i class="fa fa-file attendant-color"></i></span>
+                        <h5>Daily assignments</h5>
+                    </a>
+                </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Fee')) { ?>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                    <a href="<?php echo base_url(); ?>feerecord" class="stats-btn mb20 lead-stats admissions_color">
+                        <span data-to="568" data-from="0" class="stats-number dolar">Fee Records</span>
+                        <span class="stats-icon"><i class="fa fa-universal-access admissions-color"></i></span>
+                        <h5>Recent fee records</h5>
+                    </a>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -511,226 +520,236 @@
     <!-- .row -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> 
-                            <i class="icomoon-icon-books"></i> 
+            <?php if (check_permission($permission, 'Study_Resource')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <div class="xe-widget xe-counter-block">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> 
+                                <i class="icomoon-icon-books"></i> 
+                            </div>
+                            <div class="xe-label"> 
+                                <strong class="num">STUDY RESOURCES</strong>   
+                            </div>
                         </div>
-                        <div class="xe-label"> 
-                            <strong class="num">STUDY RESOURCES</strong>   
-                        </div>
-                    </div>
-                    <div class="border"></div>                          
-                    <div class="xe-lower scroll-bar-box">  
-                        <ul class="clearfix links-gaz">                                              
-                            <?php
-                            foreach ($studyresource as $row):
-                                ?>
-                                <li>
-                                    <a href="<?php echo base_url(); ?>uploads/project_file/<?php echo $row->study_filename; ?>"  title="<?php echo $row->study_desc; ?>" download="" target="_newtab" ><?php echo $row->study_title; ?></a>
-                                </li>
-                            <?php endforeach; ?>                                      
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block xe-counter-block-purple">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> <i class="icomoon-icon-book" aria-hidden="true"></i> </div>
-                        <div class="xe-label"> <strong class="num">DIGITAL LIBRARY</strong> <span>Daily Visits</span> </div>
-                    </div>
-                    <div class="border"></div>
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz">
-                            <?php
-                            foreach ($library as $lbr):
-                                ?>
-                                <li>
-                                    <a  download=""  href="<?php echo base_url(); ?>uploads/project_file/<?php echo $lbr->lm_filename; ?>" target="_blank" ><?php echo $lbr->lm_title; ?></a>                                
-                                </li>                            
-                            <?php endforeach; ?>   
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block  xe-counter-block-blue">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> 
-                            <i class="icomoon-icon-file" aria-hidden="true"></i> 
-                        </div>                        
-                        <div class="xe-label"> 
-                            <span>All the best</span> 
-                            <strong class="num">EXAMINATIONS</strong> 
+                        <div class="border"></div>                          
+                        <div class="xe-lower scroll-bar-box">  
+                            <ul class="clearfix links-gaz">                                              
+                                <?php
+                                foreach ($studyresource as $row):
+                                    ?>
+                                    <li>
+                                        <a href="<?php echo base_url(); ?>uploads/project_file/<?php echo $row->study_filename; ?>"  title="<?php echo $row->study_desc; ?>" download="" target="_newtab" ><?php echo wordwrap($row->study_title, '30'); ?></a>
+                                    </li>
+                                <?php endforeach; ?>                                      
+                            </ul>
                         </div>
                     </div>
-                    <div class="border"></div>            
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz">
-                            <?php foreach ($exam_listing as $row) { ?> 
+                </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Library')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6"  style="display:none;">
+                    <div class="xe-widget xe-counter-block xe-counter-block-purple">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> <i class="icomoon-icon-book" aria-hidden="true"></i> </div>
+                            <div class="xe-label"> <strong class="num">DIGITAL LIBRARY</strong> <span>Daily Visits</span> </div>
+                        </div>
+                        <div class="border"></div>
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz">
+                                <?php
+                                foreach ($library as $lbr):
+                                    ?>
+                                    <li>
+                                        <a  download=""  href="<?php echo base_url(); ?>uploads/project_file/<?php echo $lbr->lm_filename; ?>" target="_blank" ><?php echo $lbr->lm_title; ?></a>                                
+                                    </li>                            
+                                <?php endforeach; ?>   
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Exam')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <div class="xe-widget xe-counter-block  xe-counter-block-blue">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> 
+                                <i class="icomoon-icon-file" aria-hidden="true"></i> 
+                            </div>                        
+                            <div class="xe-label"> 
+                                <span>All the best</span> 
+                                <strong class="num">EXAMINATIONS</strong> 
+                            </div>
+                        </div>
+                        <div class="border"></div>            
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz">
+                                <?php foreach ($exam_listing as $row) { ?> 
+                                    <li>
+                                        <a href="<?php echo base_url('examschedual/schedule/' . $row->em_id); ?>" target="_blank"><?php echo $row->em_name; ?></a>                  
+                                    </li>
+                                <?php } ?>                                                                                                                                 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Participate')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6"  style="display:none;">
+                    <div class="xe-widget xe-counter-block xe-counter-block-orange">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> <i class=" icomoon-icon-file-upload" aria-hidden="true"></i> </div>
+                            <div class="xe-label"> <strong class="num">PARTICIPATE</strong></div>                        
+                        </div>
+                        <div class="border"></div>
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz"> 
                                 <li>
-                                    <a href="<?php echo base_url('examschedual/schedule/' . $row->em_id); ?>" target="_blank"><?php echo $row->em_name; ?></a>                  
+                                    <a href="<?php echo base_url(); ?>participate/volunteer" target="_blank">Volunteer</a>
                                 </li>
-                            <?php } ?>                                                                                                                                 
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block xe-counter-block-orange">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> <i class=" icomoon-icon-file-upload" aria-hidden="true"></i> </div>
-                        <div class="xe-label"> <strong class="num">PARTICIPATE</strong></div>                        
-                    </div>
-                    <div class="border"></div>
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz"> 
-                            <li>
-                                <a href="<?php echo base_url(); ?>participate/volunteer" target="_blank">Volunteer</a>
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url(); ?>participate/survey" target="_blank"> <div class="menu-icon"></div> <div class="menu-text">Survey</div> </a>                                
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url(); ?>participate/upload" target="_blank"> <div class="menu-icon"></div> <div class="menu-text">Upload</div> </a>                                
-                            </li>        
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block xe-progress-counter xe-progress-counter-turquoise">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> <i class="fa fa-legal" aria-hidden="true"></i> </div>
-                        <div class="xe-label"><strong class="num">RESULTS</strong> </div>
-                    </div>
-                    <div class="border"></div>
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz"> 
-                            <li>
-                                <a href="<?php echo base_url('student/exam_marks'); ?>" target="_blank">Exam Marks</a>
-
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url('student/statement_of_marks'); ?>" target="_blank">Statement of Marks</a>                                 
-                            </li>
-                        </ul>                     
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block xe-counter-block-red">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> <i class="icomoon-icon-camera-5" aria-hidden="true"></i> </div>
-                        <div class="xe-label"> <strong class="num">VIDEO CONFERENCING</strong> </div>
-                    </div>
-                    <div class="border"></div>
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz"> 
-                            <?php foreach ($live_streaming as $video) { ?>
                                 <li>
-                                    <a target="_blank" href="<?php echo base_url('video_streaming#' . $video->url_link); ?>">
-                                        <div class="menu-icon">
-                                            <i class=" icon-trophy"></i>
-                                        </div>
-                                        <div class="menu-text">
-                                            <?php echo $video->title; ?>                                        
-                                        </div>
-                                    </a>
+                                    <a href="<?php echo base_url(); ?>participate/survey" target="_blank"> <div class="menu-icon"></div> <div class="menu-text">Survey</div> </a>                                
                                 </li>
-                            <?php } ?>
-                            <?php foreach ($all as $video) { ?>
                                 <li>
-                                    <a target="_blank" href="<?php echo base_url('video_streaming#' . $video->url_link); ?>">
-                                        <div class="menu-icon">
-                                            <i class=" icon-trophy"></i>
-                                        </div>
-                                        <div class="menu-text"><?php echo $video->title; ?></div>
-                                    </a>
-                                </li>
-                            <?php } ?>
-
-                            <?php
-                            if(!count($live_streaming) && !count($all)) { ?>
-                                <h5>No live streaming available.</h5>
-                            <?php } ?>
-                        </ul>
+                                    <a href="<?php echo base_url(); ?>participate/upload" target="_blank"> <div class="menu-icon"></div> <div class="menu-text">Upload</div> </a>                                
+                                </li>        
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Exam_Marks')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <div class="xe-widget xe-counter-block xe-progress-counter xe-progress-counter-turquoise">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> <i class="fa fa-legal" aria-hidden="true"></i> </div>
+                            <div class="xe-label"><strong class="num">RESULTS</strong> </div>
+                        </div>
+                        <div class="border"></div>
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz"> 
+                                <li>
+                                    <a href="<?php echo base_url('student/exam_marks'); ?>" target="_blank">Exam Marks</a>
+
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url('student/statement_of_marks'); ?>" target="_blank">Statement of Marks</a>                                 
+                                </li>
+                            </ul>                     
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (check_permission($permission, 'Video_Streaming')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6"  style="display:none;">
+                    <div class="xe-widget xe-counter-block xe-counter-block-red">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> <i class="icomoon-icon-camera-5" aria-hidden="true"></i> </div>
+                            <div class="xe-label"> <strong class="num">VIDEO CONFERENCING</strong> </div>
+                        </div>
+                        <div class="border"></div>
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz"> 
+                                <?php foreach ($live_streaming as $video) { ?>
+                                    <li>
+                                        <a target="_blank" href="<?php echo base_url('video_streaming#' . $video->url_link); ?>">
+                                            <div class="menu-icon">
+                                                <i class=" icon-trophy"></i>
+                                            </div>
+                                            <div class="menu-text">
+                                                <?php echo $video->title; ?>                                        
+                                            </div>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                                <?php foreach ($all as $video) { ?>
+                                    <li>
+                                        <a target="_blank" href="<?php echo base_url('video_streaming#' . $video->url_link); ?>">
+                                            <div class="menu-icon">
+                                                <i class=" icon-trophy"></i>
+                                            </div>
+                                            <div class="menu-text"><?php echo $video->title; ?></div>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+
+                                <?php if (!count($live_streaming) && !count($all)) { ?>
+                                    <h5>No live streaming available.</h5>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
             <!-- Admission Volunteer start div-->
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block xe-counter-block-red attendance-box" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> <i aria-hidden="true" class=" icomoon-icon-notebook"></i> </div>
-                        <div class="xe-label"> <strong class="num">Admission</strong></div>
-                    </div>
-                    <div class="border"></div>
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz"> 
-                            <li>
-                                <a href="<?php echo base_url('student/profile'); ?>" target="_blank"> 
-                                    <div class="menu-text">Profile</div> 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url('feerecord'); ?>" target="_blank"> 
-                                    <div class="menu-text"> Student Payment Record</div> 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url('payment/student_fees'); ?>" target="_blank">                                 
-                                    <div class="menu-text">Pay Online 
-
-                                    </div> </a> 
-                            </li>
-
-                            <?php foreach ($cms_pages as $page) { ?>
+            <?php if (check_permission($permission, 'Payment')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <div class="xe-widget xe-counter-block xe-counter-block-red attendance-box" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> <i aria-hidden="true" class=" icomoon-icon-notebook"></i> </div>
+                            <div class="xe-label"> <strong class="num">Admission</strong></div>
+                        </div>
+                        <div class="border"></div>
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz"> 
                                 <li>
-                                    <a href="<?php echo base_url('student/cms_page/' . $page->am_id); ?>" target="_blank">
-                                        <div><?php echo $page->am_title; ?></div>
+                                    <a href="<?php echo base_url('profile'); ?>" target="_blank"> 
+                                        <div class="menu-text">Profile</div> 
                                     </a>
-                                </li> 
-                            <?php } ?>
-                        </ul>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url('feerecord'); ?>" target="_blank"> 
+                                        <div class="menu-text"> Student Payment Record</div> 
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url('payment/student_fees'); ?>" target="_blank">                                 
+                                        <div class="menu-text">Pay Online 
+
+                                        </div> </a> 
+                                </li>
+
+                                <?php foreach ($cms_pages as $page) { ?>
+                                    <li  style="display:none;">
+                                        <a href="<?php echo base_url('student/cms_page/' . $page->am_id); ?>" target="_blank">
+                                            <div><?php echo $page->am_title; ?></div>
+                                        </a>
+                                    </li> 
+                                <?php } ?>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php } ?>
             <!-- Admission Volunteer end div-->
 
             <!-- Project List start div-->
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                <div class="xe-widget xe-counter-block xe-counter-block-black">
-                    <div class="xe-upper">
-                        <div class="xe-icon"> <i class="fa fa-paperclip" aria-hidden="true"></i> </div>
-                        <div class="xe-label"> <strong class="num">PROJECT</strong> </div>
-                    </div>
-                    <div class="border"></div>
-                    <div class="xe-lower scroll-bar-box">
-                        <ul class="clearfix links-gaz"> 
-                            <li>                                
-                                <a href="<?php echo base_url(); ?>project/submission" target="_blank"> <div class="menu-icon"></div> <div class="menu-text">Main Project List
-                                </a>
-                            </li>
-                        </ul>    
+            <?php if (check_permission($permission, 'Project')) { ?>
+                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6"  style="display:none;">
+                    <div class="xe-widget xe-counter-block xe-counter-block-black">
+                        <div class="xe-upper">
+                            <div class="xe-icon"> <i class="fa fa-paperclip" aria-hidden="true"></i> </div>
+                            <div class="xe-label"> <strong class="num">PROJECT</strong> </div>
+                        </div>
+                        <div class="border"></div>
+                        <div class="xe-lower scroll-bar-box">
+                            <ul class="clearfix links-gaz"> 
+                                <li>                                
+                                    <a href="<?php echo base_url(); ?>project/submission" target="_blank"> <div class="menu-icon"></div> <div class="menu-text">Main Project List
+                                    </a>
+                                </li>
+                            </ul>    
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php } ?>
             <!-- Project List end div-->
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  style="display:none;">
                 <!-- calendar start here -->        
                 <div class="panel panel-default toggle">
                     <!-- Start .panel -->
                     <div class=panel-heading>
-                        <h4 class=panel-title>Event Calendar</h4>
+                        <h4 class=panel-title>Academic Calendar</h4>
                         <div class="panel-controls panel-controls-right"> 
                             <a href="#" class="toggle panel-minimize"><i class="minia-icon-arrow-up-3"></i></a>
                         </div>
@@ -857,44 +876,48 @@
                 <div class="vital-stats">
                     <!-- Vital stats -->
                     <ul class="list-unstyled growth-list">
-                       <?php  foreach($growth as $row_mark):    
-                        $total = ($row_mark->total*100/$row_mark->totalmarks);
-                        $total_percentage = number_format($total, 2, '.', ',');
-                        $total_percentage." %";
-                        $round_percentage = round($total_percentage);
-                                                ?>
-                         <?php
-                                 $progress_class = '';
-                                 $color_class = '';
-                              if($round_percentage >= 50 || $round_percentage <= 60  )
-                                {
-                                    $progress_class = "progress-bar-warning";
-                                    $color_class = "fa-caret-down color-red";
-                                }
-                                if($round_percentage <= 50)
-                                {
-                                    $progress_class = "progress-bar-danger";
-                                    $color_class= "fa-caret-down color-red";
-                                }
-                                if($round_percentage >= 70)
-                                {
-                                    $progress_class = "progress-bar-success";
-                                    $color_class= "fa-caret-up color-green";
-                                }
-                                 ?>
-                                               
-                        <li>
-                            <i class="fa s24 <?php echo $color_class; ?>" aria-hidden="true"></i>
-                             <?php echo $row_mark->s_name; ?>
-                            <span class="pull-right strong"><?php //echo $row_mark->total; ?></span>
-                            <div class="progress progress-striped animated-bar mt0">
-                               
-                                <div data-transitiongoal="<?php echo $round_percentage; ?>" role="progressbar" class="progress-bar <?php echo $progress_class; ?>" style="width: <?php echo $round_percentage; ?>%;" aria-valuenow="<?php echo $round_percentage; ?>">
-                                   <?php echo $total_percentage; ?>%
+                        <?php
+                        if(!empty($growth)){
+                        foreach ($growth as $row_mark):
+                            if(!empty($row_mark->totalmarks))
+                            {
+                            $total = ($row_mark->total * 100 / $row_mark->totalmarks);
+                            $total_percentage = number_format($total, 2, '.', ',');
+                            $total_percentage . " %";
+                            $round_percentage = round($total_percentage);
+                            ?>
+                            <?php
+                            $progress_class = '';
+                            $color_class = '';
+                            if ($round_percentage >= 50 || $round_percentage <= 60) {
+                                $progress_class = "progress-bar-warning";
+                                $color_class = "fa-caret-down color-red";
+                            }
+                            if ($round_percentage <= 50) {
+                                $progress_class = "progress-bar-danger";
+                                $color_class = "fa-caret-down color-red";
+                            }
+                            if ($round_percentage >= 70) {
+                                $progress_class = "progress-bar-success";
+                                $color_class = "fa-caret-up color-green";
+                            }
+                            ?>
+
+                            <li>
+                                <i class="fa s24 <?php echo $color_class; ?>" aria-hidden="true"></i>
+                                <?php //echo $row_mark->s_name; ?>
+                                <span class="pull-right strong"><?php //echo $row_mark->total;    ?></span>
+                                <div class="progress progress-striped animated-bar mt0">
+
+                                    <div data-transitiongoal="<?php echo $round_percentage; ?>" role="progressbar" class="progress-bar <?php echo $progress_class; ?>" style="width: <?php echo $round_percentage; ?>%;" aria-valuenow="<?php echo $round_percentage; ?>">
+                                        <?php echo $total_percentage; ?>%
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                                 <?php endforeach;?>                        
+                            </li>
+                        <?php
+                            }
+                        endforeach;
+                        }?>                        
                     </ul>
                     <!-- / Vital stats -->
                 </div>
@@ -1035,7 +1058,7 @@
 <!-- To do list js -->
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.min.js"></script>
 <script>
-var js_date_format = '<?php echo js_dateformat(); ?>';
+                                    var js_date_format = '<?php echo js_dateformat(); ?>';
 </script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/todo-student.js"></script>
 <!--  end to do list -->

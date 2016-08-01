@@ -60,24 +60,23 @@ endforeach;
 
   <script>
          $(document).ready(function () {
+             var js_format = '<?php echo js_dateformat(); ?>';
          $("#holiday_startdate1").datepicker({
-                format: 'MM d, yyyy', startDate : new Date(),
+                format: js_format, startDate : new Date(),
                 changeMonth: true,
                 changeYear: true,
-                autoclose:true,
-                onClose: function (selectedDate) {
-                    $("#holiday_enddate1").datepicker("option", "startDate", selectedDate);
-                }
+                autoclose:true
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+            $('#holiday_enddate1').datepicker('setStartDate', minDate);
             });
             
             $("#holiday_enddate1").datepicker({
-                format: ' MM d, yyyy', startDate : new Date(), autoclose:true,
+                format: js_format,               
                 changeMonth: true,
                 changeYear: true,
-                autoclose:true,
-                onClose: function (selectedDate) {
-                    $("#holiday_startdate1").datepicker("option", "endDate", selectedDate);
-                }
+                autoclose:true
+                
             });
             
              $("#holidayformedit").validate({

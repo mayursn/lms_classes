@@ -83,6 +83,12 @@
                ?> <li><a href="#editprofile" data-toggle=tab>Edit Profile</a></li>
                 <?php
                }
+if($this->session->userdata('role_name')=='Student')
+               {
+                   ?>
+                <li><a href="#studentprofile" data-toggle=tab>Edit Profile</a></li>
+                <?php
+               }
                 ?>
             </ul>
             <div id="mytab" class=tab-content style="overflow-y: scroll;height:400px">
@@ -106,7 +112,7 @@
                     <form class="form-horizontal group-border stripped" role=form action="<?php echo base_url() . 'profile/change_password'?>"
                           method="post" enctype="multipart/form-data" name="frmchangepassword" id="frmchangepassword" >
                         <div class=form-group>
-                            <label class="col-lg-3 control-label" for="">Current Password</label>
+                            <label class="col-lg-3 control-label" for="">Current Password<span style="color:red">*</span></label>
                             <div class=col-lg-9>
                                 <input class="form-control" type="hidden" name="oldpassword" id="oldpassword" value="<?php echo $profile[0]->password?>">
                                 <input class="form-control"  type="password" name="password" id="password" value="" placeholder="">
@@ -114,14 +120,14 @@
                         </div>
                         <!-- End .form-group  -->
                         <div class=form-group>
-                            <label class="col-lg-3 control-label" for="">New Password</label>
+                            <label class="col-lg-3 control-label" for="">New Password<span style="color:red">*</span></label>
                             <div class=col-lg-9>
                                 <input class="form-control"  type="password" name="new_password" id="new_password" value="" placeholder="">
                             </div>
                         </div>
                         <!-- End .form-group  -->
                         <div class=form-group>
-                            <label class="col-lg-3 control-label" for="">Confirm Password</label>
+                            <label class="col-lg-3 control-label" for="">Confirm Password<span style="color:red">*</span></label>
                             <div class=col-lg-9>
                                 <input class="form-control" type="password" name="confirm_password" id="confirm_password" value="" placeholder="">
                             </div>
@@ -140,21 +146,21 @@
                      <form class="form-horizontal group-border stripped" role=form action="<?php echo base_url() . 'profile/change_profile'?>"
                           method="post" enctype="multipart/form-data" name="frmchangeprofile" id="frmchangeprofile" >
                         <div class=form-group>
-                            <label class="col-sm-3 control-label">First Name</label> 
+                            <label class="col-sm-3 control-label">First Name<span style="color:red">*</span></label> 
                             <div class="col-lg-9">
                                 <input class="form-control" type="text" value="<?php echo $profile[0]->first_name; ?>" name="fname" id="fname" placeholder="first name">
                              </div>
                         </div>
                         <!-- End .form-group  -->
                         <div class=form-group>
-                            <label class="col-sm-3 control-label">Last Name</label>
+                            <label class="col-sm-3 control-label">Last Name<span style="color:red">*</span></label>
                             <div class="col-lg-9">
                                 <input class="form-control" type="text" value="<?php echo $profile[0]->last_name; ?>" name="lname" id="lname" placeholder="last name">
                             </div>
                         </div>
                         <!-- End .form-group  -->
                         <div class=form-group>
-                            <label class="col-sm-3 control-label">Email</label>
+                            <label class="col-sm-3 control-label">Email<span style="color:red">*</span></label>
                             <div class="col-lg-9">
                                 <input class="form-control" readonly="" type="email" value="<?php echo $profile[0]->email; ?>" name="email" id="email" placeholder="email@yourcompany.com">
                             </div>
@@ -172,25 +178,25 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Mobile Phone</label>
+                            <label class="col-sm-3 control-label">Mobile Phone<span style="color:red">*</span></label>
                             <div class="col-lg-9">
                                 <input class="form-control" name="mobile" id="mobile" value="<?php echo $profile[0]->mobile; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">City</label>
+                            <label class="col-sm-3 control-label">City<span style="color:red">*</span></label>
                             <div class="col-lg-9">
                                 <input class="form-control" name="city" id="city" value="<?php echo $profile[0]->city; ?>"/>
                             </div>
                         </div>
                          <div class="form-group">
-                            <label class="col-sm-3 control-label">Zip Code</label>
+                            <label class="col-sm-3 control-label">Zip Code<span style="color:red">*</span></label>
                             <div class="col-lg-9">
                                 <input class="form-control" name="zip" id="zip" value="<?php echo $profile[0]->zip_code; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Profile Photo"); ?><span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Profile Photo"); ?></label>
                             <div class="col-sm-8">
                                 <input type="file" class="form-control" name="userfile" id="userfile"/>
                                 <span id="imgerror" style="color:red;"></span>
@@ -204,6 +210,55 @@
                         <!-- End .form-group  -->
                     </form>
                 </div>
+                <?php
+                 if($this->session->userdata('role_name')=='Student')
+                     {
+                   ?>
+                <div id="studentprofile" class="tab-pane fade out">
+                     <form class="form-horizontal group-border stripped" role=form action="<?php echo base_url() . 'profile/student_change_profile'?>"
+                          method="post" enctype="multipart/form-data" name="frmstudentprofile" id="frmstudentprofile" >
+                       <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Parent Name"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="parentname" id="parentname" value="<?php echo $studentprofile->parent_name?>" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Parent Contact No"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="parentcontact" id="parentcontact" value="<?php echo $studentprofile->parent_contact?>" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Parent Email Id"); ?><span style="color:red"></span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="parent_email_id" id="parent_email_id" value="<?php echo $studentprofile->parent_email?>"/>
+                            <span id="emailerror" style="color: red"></span>
+                        </div>
+                    </div>
+                         <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Facebook URL"); ?></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="facebook" id="facebook" value="<?php echo $studentprofile->std_fb?>"/>
+                        </div>
+                    </div>	
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Twitter URL"); ?></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="twitter" id="twitter" value="<?php echo $studentprofile->std_twitter?>"/>
+                        </div>
+                    </div>	
+                        <div class=form-group>
+                            <div class="col-lg-9 col-lg-offset-3">
+                                <input type="submit" value="Update" class="btn btn-primary"/>
+                            </div>
+                        </div>
+                        <!-- End .form-group  -->
+                    </form>
+                </div>
+                <?php
+                     }
+                   ?>
             </div>
            
         </div>
@@ -283,6 +338,22 @@
                 mobile: "Enter mobile no",
                 city: "Enter city",
                 zip: "Enter zip",
+            }
+        });
+         $("#frmstudentprofile").validate({
+            rules: {
+                parentname: "required",
+                parentcontact: "required",
+//                parent_email_id: "required",
+//                facebook: "required",
+//                twitter: "required",
+            },
+            messages: {
+                parentname: "Enter first name",
+                parentcontact: "Enter last name",
+//                parent_email_id: "Enter email",
+//                facebook: "Select gender",
+//                twitter: "Enter mobile no",
             }
         });
     });

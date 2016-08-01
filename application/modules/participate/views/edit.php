@@ -34,7 +34,7 @@ $row = $this->participate_manager_model->get($param2);
                                         ?>>All</option>
                                                 <?php
                                                 $this->load->model('department/Degree_model');
-                                                $datadegree =$this->Degree_model->get_many_by(array('d_status' => 1));                                                
+                                                $datadegree =$this->Degree_model->order_by_column('d_name');                                                
                                                 foreach ($datadegree as $rowdegree) {
                                                     if ($rowdegree->d_id == $row->pp_degree) {
                                                         ?>

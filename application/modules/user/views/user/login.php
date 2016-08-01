@@ -53,7 +53,9 @@
                 <div class="login-panel panel panel-default plain animated bounceIn">
 
                     <!-- Start .panel -->
-
+                    <?php if($this->session->flashdata('success')){ ?>
+                    <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                    <?php } ?>
                     <div class=panel-body>
                         <form class="form-horizontal mt0" action="" id="login-form" role="form" method="post">
 

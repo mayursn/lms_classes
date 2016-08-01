@@ -13,11 +13,15 @@ class Syllabus extends MY_Controller {
         parent::__construct();
         $this->load->model('syllabus/Smart_syllabus_model');
         $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
+        $this->load->model('Courses/Course_model');
         $this->load->model('batch/Batch_model');
         $this->load->model('semester/Semester_model');
         $this->load->model('classes/Class_model');
         $this->load->model('student/Student_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
@@ -30,10 +34,13 @@ class Syllabus extends MY_Controller {
         if ($this->session->userdata('std_id')) {
             $std = $this->session->userdata('std_id');
             $student = $this->Student_model->get($std);
-            $std_degree = $student->std_degree;
+            $branch_id = $student->branch_id;
             $course_id = $student->course_id;
-            $semester_id = $student->semester_id;
-            $this->data['syllabus'] = $this->Smart_syllabus_model->get_many_by(array("syllabus_degree" => $std_degree, "syllabus_course" => $course_id, "syllabus_sem" => $semester_id));          
+            $admission_plan_id = $student->admission_plan_id;
+            $this->data['syllabus'] = $this->Smart_syllabus_model->get_many_by(
+                                array("branch_id" => $branch_id, 
+                                    "syllabus_course" => $course_id, 
+                                    "admission_plan_id" => $admission_plan_id));          
         }
         else{
         $this->data['syllabus'] = $this->Smart_syllabus_model->order_by_column('created_date');
@@ -69,9 +76,9 @@ class Syllabus extends MY_Controller {
             }
 
             $insert['syllabus_title'] = $this->input->post('title');
-            $insert['syllabus_degree'] = $this->input->post('degree');
+            $insert['branch_id'] = $this->input->post('branch');
             $insert['syllabus_course'] = $this->input->post('course');
-            $insert['syllabus_sem'] = $this->input->post('semester');
+            $insert['admission_plan_id'] = $this->input->post('admission_plan');
             $insert['syllabus_desc'] = $this->input->post('description');
 
             $this->Smart_syllabus_model->insert($insert);
@@ -133,15 +140,17 @@ class Syllabus extends MY_Controller {
      * 
      */
     function getsyllabus($param = '') {
-        $degree = $this->input->post('degree');
+        $this->load->model('admission_plan/Admission_plan_model');
+        $this->load->model('branch/Branch_location_model');
+        $branch = $this->input->post('branch');
         $course = $this->input->post('course');
-        $semester = $this->input->post("semester");
+        $admission_plan = $this->input->post("admission_plan");
         $this->data['course'] = $this->Course_model->order_by_column('c_name');
-        $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
-        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
         $array = array("syllabus_course" => $course,
-            "syllabus_degree" => $degree,
-            "syllabus_sem" => $semester);
+            "branch_id" => $branch,
+            "admission_plan_id" => $admission_plan);        
         $this->data['syllabus'] = $this->Smart_syllabus_model->get_many_by($array);
 
         $this->load->view("syllabus/getsyllabus", $this->data);

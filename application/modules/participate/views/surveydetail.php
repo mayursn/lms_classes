@@ -3,6 +3,7 @@ $this->db->select('s.*,sl.*,sq.*');
 $this->db->join('student s', 's.std_id=sl.student_id');
 $this->db->join('survey_question sq', 'sq.sq_id=sl.sq_id');
 $edit_data = $this->db->get_where('survey sl', array('sl.student_id' => $param2))->result();
+
 $this->load->helper("date_format");
 ?>
 <style>
@@ -53,7 +54,7 @@ $this->load->helper("date_format");
                                 <thead>
                                     <tr>
                                         <th><?php echo ucwords("Question"); ?></th>
-                                        <th><?php echo ucwords("Answer"); ?></th>
+                                        <th width="30%"><?php echo ucwords("Answer"); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>

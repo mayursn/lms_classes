@@ -49,5 +49,13 @@ class Module_role_permission_model extends MY_Model {
                     "$this->_table.role_id" => $role_id
                 ])->get()->result();
     }
+    
+    function get_role_modules($id)
+    {
+        $this->db->where('m.role_id',$id);
+        $this->db->order_by('role_name','asc');        
+        $this->db->join('role r','r.role_id=m.role_id');
+       return $this->db->get('module_role_permission m')->result();
+    }
 
 }

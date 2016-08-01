@@ -1,20 +1,8 @@
 <?php
 $edit_data = $this->db->get_where('subject_association', array('sa_id' => $param2))->result_array();
-$degree = $this->db->order_by('d_name', 'ASC')->get('degree')->result_array();
-$courses = $this->db->get_where('course',array('degree_id'=>$edit_data[0]['degree_id']))->result_array();
-
- $cid = $edit_data[0]['course_id'];
-        $course = $this->db->get_where('course', array('course_id' => $cid))->result_array();
-
-        $semexplode = explode(',', $course[0]['semester_id']);
-        $semester = $this->db->get('semester')->result_array();
-
-        foreach ($semester as $sem) {
-            if (in_array($sem['s_id'], $semexplode)) {
-                $semdata[] = $sem;
-            }
-        }
-
+$this->load->model('branch/Branch_location_model');
+$this->load->model('admission_plan/Admission_plan_model');
+$branch = $this->Branch_location_model->get_all();
 $professor = $this->db->get('professor')->result_array();
 foreach ($edit_data as $row):
 
@@ -33,49 +21,34 @@ foreach ($edit_data as $row):
                     <?php echo form_open(base_url() . 'subject/subject_detail_update/'.$this->uri->segment(4), array('class' => 'form-horizontal form-groups-bordered validate', 'role' => 'form', 'id' => 'frmsubjectdetail', 'target' => '_top', 'enctype' => 'multipart/form-data')); ?>
                     <div class="padded">
                         <input type="hidden" name="smid" value="<?php echo $this->uri->segment(5); ?>">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
-                            <div class="col-sm-8">
-                                <select id="degree" class="form-control" name="degree">
-                                    <option value="">Select</option>
-                                    <?php foreach ($degree as $rowde) { ?>
-                                        <option value="<?php echo $rowde['d_id']; ?>" <?php if($row['degree_id']==$rowde['d_id']){echo "selected";}?>><?php echo $rowde['d_name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
+                      <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select name="course" class="form-control"  id="course">
-                                    <option value="">Select</option> 
-                                     <?php foreach ($courses as $rowce) { ?>
-                                        <option value="<?php echo $rowce['course_id']; ?>" <?php if($row['course_id']==$rowce['course_id']){echo "selected";}?>><?php echo $rowce['c_name']; ?></option>
+                                <select id="branch" class="form-control" name="branch">
+                                    <option value="">Select</option>
+                                    <?php foreach ($branch as $rows) { ?>
+                                        <option value="<?php echo $rows->branch_id; ?>" <?php if($row['branch_id']==$rows->branch_id){ echo "selected=selected"; } ?>><?php echo $rows->branch_name.' - '.$rows->branch_location; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                            <div class="col-sm-8">
-                                <select name="semester" class="form-control" id="semester">
-                                    <option value="">Select</option>
-                                     <?php foreach ($semdata as $rowsem) { ?>
-                                        <option value="<?php echo $rowsem['s_id']; ?>" <?php if($row['sem_id']==$rowsem['s_id']){echo "selected";}?>><?php echo $rowsem['s_name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                                <lable class="error" id="error_lable_exist" style="color:red"></lable>
-                            </div>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="admission_plan">
+                                <option value="">Select</option>
+                                <?php foreach ($admission_plan as $plan): ?>
+                                <option value="<?php echo $plan->admission_plan_id; ?>" <?php if($row['admission_plan_id']==$plan->admission_plan_id){ echo "selected=selected"; } ?>><?php echo $plan->admission_duration; ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
+                    </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("professor"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select name="professor[]" class="form-control" id="professor" multiple=""> 
-                                    <?php foreach ($professor as $prof) :
-                                        $proid=explode(',',$row['professor_id']);
-                                        ?>
-                                         <option value="<?php echo $prof['user_id'];?>" <?php if(in_array($prof['user_id'],$proid)) { echo "selected"; } ?>><?php echo $prof['name']; ?></option>
+                                <select name="professor" class="form-control" id="professor" > 
+                                    <?php foreach ($professor as $prof) : ?>
+                                         <option value="<?php echo $prof['user_id'];?>" <?php if($row['professor_id']==$prof['user_id']) { echo "selected"; } ?>><?php echo $prof['name']; ?></option>
                                     <?php endforeach; ?>
 
                                 </select>

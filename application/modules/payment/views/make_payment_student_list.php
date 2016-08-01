@@ -3,10 +3,11 @@
         <tr>
             <th>No</th>
             <th>Student Name</th>
-            <th>Department</th>
+            
             <th>Branch</th>
-            <th>Batch</th>
-            <th>Semester</th>
+            <th>Course</th>
+            <th>Admission Plan</th>
+            <th>Class</th>
             <th>Paid Amount</th>
             <th>Date</th>
             <th>Action</th>
@@ -19,10 +20,10 @@
             <tr>
                 <td><?php echo $counter++; ?></td>
                 <td><?php echo $row->std_first_name . ' ' . $row->std_last_name; ?></td>
-                <td><?php echo $row->d_name; ?></td>
+                <td><?php echo $row->branch_name; ?></td>
                 <td><?php echo $row->c_name; ?></td>
-                <td><?php echo $row->b_name; ?></td>
-                <td><?php echo $row->s_name; ?></td>
+                <td><?php echo $row->admission_duration; ?></td>
+                <td><?php echo $row->class_name; ?></td>
                 <td>$<?php echo $row->paid_amount; ?></td>
                 <td><?php echo date_formats($row->paid_created_at); ?></td>
                 <td class="menu-action">

@@ -56,11 +56,12 @@
                             </div>
 
                         </div>
-                </div>
+               
             <?php } ?>
+ </form>
 
-
-            </form>
+           
+                 </div>
         </div>
     </div>
     <!-- End .panel -->
@@ -68,6 +69,8 @@
 <!-- col-lg-12 end here -->
 </div>
 <!-- End .row -->
+</div>
+<!-- col-lg-12 end here -->
 </div>
 
 <style>

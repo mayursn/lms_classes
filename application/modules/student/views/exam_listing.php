@@ -23,10 +23,10 @@
                             <tr>
                                 <td></td>
                                 <td><?php echo $exam->em_name; ?></td>
-                                <td><?php echo date_formats($exam->em_start_time); ?></td>
+                                <td><?php echo date_formats($exam->em_date); ?></td>
                                 <td><?php echo date_formats($exam->em_end_time); ?></td>
                                 <td>
-                                    <a href="<?php echo base_url('student/exam_schedule/' . $exam->em_id); ?>"><span class="label label-primary mr6 mb6">
+                                    <a href="<?php echo base_url('exam/exam_schedule/' . $exam->em_id); ?>"><span class="label label-primary mr6 mb6">
                                             <i class="fa fa-pencil"></i>Schedule</span></a>
                                 </td>
                             </tr>

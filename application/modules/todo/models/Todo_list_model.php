@@ -22,7 +22,7 @@ class Todo_list_model extends MY_Model {
     {
         $date = date('Y-m-d');
         $date = date('Y-m-d', strtotime('-6 days', strtotime($date)));        
-        $login_type = "student";        
+        //$login_type = "student";        
         $login_id = $this->session->userdata("user_id");
         $this->db->select('todo_id,todo_title,todo_datetime,todo_status');        
         $this->db->where("user_role_id",$login_id);
@@ -39,7 +39,7 @@ class Todo_list_model extends MY_Model {
     {
         $date = date('Y-m-d');
         $date = date('Y-m-d', strtotime('-6 days', strtotime($date)));        
-        $login_type = $this->session->userdata("role_name");
+       // $login_type = $this->session->userdata("role_name");
         $login_id = $this->session->userdata("user_id");
         $this->db->select('todo_id,todo_title,todo_datetime,todo_status');        
         $this->db->where("user_role_id",$login_id);

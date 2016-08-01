@@ -12,6 +12,10 @@ class Holiday extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('holiday/Holiday_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {

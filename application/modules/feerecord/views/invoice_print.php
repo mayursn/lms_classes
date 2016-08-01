@@ -8,7 +8,7 @@
     <html class=no-js>
         <head>
             <meta charset=utf-8>
-            <title><?php echo $title; ?> | Learning Management System</title>
+            <title><?php echo $title; ?> | <?php echo system_name(); ?></title>
             <!-- Mobile specific metas -->
             <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
             <!-- Force IE9 to render in normal mode --><!--[if IE]>
@@ -78,9 +78,9 @@
                             </ul>
                         </div>
                         <div class=clearfix></div>
-                        <table class="table table-bordered table-striped table-hover">
+                        <table class="table table-bordered table-striped table-hover" style="border:1px solid #000;">
                             <thead>
-                                <tr>
+                                <tr  style="border:1px solid #000;">
                                     <th class="text-center" style="width:20px;">SR</th>
                                     <th>TITLE</th>
                                     <th>MODE OF PAYMENT</th>
@@ -89,7 +89,7 @@
                                 </tr>
                             </thead>
                             <tbody>                                               
-                                <tr>
+                                <tr  style="border:1px solid #000;">
                                     <td class="text-center">1</td>
                                     <td><?php echo $invoice->title; ?></td>
                                     <td>

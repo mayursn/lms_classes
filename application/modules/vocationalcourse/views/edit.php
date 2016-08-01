@@ -108,24 +108,23 @@ endforeach;
 
 <script>
     $(document).ready(function () {
+        var js_format = '<?php echo js_dateformat(); ?>';
         $("#startdate1").datepicker({
-             format: ' MM d, yyyy', startDate : new Date(),
+             format: js_format,
+             startDate : new Date(),
             changeMonth: true,
             changeYear: true,
-            autoclose:true,
-            onClose: function (selectedDate) {
-                $("#enddate1").datepicker("option", "minDate", selectedDate);
-            }
+            autoclose:true
+        }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+        $('#enddate1').datepicker('setStartDate', minDate);
         });
 
         $("#enddate1").datepicker({
-             format: ' MM d, yyyy', startDate : new Date(),
+            format: js_format,              
             changeMonth: true,
             changeYear: true,
-            autoclose:true,
-            onClose: function (selectedDate) {
-                $("#startdate1").datepicker("option", "maxDate", selectedDate);
-            }
+            autoclose:true
         });
 
         $("#frmvocationalcourseedit").validate({

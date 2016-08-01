@@ -28,4 +28,9 @@ class Quiz_question_options_model extends MY_Model {
         return $quiz_question_options;
     }
 
+    function get_question_option($question)
+    {
+        $this->db->where('quiz_question_id',$question);
+      return   $this->db->get('quiz_question_options')->result();
+    }
 }

@@ -72,7 +72,10 @@
 </div>
 <!-- End .row -->
 </div>
-
+<!-- col-lg-12 end here -->
+</div>
+<!-- End .row -->
+</div>
 <style>
     .email_data{
         margin-top: 7px;

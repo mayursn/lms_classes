@@ -15,8 +15,8 @@
                             <div class="col-sm-5">
                                 <select id="export_module" class="form-control" name="module_name" >
                                     <option value="">Select</option>
-                                    <option value="<?php echo base_url('import-export/export-csv/admission_type'); ?>">Admission Type</option>
-                                    <option value="<?php echo base_url('import-export/export-csv/batch'); ?>">Batch</option>
+                                    <option value="<?php echo base_url('import-export/export-csv/admission_type'); ?>">Admission Type</option>                                    
+                                    <option value="batch">Batch</option>
                                     <option value="<?php echo base_url('import-export/export-csv/course'); ?>">Branch</option>
                                     <option value="<?php echo base_url('import-export/export-csv/degree'); ?>">Department</option>
                                     <option value="<?php echo base_url('import-export/export-csv/exam_manager'); ?>">Exam Manager</option>
@@ -26,11 +26,29 @@
                                     <option value="<?php echo base_url('import-export/export-csv/project_manager'); ?>">Project Manager</option>
                                     <option value="<?php echo base_url('import-export/export-csv/semester'); ?>">Semester</option>
                                     <option value="<?php echo base_url('import-export/export-csv/student'); ?>">Student</option>    
-                                    <option value="<?php echo base_url('import-export/export-csv/subject'); ?>">Subject</option>
+                                    <option value="<?php echo base_url('import-export/export-csv/subject'); ?>">Subject Association</option>
+                                    <option value="<?php echo base_url('import-export/export-csv/subject_list'); ?>">Subject</option>
                                     <option value="<?php echo base_url('import-export/export-csv/system_setting'); ?>">System Settings</option>
+                                    
                                 </select>
                             </div>
-                        </div> 
+                        </div>   
+                        <div id="batch_detail" style="display: none;" class="form-group">
+                            <label class="col-sm-4 control-label">Batch</label>
+                            <div class="col-sm-5">
+                                <?php $batch =  $this->db->get('batch')->result();
+                                    
+                                ?>
+                                <select id="batch_export" name="batch" class="form-control">
+                                        <?php foreach($batch as $bch): ?>
+                                    <option value="<?php echo $bch->b_id; ?>"><?php echo $bch->b_name; ?></option>
+                                    <?php  endforeach; ?>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <option value="<?php //echo base_url('import-export/export-csv/project_manager'); ?>">Project Manager</option>-->
+                        <!-- <option value="<?php //echo base_url('import-export/export-csv/system_setting'); ?>">System Settings</option> -->
                         <div id="main_degree" style="display: none;" class="form-group">
                             <label class="col-sm-4 control-label">Department</label>
                             <div class="col-sm-5">
@@ -113,9 +131,17 @@ $().ready(function () {
     $('#export_module').on('change', function () {
         var module_name = $(this).val();
         if (module_name == 'exam_marks') {
+            batch_hide();
             required_details();
             show_exam_details();
-        } else {
+        } 
+        else if(module_name == 'batch'){
+            remove_required_details();
+            hide_exam_details();
+            required_batch();
+            show_batch_detail();
+        }else {
+            batch_hide();
             remove_required_details();
             hide_exam_details();
         }
@@ -129,6 +155,9 @@ $().ready(function () {
                 //show_exam_details();
                 var exam_value = $('#exam').val();
                 location.href = '<?php echo base_url(); ?>import-export/export-csv/exam_marks/' + exam_value;
+            } else if(module_name=='batch'){
+                var batch_val = $('#batch_export').val();
+                location.href = '<?php echo base_url(); ?>import-export/export-csv/batch/' + batch_val;
             } else {
                 location.href = module_name;
             }
@@ -138,6 +167,21 @@ $().ready(function () {
     $('form').on('submit', function () {
         return false;
     });
+function required_batch()
+{
+     $('#batch_export').attr('required', 'required');
+}
+
+
+function show_batch_detail()
+{
+    $("#batch_detail").css('display','block');
+}
+
+function batch_hide()
+{
+    $("#batch_detail").css('display','none');
+}
 
     function hide_exam_details() {
         $('#main_degree').css('display', 'none');
@@ -223,7 +267,7 @@ $().ready(function () {
             $('#course').append('<option value="">Select</option>');
             var degree_id = $(this).val();
             $.ajax({
-                url: '<?php echo base_url(); ?>import-export/course_list_from_degree/' + degree_id,
+                url: '<?php echo base_url(); ?>branch/department_branch/' + degree_id,
                 type: 'get',
                 success: function (content) {
                     var course = jQuery.parseJSON(content);
@@ -240,6 +284,7 @@ $().ready(function () {
             var degree_id = $('#degree').val();
             var course_id = $(this).val();
             batch_from_degree_and_course(degree_id, course_id);
+            get_semester_from_branch(course_id);
         })
 
         //find batch from degree and course
@@ -247,7 +292,7 @@ $().ready(function () {
             //remove all element from batch
             $('#batch').find('option').remove().end();
             $.ajax({
-                url: '<?php echo base_url(); ?>import-export/batch_list_from_degree_and_course/' + degree_id + '/' + course_id,
+                url: '<?php echo base_url(); ?>batch/department_branch_batch/' + degree_id + '/' + course_id,
                 type: 'get',
                 success: function (content) {
                     $('#batch').append('<option value="">Select</option>');
@@ -255,6 +300,21 @@ $().ready(function () {
                     console.log(batch);
                     $.each(batch, function (key, value) {
                         $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
+                    })
+                }
+            })
+        }
+        //get semester from brach
+        function get_semester_from_branch(branch_id) {
+            $('#semester').find('option').remove().end();
+            $.ajax({
+                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch_id,
+                type: 'get',
+                success: function (content) {
+                    $('#semester').append('<option value="">Select</option>');
+                    var semester = jQuery.parseJSON(content);
+                    $.each(semester, function (key, value) {
+                        $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
                     })
                 }
             })

@@ -32,6 +32,7 @@ $department = $this->Degree_model->order_by_column('d_name');
                             <div class="col-sm-8">
                                 <select class="form-control" name="department" id="department">
                                     <option value="">Select</option>
+                                    <option value="All">All</option>
                                     <?php foreach ($department as $row) { ?>
                                         <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
                                     <?php } ?>
@@ -43,6 +44,7 @@ $department = $this->Degree_model->order_by_column('d_name');
                             <div class="col-sm-8">
                                 <select class="form-control" name="branch" id="branch">
                                     <option value="">Select</option>
+                                    <option value="All">All</option>
                                 </select>
                             </div>
                         </div>
@@ -51,6 +53,7 @@ $department = $this->Degree_model->order_by_column('d_name');
                             <div class="col-sm-8">
                                 <select class="form-control" name="batch" id="batch">
                                     <option value="">Select</option>
+                                    <option value="All">All</option>
                                 </select>
                             </div>
                         </div>
@@ -59,6 +62,16 @@ $department = $this->Degree_model->order_by_column('d_name');
                             <div class="col-sm-8">
                                 <select class="form-control" name="semester" id="semester">
                                     <option value="">Select</option>
+                                    <option value="All">All</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group subject">
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Subject"); ?><span style="color:red">*</span></label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="subject" id="subject">
+                                    <option value="">Select</option>
+                                    <option value="All">All</option>
                                 </select>
                             </div>
                         </div>
@@ -75,19 +88,19 @@ $department = $this->Degree_model->order_by_column('d_name');
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("validity value"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="number" name="validity_value" id="validity-value" class="form-control" value="1"/>
+                                <input type="number" name="validity_value" id="validity-value" class="form-control" value="1" min="1" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("total questions"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input id="total-questions" class="form-control" type="number" name="total_questions"/>
+                                <input id="total-questions" class="form-control" type="number" name="total_questions" min="1" />
                             </div>
                         </div> 
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("total marks"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="number" name="total_marks" id="total-marks" class="form-control"/>
+                                <input type="number" name="total_marks" id="total-marks" min="1" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -103,7 +116,7 @@ $department = $this->Degree_model->order_by_column('d_name');
                         <div class="form-group hide" id="nagative-mark-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("nagative marks"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input id="nagative-mark" class="form-control" name="nagative_marks"/>
+                                <input type="number" id="nagative-mark" class="form-control" name="nagative_marks" min="0"/>
                             </div>
                         </div>        
                         <div class="form-group">
@@ -119,10 +132,10 @@ $department = $this->Degree_model->order_by_column('d_name');
                         <div class="form-group hide" id="timer-status-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("timer value"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input id="timer-value" class="form-control" type="number" name="timer_value" placeholder="In minute"/>
+                                <input id="timer-value" class="form-control" type="number" name="timer_value" min="1" placeholder="In minute"/>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group hidden">
                             <label class="col-sm-4 control-label"><?php echo ucwords("difficulty level"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select id="difficulty-level" class="form-control" name="difficulty_level">
@@ -146,16 +159,16 @@ $department = $this->Degree_model->order_by_column('d_name');
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Start Date<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control datepicker" name="start_date" value=""/>
+                                <input type="text" class="form-control " id="startdate" name="start_date" value=""  />
                             </div>
                         </div>	
                         <div class="form-group">
                             <label class="col-sm-4 control-label">End Date<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control datepicker" name="end_date" value=""/>
+                                <input type="text" class="form-control" id="enddate" name="end_date" value=""/>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group hidden">
                             <label class="col-sm-4 control-label">Result Date<span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control datepicker" name="result_date" value=""/>
@@ -175,18 +188,14 @@ $department = $this->Degree_model->order_by_column('d_name');
     </div>
     <script type="text/javascript">
 
-        $(document).ready(function () {
+ $( "#enddate" ).focusin(function() {
+         $(this).prop('readonly', true);
+      });
+      $( "#enddate" ).focusout(function() {
+         $(this).prop('readonly', false);
+      });
 
-            $('#department').on('change', function () {
-                var department_id = $(this).val();
-                department_branch(department_id);
-            });
-            $('#branch').on('change', function () {
-                var branch_id = $(this).val();
-                var department = $('#department').val();
-                batch_form_department_branch(department, branch_id);
-                semester_from_branch(branch_id);
-            });
+        $(document).ready(function () {
 
             $('#nagative-marks-status').on('change', function () {
                 var status = $(this).val();
@@ -211,59 +220,96 @@ $department = $this->Degree_model->order_by_column('d_name');
                     $('#timer-value').val('');
                 }
             });
-
-            function department_branch(department_id) {
-                $('#branch').find('option').remove().end();
-                $('#branch').append('<option value>Select</option>');
-                $.ajax({
-                    url: '<?php echo base_url(); ?>branch/department_branch/' + department_id,
-                    type: 'GET',
-                    success: function (content) {
-                        var branch = jQuery.parseJSON(content);
-                        console.log(branch);
-                        $.each(branch, function (key, value) {
-                            $('#branch').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                        });
-                    }
-                });
-            }
-
-            function batch_form_department_branch(department, branch) {
-                $('#batch').find('option').remove().end();
-                $('#batch').append('<option value>Select</option>');
-                $.ajax({
-                    type: "GET",
-                    url: "<?php echo base_url(); ?>batch/department_branch_batch/" + department + '/' + branch,
-                    success: function (response) {
-                        var branch = jQuery.parseJSON(response);
-                        $.each(branch, function (key, value) {
-                            $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                        });
-                    }
-                });
-            }
-
-            function semester_from_branch(branch) {
-                $('#semester').find('option').remove().end();
-                $('#semester').append('<option value>Select</option>');
-                $.ajax({
-                    url: '<?php echo base_url(); ?>semester/semester_branch/' + branch,
-                    type: 'GET',
-                    success: function (content) {
-                        var semester = jQuery.parseJSON(content);
-                        $.each(semester, function (key, value) {
-                            $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                        });
-                    }
-                });
-            }
-
+            
             var js_date_format = '<?php echo js_dateformat(); ?>';
-            $(".datepicker").datepicker({
-                format: js_date_format,
-                autoclose: true,
-                todayHighlight: true
+            
+           function set_startdate(mindate)
+            {
+                
+                $("#enddate").datepicker( {
+                    format: js_date_format,
+                    autoclose: true,
+                     startDate: mindate,
+                    todayHighlight: true
+                });
+            }
+            
+             $("#startdate").datepicker({
+                 autoclose: true,
+                 startDate: new Date(),
+                  format: js_date_format,
+             }).on('changeDate', function (selected) {
+                  $("#enddate").val('');
+                 if($('#validity-type').val()=='Day')
+                 {
+                     var days = $('#validity-value').val();
+                     var date_format = $("#startdate").val();
+                     if(date_format!="")
+                     {
+                     var dataString = "getdate="+date_format+"&days="+days;
+                     $.ajax({
+                         type:"POST",
+                         url:"<?php echo base_url() ?>quiz/change_dateformat",
+                         data:dataString,
+                         success:function(response){
+                             $('#enddate').val(response);
+                         }
+                     });
+                     }  
+                }
+                else{
+                      var minDate = new Date(selected.date.valueOf());
+                    $("#enddate").datepicker("remove");
+                    set_startdate(minDate);
+                }
+           });
+           
+             $('#validity-value').on('change', function () {
+                if($('#validity-type').val()=='Day')
+                 {
+                     
+                 var days = $('#validity-value').val();
+                     var date_format = $("#startdate").val();
+                     if(date_format!="")
+                     {
+                     var dataString = "getdate="+date_format+"&days="+days;
+                     $.ajax({
+                         type:"POST",
+                         url:"<?php echo base_url() ?>quiz/change_dateformat",
+                         data:dataString,
+                         success:function(response){
+                             $('#enddate').val(response);
+                         }
+                     });
+                     }
+                 }
+                
             });
+            
+             $('#validity-type').on('change', function () {
+                if($(this).val()=='Day')
+                 {
+                     var days = $('#validity-value').val();
+                     var date_format = $("#startdate").val();
+                     if(date_format!="")
+                     {
+                     var dataString = "getdate="+date_format+"&days="+days;
+                     $.ajax({
+                         type:"POST",
+                         url:"<?php echo base_url() ?>quiz/change_dateformat",
+                         data:dataString,
+                         success:function(response){
+                             $('#enddate').val(response);
+                         }
+                     });
+                     }
+                }
+                else
+                {
+                      
+                }
+            });
+            
             $("#eventform").validate({
                 rules: {
                     title: "required",
@@ -276,12 +322,11 @@ $department = $this->Degree_model->order_by_column('d_name');
                     validity_value: "required",
                     total_marks: "required",
                     nagative_marks_status: "required",
-                    total_questions: "required",
-                    difficulty_level: "required",
+                    total_questions: "required",                    
                     status: "required",
                     start_date: "required",
-                    end_date: "required",
-                    result_date: "required"
+                    end_date: "required"
+                    
                 },
                 messages: {
                     title: "Enter event name",
@@ -294,13 +339,141 @@ $department = $this->Degree_model->order_by_column('d_name');
                     validity_value: "Enter validity value",
                     total_marks: "Enter total marks",
                     nagative_marks_status: "Select nagative marks status",
-                    total_questions: "Enter total number of questions",
-                    difficulty_level: "Select difficulty level",
+                    total_questions: "Enter total number of questions",                   
                     start_date: "Select start date",
                     status: "Select status",
-                    end_date: "Select end date",
-                    result_date: "Select result date"
+                    end_date: "Select end date"
+                    
                 }
             });
         });
     </script>
+    
+    <script>
+        $(document).ready(function(){
+            $("#department").change(function () {
+        var degree = $(this).val();
+        var dataString = "degree=" + degree;
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url() . 'participate/get_cource/'; ?>",
+            data: dataString,
+            success: function (response) {
+                  $('#branch').find('option').remove().end();
+                $('#branch').append('<option value>Select</option>');
+                $('#branch').append('<option value="All">All</option>');
+                if (degree == "All")
+                {
+                    subject_hide();
+                    $("#batch").val($("#batch option:eq(1)").val());
+                    $("#branch").val($("#branch option:eq(1)").val());
+                    $("#semester").val($("#semester option:eq(1)").val());
+                } else {
+                    subject_show();
+                    var branch = jQuery.parseJSON(response);
+                    console.log(branch);
+                    $.each(branch, function (key, value) {
+                        $('#branch').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
+                    });
+                }
+
+            }
+        });
+    });
+
+function subject_hide()
+{
+    $(".subject").addClass('hidden');
+}
+function subject_show()
+{
+    $(".subject").removeClass('hidden');
+}
+
+    $("#branch").change(function () {
+        var course = $(this).val();
+        var degree = $("#department").val();
+        var dataString = "course=" + course + "&degree=" + degree;
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url() . 'digital/get_batchs/'; ?>",
+            data: dataString,
+            success: function (response) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() . 'digital/get_semesterall/'; ?>",
+                    data: {'course': course},
+                    success: function (response1) {
+                        $('#semester').find('option').remove().end();
+                        $('#semester').append('<option value>Select</option>');
+                        $('#semester').append('<option value="All">All</option>');
+                        if(course=="All")
+                        {
+                            subject_hide();
+                            $("#semester").val($("#semester option:eq(1)").val());
+                        }
+                        else{
+                            subject_show();
+                            var sem_value = jQuery.parseJSON(response1);
+                            console.log(sem_value);
+                            $.each(sem_value, function (key, value) {
+                                $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
+                            });
+                        }
+                         
+                        
+                        
+                    }
+                });
+                $('#batch').find('option').remove().end();
+                $('#batch').append('<option value>Select</option>');
+                $('#batch').append('<option value="All">All</option>');
+                //$("#semester").val($("#semester option:eq(1)").val());
+               if (course == "All")
+                {
+                    subject_hide();
+                    $("#batch").val($("#batch option:eq(1)").val());
+                    $("#semester").val($("#semester option:eq(1)").val());
+                } else {
+                    subject_show();
+                    var batch_value = jQuery.parseJSON(response);
+                    console.log(batch_value);
+                    $.each(batch_value, function (key, value) {
+                        $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
+                    });
+                }
+            }
+        });
+    });
+
+$("#batch").change(function () {
+        var batches = $("#batch").val();
+        if (batches == 'All')
+        {
+            subject_hide();
+            $("#semester").val($("#semester option:eq(1)").val());
+        }
+    }); 
+    $("#semester").change(function(){
+        var branch = $("#branch").val();
+        var department = $("#department").val();
+        var sem = $(this).val();
+        subject_list_from_department_branch_semester(department,branch,sem);
+    });
+     function subject_list_from_department_branch_semester(department, branch, semester)
+        {
+              $('#subject').find('option').remove().end();
+              $('#subject').append('<option value>Select</option>');
+            $.ajax({
+                type: "GET",
+                url: "<?php echo base_url(); ?>subject/subject_department_branch_sem/" + department + '/' + branch + '/' + semester ,
+                success: function (response) {
+                    var subject = jQuery.parseJSON(response);
+                    $.each(subject, function (key, value) {
+                        $('#subject').append('<option value=' + value.sm_id + '>' + value.subject_name + '</option>');
+                    });
+                }
+            });
+        }
+        });
+        </script>

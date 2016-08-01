@@ -1,249 +1,4 @@
-<?php
-$this->load->helper('report_chart');
-$course = unique_branch_list();
-$department = student_ratio_department_wise();
-?>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/event_calendar/moment.js"></script> 
-<!-- charts js and library -->
-<script src="<?php echo base_url(); ?>assets/js/highcharts.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/exporting.js"></script>
-<!-- pie chart (male vs female) -->
-<script>
-    $(function () {
-    $('#course_count_ratio').highcharts({
-    chart: {
-    plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-    },
-            legend: {
-            align: 'center',
-                    verticalAlign: 'top',
-                    layout: 'horizontol',
-                    x: 0,
-                    y: 30
-            },
-            title: {
-            text: 'Male to Female course count ratio'
-            },
-            tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-            pie: {
-            allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                    enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            }
-                    }
-            }
-            },
-            series: [{
-            name: 'Genger',
-                    colorByPoint: true,
-                    data: [{
-                    name: 'Male',
-                            y: <?php echo $male_female_pie_chart['total_male_student']; ?>,
-                            //sliced: true,
-                            selected: true
-                    }, {
-                    name: 'Female',
-                            y: <?php echo $male_female_pie_chart['total_female_student']; ?>
-                    }]
-            }]
-    });
-    });</script>
-<!-- bar chart year wise students -->
-<script>
-    $(function () {
-    $('#stduent-enrolled').highcharts({
-    chart: {
-    type: 'column'
-    },
-            legend: {
-            align: 'center',
-                    verticalAlign: 'top',
-                    layout: 'horizontol',
-                    x: 0,
-                    y: 30
-            },
-            title: {
-            text: 'Student Enrolled'
-            },
-            subtitle: {
-            text: ''
-            },
-            xAxis: {
-            categories: [
-<?php foreach ($new_student_joining as $row) { ?>
-                '<?php echo $row->Year; ?>',
-<?php } ?>
-            ],
-                    crosshair: true
-            },
-            yAxis: {
-            min: 0,
-                    title: {
-                    text: 'Students Enrolled'
-                    }
-            },
-            tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-            },
-            plotOptions: {
-            column: {
-            pointPadding: 0.2,
-                    borderWidth: 0
-            }
-            },
-            series: [{
-            name: 'Students',
-                    data: [
-<?php foreach ($new_student_joining as $row) { ?>
-    <?php echo $row->Total; ?>,
-<?php } ?>
-                    ]
-
-            }]
-    });
-    });</script>
-<!-- bar chart course wise male and female -->
-<script>
-    $(function () {
-    $('#course-male-female').highcharts({
-    chart: {
-    type: 'column'
-    },
-            legend: {
-            align: 'center',
-                    verticalAlign: 'top',
-                    layout: 'horizontol',
-                    x: 0,
-                    y: 30
-            },
-            title: {
-            text: 'Department student count ratio'
-            },
-            subtitle: {
-            text: ''
-            },
-            xAxis: {
-            categories: [
-<?php
-//$course = unique_branch_list();
-foreach ($department as $row) {
-    ?>
-                '<?php echo $row->d_name; ?>',
-<?php } ?>
-            ],
-                    crosshair: true
-            },
-            yAxis: {
-            min: 0,
-                    title: {
-                    text: 'Students'
-                    }
-            },
-            tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-            },
-            plotOptions: {
-            column: {
-            pointPadding: 0.2,
-                    borderWidth: 0
-            }
-            },
-            series: [
-            {
-            name: 'Student',
-                    data: [
-<?php
-//$male = male_ratio_course_wise();
-foreach ($department as $row) {
-    ?>
-    <?php echo $row->TotalStudent; ?>,
-<?php } ?>
-                    ]
-            }]
-    });
-    });</script>
-<!-- bar chart course wise students -->
-<script>
-    $(function () {
-    $('#course-wise-student').highcharts({
-    chart: {
-    type: 'column'
-    },
-            legend: {
-            align: 'center',
-                    verticalAlign: 'top',
-                    layout: 'horizontol',
-                    x: 0,
-                    y: 30
-            },
-            title: {
-            text: 'Students Enrolled in Courses'
-            },
-            subtitle: {
-            text: ''
-            },
-            xAxis: {
-            categories: [
-<?php foreach ($course as $row) { ?>
-                '<?php echo $row->c_name; ?>',
-<?php } ?>
-            ],
-                    crosshair: true
-            },
-            yAxis: {
-            min: 0,
-                    title: {
-                    text: 'Students'
-                    }
-            },
-            tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-            },
-            plotOptions: {
-            column: {
-            pointPadding: 0.2,
-                    borderWidth: 0
-            }
-            },
-            series: [{
-            name: 'Students',
-                    data: [
-<?php
-$students = total_count_of_student_branch_wise();
-foreach ($students as $student) {
-    ?>
-    <?php echo $student->TotalStudent; ?>,
-<?php } ?>
-                    ]
-
-            }]
-    });
-    });</script>
 <script type="text/javascript" >
     ;
     (function ($) {
@@ -714,7 +469,7 @@ foreach ($students as $student) {
         <div class="panel panel-default toggle">
             <!-- Start .panel -->
             <div class=panel-heading>
-                <h4 class=panel-title>Event Calendar</h4>
+                <h4 class=panel-title>Academic Calendar</h4>
                 <div class="panel-controls panel-controls-right"> <a href="#" class="toggle panel-minimize"><i class="minia-icon-arrow-up-3"></i></a>
                 </div>
 
@@ -726,6 +481,15 @@ foreach ($students as $student) {
 <div class="row" id="divevent">
              <div class=panel-heading>
                 <h4 class=panel-title>Today's Event List</h4>
+             </div>
+            <div class="col-lg-12 col-md-12 col-xs-12" >
+                <div class="panel-body" id="todayevent">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row" id="divevent">
+             <div class=panel-heading>          
              </div>
             <div class="col-lg-12 col-md-12 col-xs-12" >
                 <div class="panel-body" id="todayevent">
@@ -830,7 +594,7 @@ foreach ($students as $student) {
                     <!-- End .todo-widget -->
                 </div>
             </div>
-            <div class="col-lg-7 col-md-7 col-xs-7">
+            <div class="col-lg-7 col-md-7 col-xs-7 hidden">
                 <div class="panel panel-default toggle">
                     <!-- Start .panel -->
                     <div class="panel-heading">
@@ -876,55 +640,7 @@ foreach ($students as $student) {
 </div>
 
 
-<div class="row">
-    <div class="col-lg-12 col-md-12 col-xs-12">
-        <!-- Start Report Charts -->
-        <div class="panel panel-default toggle">
-            <div class="panel-heading">
-                <h4 class="panel-title marginzero">Report Charts</h4>
-                <div class="panel-controls panel-controls-right"> <a href="#" class="toggle panel-minimize"><i class="minia-icon-arrow-up-3"></i></a>
-                </div>
-            </div>
-            <div class="panel-body margin25top">
-                <div class="row">
-                    <div class="col-md-6 hide">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title">Male to Female Course count Ratio</div>
-                            </div>
-                            <div class="panel-body" id="course_count_ratio" style="height: 580px; padding:10px 0; box-sizing:border-box !important;"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title">Students enrolled</div>
-                            </div>
-                            <div class="panel-body" id="stduent-enrolled" style="height: 580px; padding:10px 0;box-sizing:border-box !important;"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title">Department student count Ratio</div>
-                            </div>
-                            <div class="panel-body" id="course-male-female" style="height: 630px !important; min-height: 630px !important;  display:block; padding:10px 0;box-sizing:border-box !important;"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title">Students Enrolled (Coursewise)</div>
-                            </div>
-                            <div class="panel-body" id="course-wise-student" style="height: 630px !important; min-height: 630px !important;  display:block; padding:10px 0;box-sizing:border-box !important;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Report Charts -->
-    </div>
-</div>
+
 
 
 <!-- col-lg-12 end here -->

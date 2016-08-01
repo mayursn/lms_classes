@@ -23,7 +23,8 @@
                                     <option value="">Select department</option>
                                     <option value="All">All</option>
                                     <?php
-                                    $datadegree = $this->db->get_where('degree', array('d_status' => 1))->result();
+                                    $this->load->model('department/Degree_model');
+                                    $datadegree = $this->Degree_model->order_by_column('d_name');
                                     foreach ($datadegree as $rowdegree) {
                                         ?>
                                         <option value="<?= $rowdegree->d_id ?>"><?= $rowdegree->d_name ?></option>
@@ -38,16 +39,7 @@
                             <div class="col-sm-8">
                                 <select name="course" id="course" class="form-control">
                                     <option value="">Select Branch</option>
-                                    <option value="All">All</option>
-                                    <?php
-                                    /*
-                                     * $course = $this->db->get_where('course', array('course_status' => 1))->result();
-                                      foreach ($course as $crs) {
-                                      ?>
-                                      <!--  <option value="<?= $crs->course_id ?>"><?= $crs->c_name ?></option>-->
-                                      <?php
-                                      } */
-                                    ?>
+                                    <option value="All">All</option>                                  
                                 </select>
                             </div>
                         </div>
@@ -57,14 +49,6 @@
                                 <select name="batch" id="batch" onchange="get_student2(this.value);" class="form-control" >
                                     <option value="">Select batch</option>
                                     <option value="All">All</option>
-                                    <?php
-                                    /* $databatch = $this->db->get_where('batch', array('b_status' => 1))->result();
-                                      foreach ($databatch as $row) {
-                                      ?>
-                                      <option value="<?= $row->b_id ?>"><?= $row->b_name ?></option>
-                                      <?php
-                                      } */
-                                    ?>
                                 </select>
                             </div>
                         </div>	
@@ -75,7 +59,8 @@
                                     <option value="">Select Semester</option>
                                     <option value="All">All</option>
                                     <?php
-                                    $datasem = $this->db->get_where('semester', array('s_status' => 1))->result();
+                                    $this->load->model('semester/Semester_model');
+                                    $datasem = $this->Semester_model->order_by_column('s_name');
                                     foreach ($datasem as $rowsem) {
                                         ?>
                                         <option value="<?= $rowsem->s_id ?>"><?= $rowsem->s_name ?></option>

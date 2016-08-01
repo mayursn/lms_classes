@@ -1,8 +1,8 @@
 
 <?php
 
-    $branch = $this->db->get('course')->result_array();
-             $subject = $this->db->get('subject_manager')->result_array();
+    $branch = $this->db->get('course')->result_array();    
+    
 $edit_data = $this->db->get_where('courseware', array('courseware_id' => $param2))->result_array();
 foreach ($edit_data as $row):
     ?>
@@ -48,22 +48,18 @@ foreach ($edit_data as $row):
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"><?php echo ucwords("subject"); ?><span style="color:red">*</span></label>
                                 <div class="col-sm-8">
+                                    <?php                              
+                                    $this->db->where('sa.course_id',$row['branch_id']);
+                                    $this->db->join('subject_association sa','s.sm_id=sa.sm_id');
+                                    $subject = $this->db->get('subject_manager s')->result_array();                                   
+                                    ?>
                                     <select name="subject" id="subject" class="form-control" >
                                         <option value="">Select Subject</option>                                    
                                         <?php
                                         foreach ($subject as $sub) {
-                                            if($row['branch_id']== $sub[sm_course_id])
-                                            {
-                                            if ($sub['sm_id'] == $row['subject_id']) {
-                                                ?>
-                                                <option selected value="<?php echo $sub['sm_id'] ?>"><?php echo $sub['subject_name'] ?></option>
-                                                <?php
-                                            } else {
-                                                ?>
-                                                <option value="<?php echo $sub['sm_id'] ?>"><?php echo $sub['subject_name'] ?></option>
-                                                <?php
-                                            }
-                                            }
+                                           ?>
+                                                <option value="<?php echo $sub['sm_id'] ?>" <?php if($sub['sm_id']==$row['subject_id']){ echo "selected=selected"; } ?> ><?php echo $sub['subject_name'] ?></option>                                           
+                                            <?php 
                                         }
                                         ?>
                                     </select>

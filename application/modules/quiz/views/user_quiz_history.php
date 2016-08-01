@@ -16,7 +16,7 @@
                             <th>Date</th>                            
                             <th>Total Attempts</th>
                             <th>Best Score</th>
-                            <th>Action</th>
+                         <!--   <th>Action</th>-->
                         </tr>
                     </thead>
 
@@ -30,14 +30,14 @@
                                 <td><?php echo datetime_formats($row->created_at); ?></td>
                                 <td><?php echo $row->TotalAttempts; ?></td>
                                 <td><?php echo $row->BestResult; ?>/<?php echo $row->total_marks; ?></td>                            
-                                <td>
+                               <!--<td>
                                     <a target="_blank" href="<?php echo base_url(); ?>quiz/view-history/<?php echo $row->quiz_id; ?>/<?php echo $row->user_id; ?>">
                                         <span class="label label-primary mr6 mb6">
                                             <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                             View
                                         </span>
                                     </a>
-                                </td>
+                                </td>-->
                             </tr>
                         <?php } ?>
                     </tbody>

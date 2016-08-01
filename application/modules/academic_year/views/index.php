@@ -97,8 +97,7 @@
                          <div class="form-group">
                                 <label class="col-sm-2 control-label">Academic Year</label>
                                 <div class="col-sm-5">
-                                    <select name="set_academic_year" class="form-control" style="width:100%;" data-validate="required">
-                                        <option value="">Select year </option>
+                                    <select name="set_academic_year" class="form-control" style="width:100%;" data-validate="required">                                       
                                         <?php 
                                         $academic_year = $this->db->get('academic_year')->result_array();
                                         foreach($academic_year as $row):
@@ -166,12 +165,12 @@
         $("#academic_submit").validate({
             rules: {              
                 from_date: "required",  
-                end_date :"required",
+                to_date :"required",
                 
             },
             messages: {                
                 from_date: "Enter Start Date.",  
-                end_date :"Enter End Date",
+                to_date :"Enter End Date",
             }
         });
 

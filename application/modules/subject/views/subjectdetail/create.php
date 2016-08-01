@@ -1,8 +1,13 @@
 <?php
-$degree = $this->db->order_by('d_name', 'ASC')->get('degree')->result_array();
-$courses = $this->db->get('course')->result_array();
-$semesters = $this->db->get('semester')->result_array();
-$professor = $this->db->get('professor')->result_array();
+$this->load->model('branch/Branch_location_model');
+$this->load->model('courses/Course_model');
+$this->load->model('admission_plan/Admission_plan_model');
+
+$branch = $this->Branch_location_model->order_by_column('branch_name');
+$courses = $this->Course_model->order_by_column('c_name');
+$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
+
+$professor = $this->db->get('professor p')->result();
 ?>
 
 <div class=row>                      
@@ -18,41 +23,33 @@ $professor = $this->db->get('professor')->result_array();
                     <?php echo form_open(base_url() . 'subject/subject_detail_create/'.$this->uri->segment(4), array('class' => 'form-horizontal form-groups-bordered validate', 'role' => 'form', 'id' => 'frmsubjectdetail', 'target' => '_top', 'enctype' => 'multipart/form-data')); ?>
                     <div class="padded">	
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select id="degree" class="form-control" name="degree">
+                                <select id="branch" class="form-control" name="branch">
                                     <option value="">Select</option>
-                                    <?php foreach ($degree as $row) { ?>
-                                        <option value="<?php echo $row['d_id']; ?>"><?php echo $row['d_name']; ?></option>
+                                    <?php foreach ($branch as $row) { ?>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
-                            <div class="col-sm-8">
-                                <select name="course" class="form-control"  id="course">
-                                    <option value="">Select</option>                                    
-                                </select>
-                            </div>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="admission_plan">
+                                <option value="">Select</option>
+                                <?php foreach ($admission_plan as $plan): ?>
+                                <option value="<?php echo $plan->admission_plan_id; ?>"><?php echo $plan->admission_duration; ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                            <div class="col-sm-8">
-                                <select name="semester" class="form-control" id="semester">
-                                    <option value="">Select</option>
-
-                                </select>
-                                <lable class="error" id="error_lable_exist" style="color:red"></lable>
-                            </div>
-                        </div>
+                    </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label"><?php echo ucwords("professor"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select name="professor[]" class="form-control" id="professor" multiple=""> 
+                                <select name="professor" class="form-control" id="professor"> 
                                     <?php foreach ($professor as $prof) : ?>
-                                        <option value="<?php echo $prof['user_id']; ?>"><?php echo $prof['name']; ?></option>
+                                        <option value="<?php echo $prof->user_id; ?>"><?php echo $prof->name; ?></option>
                                     <?php endforeach; ?>
 
                                 </select>
@@ -76,46 +73,28 @@ $professor = $this->db->get('professor')->result_array();
 
 <script type="text/javascript">
 
-        $('#degree').on('change', function () {
-            var department_id = $(this).val();
-            department_branch(department_id);
-        });
         $('#course').on('change', function () {
-            var branch_id = $(this).val();
-            var department = $('#degree').val();
-            semester_from_branch(branch_id);
+            var course_id = $(this).val();
+            
+            get_admission_plan(course_id);
         });
         
-         function semester_from_branch(branch) {
-            $('#semester').find('option').remove().end();
-            $('#semester').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch,
-                type: 'GET',
-                success: function (content) {
-                    var semester = jQuery.parseJSON(content);
-                    $.each(semester, function (key, value) {
-                        $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                    });
-                }
-            });
-        } 
-         function department_branch(department_id) {
-            $('#course').find('option').remove().end();
-            $('#course').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + department_id,
-                type: 'GET',
-                success: function (content) {
-                    var branch = jQuery.parseJSON(content);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-                }
-            });
-        }
-        
+        function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value="">Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
     $.validator.setDefaults({
         submitHandler: function (form) {
             form.submit();

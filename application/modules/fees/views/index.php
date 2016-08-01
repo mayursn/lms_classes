@@ -5,6 +5,14 @@ $create = create_permission($permission, 'Fee');
 $read = read_permission($permission, 'Fee');
 $update = update_permisssion($permission, 'Fee');
 $delete = delete_permission($permission, 'Fee');
+$this->load->model('courses/Course_model'); 
+$this->load->model('branch/Branch_location_model'); 
+$this->load->model('classes/Class_model'); 
+$this->load->model('admission_plan/Admission_plan_model'); 
+$branch  = $this->Branch_location_model->order_by_column('branch_name');
+$course =$this->Course_model->order_by_column('c_name');
+$class = $this->Class_model->order_by_column('class_name');
+$plan = $this->Admission_plan_model->order_by_column('admission_duration');
 ?>
 <div class=row>                      
 
@@ -17,37 +25,40 @@ $delete = delete_permission($permission, 'Fee');
                 <a href="#" class="links"   onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/fees_create');" data-toggle="modal"><i class="fa fa-plus"></i> Fee Structure</a>				
                 <?php } ?>
                 <div class="row filter-row">
-               <?php if($create || $read || $update || $delete){ ?>     
+               <?php if($create || $update || $delete && $read ){ ?>     
                 <form id="fee-structure-search" action="#" class="form-groups-bordered validate">
                     <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <label><?php echo ucwords("department"); ?></label>
-                        <select class="form-control" id="search-degree"name="degree">
-                            <option value="">Select</option>
-                            <option value="All">All</option>
-                            <?php foreach ($degree as $row) { ?>
-                                <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                        <label><?php echo ucwords("Branch"); ?></label>
+                        <select class="form-control" id="search-branch"name="branch">
+                            <option value="">Select</option>                            
+                            <?php foreach ($branch as $row) { ?>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                             <?php } ?>
                         </select>
                     </div>
                     <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <label><?php echo ucwords("Branch"); ?></label>
+                        <label><?php echo ucwords("Course"); ?></label>
                         <select id="search-course" name="course" data-filter="4" class="form-control">
                             <option value="">Select</option>
-                            <option value="All">All</option>
+                            <?php foreach($course as $crs ): ?>
+                            <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <label><?php echo ucwords("Batch"); ?></label>
-                        <select id="search-batch" name="batch" data-filter="5" class="form-control">
+                        <label><?php echo ucwords("Admission Plan"); ?></label>
+                        <select id="search-admission_plan" name="admission_plan" data-filter="5" class="form-control">
                             <option value="">Select</option>
-                            <option value="All">All</option>
+                        
                         </select>
                     </div>                                
                     <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                        <label> <?php echo ucwords("Semester"); ?></label>
-                        <select id="search-semester" name="semester" data-filter="6" class="form-control">
+                        <label> <?php echo ucwords("Class"); ?></label>
+                        <select id="search-class" name="class" data-filter="6" class="form-control">
                             <option value="">Select</option>
-                            <option value="All">All</option>
+                            <?php foreach($class as $cl):?>
+                            <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_name; ?></option>   
+                        <?php    endforeach; ?>
 
                         </select>
                     </div>
@@ -65,10 +76,10 @@ $delete = delete_permission($permission, 'Fee');
                             <tr>
                                 <th>No</th>
                                 <th>Title</th>
-                                <th>Department</th>
                                 <th>Branch</th>
-                                <th>Batch</th>
-                                <th>Semester</th>
+                                <th>Course</th>                                
+                                <th>Admission Plan</th>
+                                <th>Class</th>
                                 <th>Fee</th>
                                 <?php if($update || $delete){ ?>
                                 <th>Action</th>
@@ -82,42 +93,20 @@ $delete = delete_permission($permission, 'Fee');
                                     <td></td>
                                     <td><?php echo $row->title; ?></td>
                                     <td><?php 
-                                    if($row->degree_id!="All")
-                                    {
-                                    $degree = $this->Degree_model->get($row->degree_id);
-                                            echo $degree->d_name;
-                                    }
-                                    else{
-                                        echo "All";
-                                    }
+                                   $branch_array = $this->Branch_location_model->get($row->branch_id);
+                                   echo $branch_array->branch_name.' - '.$branch_array->branch_location;
                                     ?></td>
                                     <td><?php 
-                                    if($row->course_id!="All")
-                                    {
-                                   $branch =  $this->Course_model->get($row->course_id);
-                                    echo $branch->c_name; 
-                                    }else{
-                                        echo "All";
-                                    }
+                                   $course_array = $this->Course_model->get($row->course_id);
+                                   echo $course_array->c_name;
                                     ?></td>
                                     <td><?php
-                                    if($row->batch_id!="All")
-                                    {
-                                    $batch = $this->Batch_model->get($row->batch_id);
-                                    echo $batch->b_name; 
-                                    }else{
-                                        echo "All";
-                                    }
+                                    $plan_array = $this->Admission_plan_model->get($row->admission_plan_id);
+                                    echo $plan_array->admission_duration;
                                     ?></td>
                                     <td><?php 
-                                    if($row->sem_id!="All")
-                                    {
-                                    $semester = $this->Semester_model->get($row->sem_id);
-                                    
-                                    echo $semester->s_name;
-                                    }  else {
-                                        echo "All";
-                                    }
+                                    $class_array = $this->Class_model->get($row->class_id);
+                                    echo $class_array->class_name;                                    
                                     ?></td>
                                     <td><?php echo $this->data['currency'] . $row->total_fee; ?></td>
                                     <?php if($update || $delete){ ?>
@@ -151,37 +140,39 @@ $delete = delete_permission($permission, 'Fee');
 <!-- End #content -->
 
 <script>
+    
     $(document).ready(function () {
 
         var form = $('#fee-structure-search');
 
         $('#search-fee-structure-data').on('click', function () {
+            
             $("#fee-structure-search").validate({
                 rules: {
-                    degree: "required",
+                    branch: "required",
                     course: "required",
-                    batch: "required",
-                    semester: "required"
+                    admission_plan: "required",
+                    class: "required"
                 },
                 messages: {
-                    degree: "Select department",
-                    course: "Select branch",
-                    batch: "Select batch",
-                    semester: "Select semester"
+                    branch: "Select branch",
+                    course: "Select course",
+                    admission_plan: "Select admission plan",
+                    class: "Select class"
                 }
             });
 
             if (form.valid() == true)
             {
                 $('#all-fee-structure').hide();
-                var degree = $("#search-degree").val();
+                var branch = $("#search-branch").val();
                 var course = $("#search-course").val();
-                var batch = $("#search-batch").val();
-                var semester = $("#search-semester").val();
+                var admission_plan = $("#search-admission_plan").val();
+                var class_name = $("#search-class").val();
                 var exam = $('#search-exam').val();
                 $.ajax({
-                    url: '<?php echo base_url(); ?>fees/fee_structure_filter/' + degree + '/'
-                            + course + '/' + batch + '/' + semester,
+                    url: '<?php echo base_url(); ?>fees/fee_structure_filter/' + branch + '/'
+                            + course + '/' + admission_plan + '/' + class_name,
                     type: 'get',
                     success: function (content) {
                         $("#filtered-fee-structure").html(content);
@@ -196,98 +187,26 @@ $delete = delete_permission($permission, 'Fee');
 
 <script>
     
-    
-    $("#search-degree").change(function () {
-        var degree = $(this).val();
-
-        var dataString = "degree=" + degree;
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'digital/get_cource/'; ?>",
-            data: dataString,
-            success: function (response) {                
-                $('#search-course').find('option').remove().end();
-                $('#search-course').append('<option value>Select</option>');
-                $('#search-course').append('<option value="All">All</option>');
-                if (degree == "All")
-                {
-                    $("#search-batch").val($("#search-batch option:eq(1)").val());
-                    $("#search-course").val($("#search-course option:eq(1)").val());
-                    $("#search-semester").val($("#search-semester option:eq(1)").val());
-                } else {
-                    var branch = jQuery.parseJSON(response);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#search-course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-                }
-            }
-        });
+    $('#search-course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
     });
-
-
-$("#search-batch").change(function () {
-        var batches = $("#search-batch").val();
-        if (batches == 'All')
-        {
-            $("#search-semester").val($("#search-semester option:eq(1)").val());
-        }
-    });
-
-
-
-    $("#search-course").change(function () {
-        var course = $(this).val();
-        var degree = $("#search-degree").val();
-        var dataString = "course=" + course + "&degree=" + degree;
+    function get_admission_plan(course_id)
+    {
+     $('#search-admission_plan').find('option').remove().end();
+        $('#search-admission_plan').append('<option value>Select</option>');
         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'digital/get_batchs/'; ?>",
-            data: dataString,
-            success: function (response) {
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url() . 'digital/get_semesterall/'; ?>",
-                    data: {'course': course},
-                    success: function (response1) {
-                        $('#search-semester').find('option').remove().end();
-                        $('#search-semester').append('<option value>Select</option>');
-                        $('#search-semester').append('<option value="All">All</option>');
-                        if(course=="All")
-                        {
-                            $("#search-semester").val($("#search-semester option:eq(1)").val());
-                        }
-                        else{
-                            var sem_value = jQuery.parseJSON(response1);
-                            console.log(sem_value);
-                            $.each(sem_value, function (key, value) {
-                                $('#search-semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                            });
-                        }
-                         
-                        
-                        
-                    }
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#search-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
                 });
-                $('#search-batch').find('option').remove().end();
-                $('#search-batch').append('<option value>Select</option>');
-                $('#search-batch').append('<option value="All">All</option>');
-                //$("#semester").val($("#semester option:eq(1)").val());
-               if (course == "All")
-                {
-                    $("#search-batch").val($("#search-batch option:eq(1)").val());
-                    $("#search-semester").val($("#search-semester option:eq(1)").val());
-                } else {
-
-                    var batch_value = jQuery.parseJSON(response);
-                    console.log(batch_value);
-                    $.each(batch_value, function (key, value) {
-                        $('#search-batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                    });
-                }
             }
         });
-    });
-
-    
+    }
     </script>

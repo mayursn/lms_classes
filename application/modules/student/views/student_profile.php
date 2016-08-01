@@ -23,7 +23,7 @@
                     <div class=col-md-8>
                         <div class=profile-name>
                             <h4><?php echo $profile->std_first_name . ' ' . $profile->std_last_name; ?></h4>
-                            <p class="job-title mb0"><i class="fa fa-building"></i> <?php echo $profile->d_name; ?></p>
+                            <p class="job-title mb0"><i class="fa fa-building"></i> <?php echo $profile->branch_location; ?></p>
                             <br/><p><i class="fa fa-envelope"></i> <?php echo $profile->email; ?></p>
                             <br/><p><i class="fa fa-phone"></i><?php echo $profile->std_mobile; ?></p>
                         </div>
@@ -44,10 +44,12 @@
                                     <dd><?php echo $profile->std_roll; ?>
                                     <dt class=text-muted>Mobile
                                     <dd><?php echo $profile->mobile; ?>
-                                    <dt class=text-muted>Department
-                                    <dd><?php echo $profile->d_name; ?>
-                                    <dt class=text-muted>Batch
-                                    <dd><?php echo $profile->b_name; ?>
+                                    <dt class=text-muted>Branch
+                                    <dd><?php echo $profile->branch_name.' - '.$profile->branch_location; ?>
+                                    <dt class=text-muted>Course
+                                    <dd><?php echo $profile->c_name; ?>
+                                    <dt class=text-muted>Admission Plan
+                                    <dd><?php echo $profile->admission_duration; ?>    
                                 </dl>
                             </div>
                             <div class=col-md-6>
@@ -58,10 +60,6 @@
                                     <dd><?php echo $profile->gender; ?>
                                     <dt class=text-muted>Email
                                     <dd><?php echo $profile->email; ?>
-                                    <dt class=text-muted>Branch
-                                    <dd><?php echo $profile->c_name; ?>
-                                    <dt class=text-muted>Semester
-                                    <dd><?php echo $profile->s_name; ?>
                                 </dl>
                             </div>
                         </div>
@@ -102,51 +100,7 @@
     </div>
 
     
-<div class="row">
-    <div class="col-lg-12 col-md-12 col-xs-12">
-        <!-- Start Report Charts -->
-        <div class="panel panel-default toggle">
-            <div class="panel-heading">
-                <h4 class="panel-title marginzero">Submitted assignment</h4>
-                <div class="panel-controls panel-controls-right"> <a href="#" class="toggle panel-minimize"><i class="minia-icon-arrow-up-3"></i></a>
-                </div>
-            </div>
-            <div class="panel-body ">
-                <div class="row">
-                   
-                            <table id="submitted-assignment-datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Assignment</th>												
-                                        <th>Submitted-Date</th>												
-                                        <th>Document</th>	
-                                        <th>File</th>                                                               
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $count = 1;
-                                    foreach ($submitassignment as $srow):
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $count++; ?></td>
-                                            <td><?php echo $srow->assign_title; ?></td>	
-                                            <td><?php echo date("F d, Y", strtotime($srow->submited_date)); ?></td>	
-                                            <td><?php echo $srow->document_file; ?></td>
-                                            <td > 
-                                                <a href="<?php echo base_url() ?>uploads/project_file/<?php echo $srow->document_file; ?>" download=""  data-toggle="tooltip" data-placement="top" title="download" ><i class="fa fa-download"></i></a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>						
-                                </tbody>
-                            </table>
-                </div>
-            </div>
-        </div>
-        <!-- End Report Charts -->
-    </div>
-</div>
+
 </div>
 </div>
 

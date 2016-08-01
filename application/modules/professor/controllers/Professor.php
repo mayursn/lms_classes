@@ -13,8 +13,12 @@ class Professor extends MY_Controller {
         parent::__construct();
         $this->load->model('professor/Professor_model');
         $this->load->model('todo/Todo_list_model');
-        $this->load->model('professor/Last_activity_model');
-        
+        $this->load->model('professor/Last_activity_model');        
+        $this->load->model('academic_year/Academic_year_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
         
     }
 
@@ -55,8 +59,8 @@ class Professor extends MY_Controller {
                 'dob' => $this->input->post('dob'),
                 'occupation' => $this->input->post('occupation'),
                 'designation' => $this->input->post('designation'),
-                'department' => $this->input->post('degree'),
-                'branch' => $this->input->post('branch'),
+                'branch_id' => $this->input->post('branch'),
+                'course_id' => $this->input->post('course'),
                 'about' => $this->input->post('about')
             ));
         }
@@ -70,7 +74,9 @@ class Professor extends MY_Controller {
         $role = $this->Role_model->get_by(array(
             'role_name' => 'Staff'
         ));
-
+         $active = $this->Academic_year_model->get_by(array("current_year_status" => 'active'));
+            $start_year = $active->start_year;
+            $end_year = $active->end_year;
         $user_id = $this->User_model->insert(array(
             'first_name' => $professor['professor_name'],
             'last_name' => '',
@@ -83,7 +89,9 @@ class Professor extends MY_Controller {
             'address'  => $professor['address'],  
             'role_id' => $role->role_id,
             'is_active' => 1,
-            'profile_pic' => $this->upload_professor_profile_pic($files)
+            'profile_pic' => $this->upload_professor_profile_pic($files),
+            'start_year' => $start_year,
+            'end_year' =>$end_year
         ));
         return $user_id;
     }
@@ -136,6 +144,9 @@ class Professor extends MY_Controller {
     
     function delete($id) {
         $this->load->model('user/User_model');
+        $professor = $this->Professor_model->get($id);
+        $user_id = $professor->user_id;
+        $this->User_model->delete($user_id);
         $this->Professor_model->delete($id);
         $this->session->set_flashdata('flash_message', 'Professor is successfully deleted.');
 
@@ -144,9 +155,9 @@ class Professor extends MY_Controller {
 
     function update($id) {
        if($_POST) {
-              $user_id = $this->update_professor_user($id,$_POST, $_FILES); 
-              
-                $this->Professor_model->update($id,array(
+           $user_id = $this->update_professor_user($_POST['txtuserid'],$_POST, $_FILES); 
+             
+           $data = array(
                 'name' => $this->input->post('professor_name'),
                 'email' => $this->input->post('email'),
                 'password' =>Modules::run('user/__hash', $this->input->post('password')),
@@ -158,10 +169,15 @@ class Professor extends MY_Controller {
                 'dob' => $this->input->post('dob'),
                 'occupation' => $this->input->post('occupation'),
                 'designation' => $this->input->post('designation'),
-                'department' => $this->input->post('degree'),
-                'branch' => $this->input->post('branch'),
+                'branch_id' => $this->input->post('branch'),
+                'course_id' => $this->input->post('course'),
                 'about' => $this->input->post('about')
-            ));
+            );
+                $this->db->where('professor_id',$id);                
+                $this->db->update('professor',$data);
+                $this->db->last_query();
+                
+               
               $this->flash_notification('Professor is successfully updated.');
         }
          redirect(base_url('professor'));
@@ -183,7 +199,7 @@ class Professor extends MY_Controller {
                         'address'  => $professor['address'], 
                     );
             
-             $filedata=$this->update_professor_profile_pic($files); 
+             $filedata=$this->upload_professor_profile_pic($files); 
             if($filedata!="")
             {
                $data['profile_pic']=$filedata; 

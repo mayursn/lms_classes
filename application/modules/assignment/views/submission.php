@@ -1,4 +1,11 @@
 <!-- Start .row -->
+<?php
+$create = create_permission($permission, 'Assignment');
+$read = read_permission($permission, 'Assignment');
+$update = update_permisssion($permission, 'Assignment');
+$delete = delete_permission($permission, 'Assignment');
+$read_assessment = read_permission($permission, 'Assessment');
+?>
 <div class=row>                      
 
     <div class=col-lg-12>
@@ -7,18 +14,26 @@
             <div class=panel-body>
                 <div class="tabs mb20">
                     <ul id="import-tab" class="nav nav-tabs">
+                        <?php if($read){ ?>
                         <li class="active">
                             <a href="#assignment-list" data-toggle="tab" aria-expanded="true">Assignment List</a>
                         </li>
+                          <?php } ?>
+                        <?php if($read){ ?>
                         <li class="">
                             <a href="#submitted-assignment" data-toggle="tab" aria-expanded="false">Submitted Assignment</a>
                         </li>
-                        <li class="">
+                          <?php } ?>
+                        <?php if($read_assessment){ ?>
+                        <li class="<?php if(!$read){ ?> active <?php } ?>">
                             <a href="#assessment" data-toggle="tab" aria-expanded="false">Assessment</a>
                         </li>
+                        <?php } ?>
                     </ul>
                     <div id="import-tab-content" class="tab-content">
+                        
                         <div class="tab-pane fade active in" id="assignment-list">
+                            <?php if($read){ ?>
                             <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                                 <thead>
                                     <tr>
@@ -75,14 +90,12 @@
                                     <?php endforeach; ?>							
                                 </tbody>
                             </table>
+                             <?php } ?>
                         </div>
-
+                        
                         <!-- tab content -->
                         <div class="tab-pane fade" id="submitted-assignment">
-                            <?php
-                           
-                            
-                            ?> 
+                             <?php if($read){ ?>
                             <table id="submitted-assignment-datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                                 <thead>
                                     <tr>
@@ -110,9 +123,11 @@
                                     <?php endforeach; ?>						
                                 </tbody>
                             </table>
+                             <?php } ?>
                         </div>
 
-                        <div class="tab-pane fade out" id="assessment">
+                        <div class="tab-pane fade <?php if(!$read){ ?> active in <?php }else{ ?> out <?php } ?>" id="assessment">
+                             <?php if($read_assessment){ ?>
                             <table class="table table-striped table-bordered table-responsive" cellspacing=0 width=100% id="datatable-list2">
                                 <thead>
                                     <tr>
@@ -141,8 +156,9 @@
                                     <?php endforeach; ?>																									
                                 </tbody>
                             </table>
+                             <?php } ?>
                         </div>
-
+                       
                     </div>
 
                 </div>

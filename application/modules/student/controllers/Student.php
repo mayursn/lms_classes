@@ -15,6 +15,12 @@ class Student extends MY_Controller {
          $this->session->set_userdata('notifications', $notification);
            date_default_timezone_set('Etc/UTC');
          }         
+         if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
+        $this->load->helper('text');
+        date_default_timezone_set('Asia/Kolkata');
     }
 
     /**
@@ -25,9 +31,17 @@ class Student extends MY_Controller {
         {
             redirect(base_url('student/professor_student'));
         }
+        if($this->session->userdata('std_id'))
+        {
+            redirect(base_url('student/dashboard'));
+        }
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
         $this->data['title'] = 'Student';
         $this->data['page'] = 'student';
-        $this->data['department'] = $this->Degree_model->order_by_column('d_name');
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+        $this->data['course'] = $this->Course_model->order_by_column('c_name');
+        $this->data['student'] = $this->Student_model->get_classes_student_list();
         $this->__template('student/index', $this->data);
     }
     
@@ -40,14 +54,12 @@ class Student extends MY_Controller {
             $this->load->model('student/Student_model');
             $this->load->model('todo/Todo_list_model');
             $this->data['studyresource'] = $this->Study_resources_model->order_by_column('created_date');
-             $student_detail = $this->db->select('std_id, semester_id, std_degree, course_id, class_id, std_batch')
+             $student_detail = $this->db->select('std_id, semester_id, std_degree, course_id, class_id, std_batch,admission_plan_id,branch_id')
                 ->from('student')
                 ->where('std_id', $this->session->userdata('std_id'))
                 ->get()
                 ->row();
         $this->data['title'] = 'Student Dashboard';
-
-        
         $this->data['library'] = $this->Library_manager_model->order_by_column('created_date');
         $this->data['exam_listing'] = $this->student_exam_listing_widget($student_detail);
         $this->data['cms_pages'] = $this->student_cms_page_list_widget($student_detail);
@@ -103,7 +115,6 @@ class Student extends MY_Controller {
      */
     function create() {
         if ($_POST) {
-           
             $user_id = $this->create_student_user($_POST, $_FILES); 
             $student_id = $this->Student_model->insert(array(
                 'user_id' => $user_id,
@@ -115,28 +126,19 @@ class Student extends MY_Controller {
                 'city'  => $_POST['city'],
                 'zip'   => $_POST['zip'],
                 'std_birthdate' => date('Y-m-d', strtotime($_POST['birthdate'])),
-                'std_marital'   => $_POST['maritalstatus'],
-                'std_batch' => $_POST['batch'],
-                'semester_id'   => $_POST['semester'],
-                'std_degree'    => $_POST['degree'],
+                'branch_id' => $_POST['branch'],
                 'course_id' => $_POST['course'],
+                'admission_plan_id'=> $_POST['admission_plan'],
                 'class_id'  => $_POST['class'],
                 'std_about' => $_POST['std_about'],
-                'std_mobile'    => $_POST['mobileno'],
-                'parent_name'   => $_POST['parentname'],
-                'parent_contact'    => $_POST['parentcontact'],
-                'parent_email'  => $_POST['parent_email_id'],
-                'admission_type_id' => $_POST['admissiontype'],
-                'std_fb'    => $_POST['facebook'],
-                'std_twitter'   => $_POST['twitter'],
-                'std_status'=>1
+                'std_mobile'    => $_POST['mobileno']                              
             ));   
             $student=array('f_name'=>$_POST['f_name'],
                            'l_name'=>$_POST['l_name'],
                            'email_id'=>$_POST['email_id'],
                            'password'=>$_POST['password'],
                         );
-            $this->assign_student_roll($_POST['course'], $_POST['semester'], $student_id);
+            $this->assign_student_roll($_POST['branch'], $_POST['course'], $student_id);
             $this->email_student_credential($student);
             $this->flash_notification('Student is successfully inserted.');
         }        
@@ -158,30 +160,21 @@ class Student extends MY_Controller {
                 'address'   => $_POST['address'],
                 'city'  => $_POST['city'],
                 'zip'   => $_POST['zip'],
-                'std_birthdate' => date('Y-m-d', strtotime($_POST['birthdate'])),
-                'std_marital'   => $_POST['maritalstatus'],
-                'std_batch' => $_POST['batch'],
-                'semester_id'   => $_POST['semester'],
-                'std_degree'    => $_POST['degree'],
+                'std_birthdate' => date('Y-m-d', strtotime($_POST['birthdate'])),               
+                'branch_id' => $_POST['branch'],
                 'course_id' => $_POST['course'],
+                'admission_plan_id'=> $_POST['admission_plan'],
                 'class_id'  => $_POST['class'],
                 'std_about' => $_POST['std_about'],
-                'std_mobile'    => $_POST['mobileno'],
-                'parent_name'   => $_POST['parentname'],
-                'parent_contact'    => $_POST['parentcontact'],
-                'parent_email'  => $_POST['parent_email_id'],
-                'admission_type_id' => $_POST['admissiontype'],
-                'std_fb'    => $_POST['facebook'],
-                'std_twitter'   => $_POST['twitter'],
-                'std_status'=>1
+                'std_mobile'    => $_POST['mobileno']                
             ));  
                $this->flash_notification('Student is successfully updated.');
           }
           redirect(base_url('student'));
       }
-       function update_professor_profile_pic($files)
+       function update_student_profile_pic($files)
         {
-            if ($files['userfile']['name'] != '') {
+            if ($files['profilefile']['name'] != '') {
                 $config['upload_path'] = 'uploads/system_image';
                 $config['allowed_types'] = 'gif|jpg|png';
                 $this->load->library('upload', $config);
@@ -189,7 +182,7 @@ class Student extends MY_Controller {
 
                 if (!$this->upload->do_upload('userfile')) {
                     $this->session->set_flashdata('flash_message', "Invalid File!");
-                    redirect(base_url('professor'));
+                    redirect(base_url('student'));
                 } else {
                     $file = $this->upload->data();
                     $data['profile_photo'] = $file['file_name'];
@@ -197,6 +190,32 @@ class Student extends MY_Controller {
                  return $data['profile_photo'];
             }
         }
+          /**
+     * Upload student profile picture
+     * @param array $_FILES
+     * @return string
+     */
+    function upload_student_profile_pic($files) {
+        if ($files['profilefile']['name'] != '') {
+            $config['upload_path'] = 'uploads/system_image';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            if (!$this->upload->do_upload('profilefile')) {
+                $this->session->set_flashdata('flash_message', "Invalid File!");
+                redirect(base_url('student'));
+            } else {
+                $file = $this->upload->data();
+                $data['profile_photo'] = $file['file_name'];
+                //$file_url = base_url().'uploads/project_file/'.$data['lm_filename'];
+            }
+        } else {
+            $data['profile_photo'] = '';
+        }
+
+        return $data['profile_photo'];
+    }
        function update_student_user($id,$student, $files) {
       
         if ($student) {
@@ -213,7 +232,7 @@ class Student extends MY_Controller {
                         'address'  => $student['address'],  
                         'is_active' => $student['status']
                     );
-            $filedata=$this->update_professor_profile_pic($files); 
+            $filedata=$this->upload_student_profile_pic($files); 
             if($filedata!="")
             {
                $data['profile_pic']=$filedata; 
@@ -281,34 +300,6 @@ class Student extends MY_Controller {
     }
 
     /**
-     * Upload student profile picture
-     * @param array $_FILES
-     * @return string
-     */
-    function upload_student_profile_pic($files) {
-        if ($files['userfile']['name'] != '') {
-            $config['upload_path'] = 'uploads/system_image';
-            $config['allowed_types'] = 'gif|jpg|png';
-            $this->load->library('upload', $config);
-            $this->upload->initialize($config);
-
-            if (!$this->upload->do_upload('profilefile')) {
-                $this->session->set_flashdata('flash_message', "Invalid File!");
-                redirect(base_url('student'));
-            } else {
-                $file = $this->upload->data();
-                $data['profile_photo'] = $file['file_name'];
-                //$file_url = base_url().'uploads/project_file/'.$data['lm_filename'];
-            }
-        } else {
-            $data['profile_photo'] = '';
-        }
-
-        return $data['profile_photo'];
-    }
-    
-   
-    /**
      * Delete student
      * @param string $id
      */
@@ -343,11 +334,10 @@ class Student extends MY_Controller {
         $this->load->helper('role_permission_helper');
         
         $this->data['student']=$this->Student_model->with('user')->get_many_by(array(
-            'std_degree' => $_POST['degree'],
+            'branch_id' => $_POST['branch'],
             'course_id' => $_POST['course'],
-            'std_batch' => $_POST['batch'],
-            'semester_id' => $_POST['sem'],
-            'class_id' => $_POST['divclass'],
+            'admission_plan_id' => $_POST['admission_plan'],
+            'class_id' => $_POST['class']
         ));
         $this->load->view('student/filtered_student',  $this->data);
     }
@@ -443,7 +433,7 @@ function student_exam_marks()
         $this->load->view('student/student_exam_marks',$this->data);
     }
     
-    function student_exam_listing_widget($student_details) {       
+    function student_exam_listing_widget($student_details ='') {       
        
         
         $page_data['exam_listing'] = $this->Exam_time_table_model->get_exam_listing($student_details);
@@ -478,7 +468,7 @@ function student_exam_marks()
      * @return mixed
      */
     
-     function student_cms_page_list_widget($student_detail) {
+     function student_cms_page_list_widget($student_detail='') {
         //echo $student_detail->std_batc
         $cms_pages = $this->db->get_where('cms_pages', array(
                     'am_course' => $student_detail->course_id,
@@ -493,7 +483,7 @@ function student_exam_marks()
      * @param mixed $student_details
      * @return mixed
      */
-     function streaming_list_widget($student_details) {
+     function streaming_list_widget($student_details = '') {
         $date = date('Y-m-d');
         //var_dump($student_details);
         $where = array(
@@ -527,11 +517,11 @@ function student_exam_marks()
 
         $this->data['title'] = 'Student';
         $this->data['page'] = 'professor_student';
-        $userid=$this->session->userdata('professor_id');
+        $userid=$this->session->userdata('user_id');
         $wherearray=array("user_id" => $userid);
-        $professor=$this->Professor_model->get_by($wherearray);
+        $professor=$this->Professor_model->get_by($wherearray);        
         
-        $wherearray=array("std_degree" => $professor->department,'course_id'=>$professor->branch);
+        $wherearray=array("branch_id" => $professor->branch_id,'course_id'=>$professor->course_id);
 
         $this->data['student']=$this->Student_model->with('user')->get_many_by($wherearray);
 
@@ -543,16 +533,19 @@ function student_exam_marks()
      */
     function exam_marks($exam_id = '') {
         $student_id = $this->session->userdata('std_id');
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
+        $this->load->model('admission_plan/Admission_plan_model');
         $this->data['page'] = 'exam_marks';
         $this->data['title'] = 'Exam Marks';
         $this->data['exam_id'] = $exam_id;
         $this->data['exam_details'] = $this->Exam_time_table_model->exam_detail($exam_id);
         $student_details = $this->Student_model->get($this->session->userdata('std_id'));
         $this->data['student_detail'] = $student_details;
-        $this->data['department'] = $this->Degree_model->get($student_details->std_degree);
-        $this->data['batch_detail'] = $this->Student_model->student_batch_course_detail($student_details->std_id);
+        $this->data['branch'] = $this->Branch_location_model->get($student_details->branch_id);
+        $this->data['course'] = $this->Course_model->get($student_details->course_id);
         $this->data['student_marks'] = $this->Student_model->student_marks($student_details->std_id, $exam_id);
-        $this->data['exam_listing'] = $this->Student_model->student_exam_list($student_details->course_id, $student_details->semester_id);
+        $this->data['exam_listing'] = $this->Student_model->student_exam_list($student_details->course_id, $student_details->admission_plan_id,$student_details->branch_id);
 
         $student_id = $this->session->userdata('std_id');
         foreach ($this->data['exam_listing'] as $exam) {
@@ -575,7 +568,7 @@ function student_exam_marks()
             
         }
 
-        clear_notification('marks_manager', $this->session->userdata('std_id'));
+       // clear_notification('marks_manager', $this->session->userdata('std_id'));
         unset($this->session->userdata('notifications')['marks_manaher']);
         $this->__template('student/exam_marks', $this->data);
     }
@@ -585,7 +578,7 @@ function student_exam_marks()
      */
     function statement_of_marks() {
         $this->data['student_details'] = $this->Student_model->get($this->session->userdata('std_id'));
-        $this->data['exam_listing'] = $this->Student_model->student_exam_list($this->data['student_details']->course_id, $this->data['student_details']->semester_id);
+        $this->data['exam_listing'] = $this->Student_model->student_exam_list($this->data['student_details']->course_id, $this->data['student_details']->admission_plan_id,  $this->data['student_details']->branch_id);
         $this->data['page'] = 'statement_of_marks';
         $this->data['title'] = 'Statement of Marks';
         $this->__template('student/statement_of_marks', $this->data);
@@ -628,9 +621,10 @@ function student_exam_marks()
         $std_id = $this->session->userdata('std_id');
         $student_details = $this->Student_model->get($std_id);
        
-        $course_id = $student_details->course_id;
-        $semester_id = $student_details->semester_id;
-        $this->data['exam_listing'] = $this->Student_model->student_exam_list($course_id,$semester_id );
+        $course = $student_details->course_id;
+        $admission_plan = $student_details->admission_plan_id;
+        $branch = $student_details->branch_id;
+        $this->data['exam_listing'] = $this->Student_model->student_exam_list($course, $admission_plan,$branch );
 
         //check for time table
         $student_id = $this->session->userdata('std_id');
@@ -666,20 +660,30 @@ function student_exam_marks()
         $std_id =$this->session->userdata('std_id');
         $this->data['student'] = $this->Student_model->get($std_id);
         $student = $this->data['student'];
+        $branch_id = $student->branch_id;
         $course_id = $student->course_id;        
-        $semester_id = $student->semester_id;
+        $admission_plan_id = $student->admission_plan_id;
+        $class_id = $student->class_id;
         
-        $this->data['subjects'] = $this->Student_model->student_subject_list(
-       $course_id,$semester_id );
+        $this->data['subjects'] = $this->Student_model->get_student_subject_attendance(
+       $branch_id,$course_id,$admission_plan_id,$class_id );
         
         $this->__template('student/attendance_report', $this->data);
     }
     
-    function attendance_report_detail($subject_id) {
+    function attendance_report_detail($subject_id ='') {
+        
         $this->data['title'] = 'Attendance reports details';
         $this->data['page'] = 'attendance';
-        $this->data['report'] = $this->Student_model->attendance_detail_report(
-                $this->session->userdata('std_id'), $subject_id);
+        $std_id= $this->session->userdata('std_id');
+        $student_detail = $this->Student_model->get($std_id);
+        
+        $branch = $student_detail->branch_id;
+        $course = $student_detail->course_id;
+        $admission_plan = $student_detail->admission_plan_id;
+        $class = $student_detail->class_id;
+        $this->data['report'] = $this->Student_model->student_attendance_detail($branch,$course,
+                $admission_plan,$class,$this->session->userdata('std_id'), $subject_id);
         $this->__template('student/attendance_report_detail', $this->data);
     }
     
@@ -717,16 +721,27 @@ function student_exam_marks()
      * @param string $batch
      * @param string $semester
      */
-    function student_list($department, $branch, $batch, $semester) {
+    function student_list($branch, $course, $admission_plan) {
         $students = $this->Student_model->get_many_by(array(
-            'std_degree' => $department,
-            'course_id' => $branch,
-            'std_batch' => $batch,
-            'semester_id' => $semester
-        ));
+            'branch_id' => $branch,
+            'course_id' => $course,
+            'admission_plan_id' => $admission_plan));
         
         echo json_encode($students);
     }   
 
-
+    function get_student_list()
+    {
+        $branch = $_GET['branch'];
+        $course = $_GET['course'];
+        $admission_plan = $_GET['admission_plan'];
+        $class = $_GET['class'];
+        $students = $this->Student_model->get_many_by(array(
+            'branch_id' => $branch,
+            'course_id' => $course,
+            'class_id' => $class,
+            'admission_plan_id' => $admission_plan));
+        
+        echo json_encode($students);
+    }
 }

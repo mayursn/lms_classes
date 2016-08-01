@@ -9,4 +9,9 @@ class Profile_model extends MY_Model {
         $this->db->where('user_id',$id);
         return $this->db->update('professor',$data);        
     }
+    function student_update($id,$data)
+    {
+        $this->db->where('user_id',$id);
+        return $this->db->update('student',$data);        
+    }
 }

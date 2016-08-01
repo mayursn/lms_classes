@@ -7,6 +7,10 @@ class Course_category extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('course_category/Course_category_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**

@@ -114,6 +114,13 @@ class Banner_slider extends MY_Controller {
         }
     }
     
+    function delete($id)
+    {
+        $this->Banner_slider_model->delete($id);
+        $this->flash_notification("Banner Slider successfully deleted");
+        redirect(base_url().'media/banner_slider');
+    }
+    
     function general()
     {
          if (strtolower($_SERVER['REQUEST_METHOD']) == "post") {

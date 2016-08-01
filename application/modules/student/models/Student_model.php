@@ -21,16 +21,22 @@ class Student_model extends MY_Model {
     }
     
      function student_details($student_id) {
-        return $this->db->select('student.*,u.*, student.created_date AS Joining_date, course.course_id,course.c_name, semester.*, batch.b_id,batch.b_name, degree.d_name')
+        return $this->db->select('student.*,u.*, student.created_date AS Joining_date,b.*,c.*,ap.*')
                         ->from('student')
-                        ->join('user u', 'u.user_id = student.user_id')
-                        ->join('course', 'course.course_id = student.course_id')
-                        ->join('semester', 'semester.s_id = student.semester_id')
-                        ->join('batch', 'batch.b_id = student.std_batch')
-                        ->join('degree', 'degree.d_id = student.std_degree')
+                        ->join('user u', 'u.user_id = student.user_id')                        
+                        ->join('branch_location b', 'b.branch_id = student.branch_id')                        
+                        ->join('course c', 'c.course_id = student.course_id')                        
+                        ->join('admission_plan ap', 'ap.admission_plan_id = student.admission_plan_id')                        
                         ->where('student.std_id', $student_id)
                         ->get()
                         ->row();
+    }
+    
+    function get_classes_student_list(){
+        
+        
+        $this->db->join('user u','s.user_id=u.user_id');
+        return $this->db->get('student s')->result();
     }
      /**
      * Student list from degree, course, batch, and semester
@@ -126,7 +132,9 @@ class Student_model extends MY_Model {
     function get_growth($user_id)
     {
         
-        return $this->db->query("SELECT SUM(marks_manager.mark_obtained) as total, SUM(exam_manager.total_marks) as totalmarks,marks_manager.mm_std_id,semester.s_name FROM  marks_manager JOIN exam_manager ON marks_manager.mm_exam_id = exam_manager.em_id JOIN semester ON exam_manager.em_semester=semester.s_id WHERE marks_manager.mm_std_id='".$user_id."' GROUP BY exam_manager.em_semester")->result();            
+        //return $this->db->query("SELECT SUM(marks_manager.mark_obtained) as total, SUM(exam_manager.total_marks) as totalmarks,marks_manager.mm_std_id,semester.s_name FROM  marks_manager JOIN exam_manager ON marks_manager.mm_exam_id = exam_manager.em_id JOIN semester ON exam_manager.em_semester=semester.s_id WHERE marks_manager.mm_std_id='".$user_id."' GROUP BY exam_manager.em_semester")->result();            
+      return $this->db->query("SELECT SUM(marks_manager.mark_obtained) as total, SUM(exam_manager.total_marks) as totalmarks,marks_manager.mm_std_id FROM  marks_manager JOIN exam_manager ON marks_manager.mm_exam_id = exam_manager.em_id  WHERE marks_manager.mm_std_id='".$user_id."'")->result();         
+      
         
     }
     
@@ -170,14 +178,15 @@ class Student_model extends MY_Model {
      * @param string $semeseter
      * @return array
      */
-    function student_exam_list($course, $semeseter) {
+    function student_exam_list($course, $admission_plan,$branch) {
         return $this->db->select()
                         ->from('exam_manager')
                         ->join('exam_type', 'exam_type.exam_type_id = exam_manager.em_type')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
                         ->where(array(
                             'exam_manager.course_id' => $course,
-                            'exam_manager.em_semester' => $semeseter,
+                            'exam_manager.admission_plan_id' => $admission_plan,
+                            'exam_manager.branch_id' => $branch,
                             'exam_manager.exam_ref_name' => 'reguler'
                         ))
                         ->order_by('exam_manager.em_start_time', 'DESC')
@@ -284,6 +293,15 @@ class Student_model extends MY_Model {
         
     }
     
+    function get_student_subject_attendance($branch,$course,$admission_plan,$class){
+        $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id');
+        $this->db->where('sa.branch_id',$branch);
+        $this->db->where('sm.course_id',$course);
+        $this->db->where('sa.admission_plan_id',$admission_plan);
+        return $this->db->get('subject_association sa')->result();        
+        
+    }
+    
     
     /**
      * Student class routine information
@@ -303,6 +321,13 @@ class Student_model extends MY_Model {
                     'ClassID' => $class
                 ])->result();
     }
+    
+    /**
+     * Student exam detail 29-07-2016
+     * @param int $student_id
+     * @param int $exam_id
+     * @return mixed array
+     */
      function student_exam_detail($student_id,$exam_id) {
         return $this->db->select()
                         ->from('exam_manager')
@@ -314,5 +339,62 @@ class Student_model extends MY_Model {
                         ->get()
                         ->row();
     }
+    
+    /**
+     * student total class 29-07-2016
+     * @param int $branch
+     * @param int $course
+     * @param int $admission_plan
+     * @param int $class
+     * @param int $sm_id
+     * @param int $std_id
+     * @return mixed array
+     */
+    function get_student_total_class($branch,$course,$admission_plan,$class,$sm_id,$std_id)
+    {
+                       $this->db->select();                
+                        $this->db->where('branch_id',$branch);
+                       $this->db->where("course_id",$course);
+                       $this->db->where("admission_plan_id",$admission_plan);
+                       $this->db->where("class_id",$class);
+                       $this->db->where("sm_id",$sm_id);
+                       $this->db->where('student_id',$std_id);
+                       return  $this->db->get('attendance')->result();
+    }
+    
+    /**
+     * student present count 29-07-2016
+     * @param int $branch
+     * @param int $course
+     * @param int $admission_plan
+     * @param int $class
+     * @param int $sm_id
+     * @param int $std_id
+     * @return mixed array
+     */
+    function get_present_class_student($branch,$course,$admission_plan,$class,$sm_id,$std_id)
+    {
+                      $this->db->select();                
+                        $this->db->where('branch_id',$branch);
+                       $this->db->where("course_id",$course);
+                       $this->db->where("admission_plan_id",$admission_plan);
+                       $this->db->where("class_id",$class);
+                       $this->db->where("sm_id",$sm_id);
+                       $this->db->where('student_id',$std_id);
+                       $this->db->where('is_present','1');
+                       return  $this->db->get('attendance')->result();
+    }
 
+    
+    function student_attendance_detail($branch,$course,$admission_plan,$class,$std_id,$sm_id)
+    {
+                     $this->db->select();                
+                        $this->db->where('branch_id',$branch);
+                       $this->db->where("course_id",$course);
+                       $this->db->where("admission_plan_id",$admission_plan);
+                       $this->db->where("class_id",$class);
+                       $this->db->where("sm_id",$sm_id);
+                       $this->db->where('student_id',$std_id);                       
+                       return  $this->db->get('attendance')->result();
+    }
 }

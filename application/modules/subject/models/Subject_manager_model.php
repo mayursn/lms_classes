@@ -37,15 +37,13 @@ class Subject_manager_model extends MY_Model {
     
     function subjectdetail($id)
     {
-         $this->db->select('sa.*,d.d_name,c.c_name,s.s_name,sm.subject_name,sm.subject_code');
-             $this->db->where('sa.sm_id', $id);
-             $this->db->order_by('d_name');
-             $this->db->from('subject_association sa');
-             $this->db->join('degree d','d.d_id=sa.degree_id');
-             $this->db->join('course c','c.course_id=sa.course_id');
-             $this->db->join('semester s','s.s_id=sa.sem_id');
+         $this->db->select('sa.*,sm.subject_name,sm.subject_code,b.*');
+             $this->db->where('sm.sm_id', $id);             
+             $this->db->from('subject_association sa');             
+             $this->db->join('branch_location b','b.branch_id=sa.branch_id');             
              $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id'); 
-            return $this->db->get()->result();
+             return $this->db->get()->result();
+             
     }
     
     function subject_detail_create($data)
@@ -75,5 +73,33 @@ class Subject_manager_model extends MY_Model {
     {
         $this->db->where('sm_id',$id);
         return $this->db->get('subject_manager')->row()->subject_name;
+    }
+    function subejct_list_branch_sem($course,$admission_plan)    
+    {
+        
+        $this->db->where("course_id",$course);
+        $this->db->where("admission_plan_id",$admission_plan);
+        return $this->db->get('subject_manager')->result();
+        
+       
+    }
+    
+    function subject_from_dept_branch_sem($dept,$branch,$sem)
+    {
+        $this->db->join("subject_manager s","s.sm_id = sa.sm_id");
+        $this->db->where("sa.degree_id",$dept);
+        $this->db->where("sa.course_id",$branch);
+        $this->db->where("sa.sem_id",$sem);
+        return $this->db->get_where("subject_association sa")->result();
+    }
+    
+    function subject_list_admission_plan($branch,$course,$admission_plan)
+    {
+        $this->db->where('sm.course_id',$course);
+        $this->db->where('sa.branch_id',$branch);
+        $this->db->where('sa.admission_plan_id',$admission_plan);
+        $this->db->join("subject_association sa",'sa.sm_id=sm.sm_id');
+        return  $this->db->get('subject_manager sm')->result();
+     
     }
 }

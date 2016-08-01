@@ -15,7 +15,14 @@
 
 <!-- just copy this <section> and next script -->
                     <section class="experiment">
-                        <div class="form-horizontal">  
+                        <?php // if()
+                        $create = create_permission($permission, 'Video_Streaming');
+                            $read = read_permission($permission, 'Video_Streaming');
+                            $update = update_permisssion($permission, 'Video_Streaming');
+                            $delete = delete_permission($permission, 'Video_Streaming');
+                           
+                        ?>
+                        <div class="form-horizontal <?php if(!$create){ ?> hidden <?php } ?>">  
                             <div class="">
                                 <span style="color:red">* is mandatory field</span> 
                             </div>  
@@ -85,6 +92,8 @@
                                 </section>
                             </div>
                         </div>
+                          
+                     <?php if($read){ ?>
                         <!-- list of all available broadcasting rooms -->
                         <h4>All Broadcast</h4>
                         <table style="width: 100%;" id="rooms-list" class="table table-bordered table-responsive"></table>
@@ -128,7 +137,10 @@
                                 <?php } ?>
                             </table>
                         <?php }
+                        
+                     }
                         ?>
+                        
                     </section>
                     <script>
                         var connection = new RTCMultiConnection();

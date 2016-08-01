@@ -29,5 +29,20 @@ class Batch_model extends MY_Model {
         
         return $batch;
     }
+    
+    function check($degree,$course)
+    {
+        $query = 'SELECT * FROM `batch` WHERE b_name="' . $this->input->post('batch') . '" AND '; // construct query
+        foreach ($degree as $d) {
+            $query .= "FIND_IN_SET($d, degree_id) AND "; // append every time for set 
+        }
+        foreach ($course as $c) {
+            $query .= "FIND_IN_SET($c, course_id) AND "; // append every time for set 
+        }
+
+        $query = rtrim($query, ' AND'); // remove last AND
+
+        return $this->db->query($query)->result_array();
+    }
 
 }

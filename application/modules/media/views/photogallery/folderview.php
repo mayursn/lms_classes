@@ -46,7 +46,16 @@ $delete = delete_permission($permission, 'Media');
     <div class=col-lg-12 col-md-12 col-xs-12>
         <!-- col-lg-12 start here -->
         <div class="panel-default toggle panelMove panelClose panelRefresh">
-            <?php $folder_name = $this->Photo_gallery_model->get_folder_name($folder_id); ?>
+            
+            <?php 
+            if(!empty($folder_id))
+            {
+            $folder_name = $this->Photo_gallery_model->get_folder_name($folder_id); 
+            }
+            else{
+                $folder_name ='';
+            }
+            ?>
             <a class="links" href="<?php  $referred_from = $this->session->userdata('referred_from');
                  echo $referred_from; ?>">Go Back To <?php echo $folder_name; ?></a>
              <?php if ($create) { ?>

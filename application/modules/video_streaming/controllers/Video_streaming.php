@@ -12,6 +12,10 @@ class Video_streaming extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('Video_streaming/Broadcast_and_streaming_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**
@@ -22,7 +26,16 @@ class Video_streaming extends MY_Controller {
         $this->data['title'] = 'Video streaming';
         $this->data['page'] = 'video_streaming';
         $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        if($this->session->userdata('std_id'))
+        {
+        $this->db->like("created_at",date('Y-m-d'));
+        $this->db->where("is_active",'1');
+        $this->data['streaming']= $this->db->get("broadcast_and_streaming")->result();        
+        $this->__template('video_streaming/std_index', $this->data);
+        }
+        else{
         $this->__template('video_streaming/index', $this->data);
+        }
     }
 
     function create_private_broadcast() {

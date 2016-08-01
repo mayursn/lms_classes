@@ -13,12 +13,21 @@ class Profile extends MY_Controller {
         parent::__construct();
         $this->load->model('profile/Profile_model');
         $this->load->model('user/User_model');
+        $this->load->model('student/Student_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
         $this->data['title'] = 'Profile';
         $this->data['page'] = 'profile';
          $this->data['profile'] = $this->User_model->get_user();
+         if($this->session->userdata('role_name')=='Student')
+         {
+             $this->data['studentprofile'] = $this->Student_model->get_by(array('user_id'=>$this->session->userdata('user_id')));
+         }
         $this->__template('profile/index', $this->data);
     }
     
@@ -41,7 +50,7 @@ class Profile extends MY_Controller {
     {
          if ($_POST) {
         $data=array('password'=>hash('md5', trim($this->input->post('new_password')) . config_item('encryption_key')));
-        $this->User_model->update($this->session->userdata('user_id'),$data);
+        $this->User_model->password_update($this->session->userdata('user_id'),$data);
         
          $this->flash_notification('Password is successfully updated.');
         }
@@ -65,7 +74,7 @@ class Profile extends MY_Controller {
         {
            $data['profile_pic']=$filedata; 
         }
-        $this->User_model->update($this->session->userdata('user_id'),$data);
+        $this->User_model->profile_update($this->session->userdata('user_id'),$data);
         if($this->session->userdata('role_name')=="Staff")
         {
             $dataprofessor=array('name'=>$this->input->post('fname'),
@@ -77,4 +86,17 @@ class Profile extends MY_Controller {
         }
          redirect(base_url('profile'));
     }
+    function student_change_profile()
+    {
+         $data=array('parent_name'=>$this->input->post('parentname'),
+                    'parent_contact'=>$this->input->post('parentcontact'),
+                    'parent_email'=>$this->input->post('parent_email_id'),
+                    'std_fb'=>$this->input->post('facebook'),
+                    'std_twitter'=>$this->input->post('twitter')
+            );
+          $this->Profile_model->student_update($this->session->userdata('user_id'),$data);
+          redirect(base_url('profile'));
+    }
+    
+    
 }

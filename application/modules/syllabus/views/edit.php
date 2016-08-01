@@ -4,6 +4,13 @@ $this->load->model('branch/Course_model');
 $this->load->model('department/Degree_model');
 $row = $this->Smart_syllabus_model->get($param2);
 
+$this->load->model('admission_plan/Admission_plan_model');
+$this->load->model('classes/Class_model');
+$this->load->model('courses/Course_model');
+$this->load->model('Branch/Branch_location_model');
+$course = $this->Course_model->order_by_column('c_name');
+$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
+
     ?>
 <div class=row>                      
     <div class=col-lg-12>
@@ -27,67 +34,41 @@ $row = $this->Smart_syllabus_model->get($param2);
                                 </div>
                             </div>
                              <div class="form-group">
-                                            <label class="col-sm-4 control-label"><?php echo ucwords("department");?><span style="color:red">*</span></label>
-                                            <div class="col-sm-8">
-                                                <select name="degree" class="form-control"  id="degree2">
-                                                    <option value="">Select department</option>
-                                                    <?php
-                                                  $degree =  $this->Degree_model->get_all();
-                                                    foreach ($degree as $dgr) {
-                                                        ?>
-                                                    <option value="<?= $dgr->d_id ?>" <?php if($row->syllabus_degree==$dgr->d_id){  echo "selected=selected"; } ?>><?= $dgr->d_name ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"><?php echo ucwords("Branch");?><span style="color:red">*</span></label>
-                                <div class="col-sm-8">
-                                    <select name="course" class="form-control"  id="course2">
-                                        <option value="">Select Branch</option>
-                                        <?php
-                                        $course = $this->Course_model->get_all();
-                                        foreach ($course as $crs) {
-                                            if ($crs->course_id == $row->syllabus_course) {
-                                                ?>
-                                                <option value="<?= $crs->course_id ?>" selected><?= $crs->c_name ?></option>
-                                                <?php
-                                            } else {
-                                                ?>
-                                                <option value="<?= $crs->course_id ?>" ><?= $crs->c_name ?></option>
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"><?php echo ucwords("Semester");?><span style="color:red">*</span></label>
-                                <div class="col-sm-8"> 
-                                    <select name="semester" class="form-control"  id="semester1">
-                                        <option value="">Select semester</option>
-                                        <?php
-                                        $this->load->model('semester/Semester_model');
-                                        $datasem = $this->Semester_model->get_all();
-                                        foreach ($datasem as $rowsem) {
-                                            if ($rowsem->s_id == $row->syllabus_sem) {
-                                                ?>
-                                                <option value="<?= $rowsem->s_id ?>" selected><?= $rowsem->s_name ?></option>
-                                                    <?php
-                                                } else {
-                                                    ?>
-                                                <option value="<?= $rowsem->s_id ?>" ><?= $rowsem->s_name ?></option>
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <?php $this->load->model('branch/Branch_location_model'); 
+                            $branch = $this->Branch_location_model->order_by_column('branch_name');
+                            ?>
+                            <select name="branch" class="form-control" id="branch">
+                                <option value="">Select</option>
+                                <?php foreach ($branch as $rows) { ?>
+                                    <option value="<?php echo $rows->branch_id; ?>" <?php if($row->branch_id==$rows->branch_id){ echo "selected=selected"; } ?>><?php echo $rows->branch_name.' - '.$rows->branch_location; ?></option>
+                                <?php } ?>                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="course" class="form-control" id="course">
+                                <option value="">Select</option>
+                                <?php foreach($course as $rowcourse): ?>
+                                <option value="<?php echo $rowcourse->course_id; ?>" <?php if($row->syllabus_course==$rowcourse->course_id){ echo "selected=selected"; } ?>><?php echo $rowcourse->c_name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="admission_plan">
+                                <option value="">Select</option>
+                                <?php foreach ($admission_plan as $plan): ?>
+                                <option value="<?php echo $plan->admission_plan_id; ?>" <?php if($row->admission_plan_id==$plan->admission_plan_id){ echo "selected=selected"; } ?>><?php echo $plan->admission_duration; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>	
            
                            
                             <div class="form-group">

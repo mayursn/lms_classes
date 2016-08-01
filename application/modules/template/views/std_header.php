@@ -61,7 +61,7 @@
         <div id="header">
             <nav class="navbar navbar-default" role=navigation>
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="<?php echo base_url(); ?>admin">
+                    <a class="navbar-brand" href="<?php echo base_url(); ?>">
                         <img src="<?php echo base_url(); ?>assets/img/logo.png" alt="logo">
                     </a>
                 </div>
@@ -72,7 +72,7 @@
                             <a href=# class="collapseBtn leftbar"><i class="fa fa-bars" aria-hidden="true"></i></a>
                         </li>
                         <li class="dropdown">
-                            <a href="<?php echo base_url(); ?>email_inbox">
+                            <a href="<?php echo base_url(); ?>email/inbox">
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                                 <span class=txt>Messages</span>
                             </a>
@@ -90,7 +90,7 @@
                                      <ul class=notif>
                                             <li class=header><strong>Notifications</strong> (<?php echo $this->session->userdata('notifications')['total_notification']; ?>) items</li>
                                             <?php if (isset($this->session->userdata('notifications')['fees_structure'])) { ?>
-                                                <li><a href="<?php echo base_url('student/student_fees'); ?>"><span class=icon>
+                                                <li><a href="<?php echo base_url('payment/student_fees'); ?>"><span class=icon>
                                                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                                                         </span> <span class=event> New fee structure was added.</span></a>
                                                 </li>
@@ -133,7 +133,7 @@
                             $user_id = $this->session->userdata('user_id');
                             $user = $this->User_model->get($user_id);
                             ?>
-                            <a href=# class="dropdown-toggle avatar" data-toggle=dropdown><img src=<?php echo base_url().'system_image/'.$user->profile_pic; ?> alt="" class="image"> 
+                            <a href=# class="dropdown-toggle avatar" data-toggle=dropdown><img src=<?php echo base_url().'uploads/system_image/'.$user->profile_pic; ?> alt="" class="image"> 
                                 <span class=txt><?php echo $user->first_name.' '.$user->last_name; ?></span> <b class=caret></b>
                             </a>
                             <ul class="dropdown-menu right">
@@ -141,12 +141,9 @@
                                     <ul>
                                         <li>
                                             <a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard" aria-hidden="true"></i>Home</a>
-                                        </li>
-<<<<<<< HEAD
-                                        <li><a href="<?php echo base_url(); ?>manage_profile">
-=======
+                                        </li>                                        
                                         <li><a href="<?php echo base_url(); ?>profile">
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
+
                                                 <i class="fa fa-user" aria-hidden="true"></i>Edit profile</a>
                                         </li>
                                         <li><a href="<?php echo base_url(); ?>user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -170,27 +167,7 @@
             <!-- #wrapper --><!--Sidebar background-->
             <div id=sidebarbg class="hidden-lg hidden-md hidden-sm hidden-xs"></div>
             <!--Sidebar content-->
-            <div id="sidebar" class="page-sidebar hidden-lg hidden-md hidden-sm hidden-xs">
-                <div class=shortcuts>
-                    <ul>
-                        <li><a href="<?php echo base_url(); ?>system_settings" title="System Settings" class=tip>
-                                <i class="fa fa-life-ring" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                        <li><a href="<?php echo base_url(); ?>backup" title="Database backup" class=tip>
-                                <i class="fa fa-database" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                        <li><a href="<?php echo base_url(); ?>report_chart" title="Reports" class=tip>
-                                <i class="fa fa-pie-chart" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                        <li><a href="<?php echo base_url(); ?>manage_profile" title="Profile" class=tip>
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div id="sidebar" class="page-sidebar hidden-lg hidden-md hidden-sm hidden-xs">               
                 <!-- End search -->
                 <!-- Start .sidebar-inner -->
                 <div class=sidebar-inner>
@@ -210,92 +187,149 @@
                                             <span class="indicator"></span>
                                         </a>
                                     </li>
-                                    <li>
+                                    <?php if(check_permission($permission, 'Class_Routine')) { ?>
+                                    <li style="display:none;">
                                         <a <?php echo active_single_menu('class_routine', $page); ?> href="<?php echo base_url(); ?>student/class_routine">
                                             <i class="fa fa-list" aria-hidden="true"></i>
                                             <span class=txt>Class Routine</span>
                                         </a>
                                     </li>
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Attendance')) { ?>
                                     <li>
                                             <a <?php echo active_single_menu('attendance_report', $page); ?> href="<?php echo base_url(); ?>student/attendance_report">
                                                 <i class="fa fa-bars" aria-hidden="true"></i>
                                                 <span class=txt>Attendance Report</span>
                                             </a>
                                     </li>
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Syllabus')) { ?>
                                     <li>
                                             <a <?php echo active_single_menu('syllabus', $page); ?> href="<?php echo base_url(); ?>syllabus">
                                                 <i class="fa fa-code" aria-hidden="true"></i>
                                                 <span class=txt>Syllabus</span>
                                             </a>
                                     </li>
-                                    <li>
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Assignment')) { ?>
+                                    <li style="display:none;">
                                             <a <?php echo active_single_menu('assignment', $page); ?> href="<?php echo base_url(); ?>assignment/submission"><i class="s16 fa fa-table"></i><span class="txt">Assignments </span>
                                             </a>
-                                        </li>
-                                    <li>
+                                    </li>
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Project')) { ?>
+                                    <li  style="display:none;">
                                             <a <?php echo active_single_menu('project', $page); ?> href="<?php echo base_url(); ?>project/submission/"><i class="s16 icomoon-icon-cube"></i><span class="txt">Projects </span>
                                             </a>
                                     </li>
-                                    <li>
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Video_Streaming')) { ?>
+                                    <li  style="display:none;" >
                                             <a <?php echo active_single_menu('video_streaming', $page); ?> href="<?php echo base_url(); ?>video_streaming"><i class="s16 fa fa-video-camera"></i><span class=txt>Video Streaming </span>
                                             </a>
                                     </li>
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Exam')) { ?>
                                     <li>
                                             <a <?php echo active_single_menu('exam', $page); ?> href="<?php echo base_url(); ?>exam"><i class="s16 fa fa-picture-o"></i>
                                                 <span class=txt>Exam</span>
                                             </a>
+                                    </li>
+                                    <?php } ?>
+                                    <?php
+                                    $pages = [
+                                        'compose', 'inbox', 'sent', 'reply'
+                                    ];
+                                    ?>
+                                    <?php if (check_permission($permission, 'Email')) { ?>                                           
+
+                                        <li class="hasSub<?php echo highlight_menu($page, $pages); ?>">
+                                            <a href="#" class="<?php echo exapnd_not_expand_menu($page, $pages); ?>"><i class="icomoon-icon-arrow-down-2 s16 hasDrop"></i><i class="s16 fa fa-envelope"></i>
+                                                <span class="txt">Email </span></a>
+                                            <ul <?php echo navigation_show_hide_ul($page, $pages); ?>>
+                                                <li>
+                                                    <a id="link-compose" href="<?php echo base_url(); ?>email/compose">
+
+                                                        <i class="s16 fa fa-envelope"></i>
+                                                        <span class="txt">Compose E-Mail</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a id="link-inbox" href="<?php echo base_url(); ?>email/inbox">
+                                                        <i class="s16 fa fa-inbox"></i>
+                                                        <span class="txt">Inbox</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a id="link-sent" href="<?php echo base_url(); ?>email/sent">
+
+                                                        <i class="s16 fa fa-send"></i>
+                                                        <span class="txt">Sent E-Mail</span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
                                         </li>
+                                    <?php } ?>
+                                   <!-- email/inbox -->
+                                    <?php if(check_permission($permission, 'Exam_Marks')) { ?>
                                     <li>
                                         <a <?php echo active_single_menu('exam_marks', $page); ?> href="<?php echo base_url(); ?>student/exam_marks">
                                                 <i class="s16 fa fa-clock-o"></i>
                                               <span class=txt>Exam Marks</span>
                                         </a>
                                     </li> 
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Fee')) { ?>
                                     <li>
                                         <a <?php echo active_single_menu('student_fees', $page); ?> href="<?php echo base_url(); ?>payment/student_fees"><i class="s16 fa fa-money"></i>
                                                 <span class=txt>Pay Online </span>
                                         </a>
                                     </li> 
+                                     <?php } ?>
+                                    <?php if(check_permission($permission, 'Fee')) { ?>
                                     <li>
                                             <a <?php echo active_single_menu('fees_record', $page); ?> href="<?php echo base_url(); ?>feerecord"><i class="s16 fa fa-newspaper-o"></i><span class=txt>Fee Record </span>
                                             </a>
-                                        </li>                                        
+                                        </li> 
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Holiday')) { ?>
                                         <li>
-<<<<<<< HEAD
-                                            <a <?php echo active_single_menu('holiday', $page); ?> href="<?php echo base_url(); ?>student/holiday">
-=======
-                                            <a <?php echo active_single_menu('holiday', $page); ?> href="<?php echo base_url(); ?>/holiday">
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
+
+                                            <a <?php echo active_single_menu('holiday', $page); ?> href="<?php echo base_url(); ?>holiday">
+
                                                 <i class="s16 fa fa-calendar"></i>
                                                 <span class=txt>Holiday </span>
                                             </a>
-                                        </li>                                           
-                                        <li>
+                                        </li>   
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Courseware')) { ?>
+                                        <li  style="display:none;">
                                             <a <?php echo active_single_menu('courseware', $page); ?> href="<?php echo base_url(); ?>courseware">
                                                 <i class="s16 fa fa-file-o"></i>
                                                 <span class=txt>Courseware</span>
                                             </a>
                                         </li>
-                                        <li>
-<<<<<<< HEAD
-                                            <a <?php echo active_single_menu('vocational_course', $page); ?> href="<?php echo base_url(); ?>student/vocationalcourse">
-=======
+                                    <?php } ?>
+                                    <?php if(check_permission($permission, 'Vocational_Course')) { ?>
+                                        <li  style="display:none;">
+
                                             <a <?php echo active_single_menu('vocational_course', $page); ?> href="<?php echo base_url(); ?>vocationalcourse">
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
+
                                                 <i class="s16 fa fa-spinner"></i>
                                                 <span class=txt>Vocational Course</span>
                                             </a>
                                         </li>
-                                        <li>
-<<<<<<< HEAD
-                                            <a <?php echo active_single_menu('gallery', $page); ?> href="<?php echo base_url(); ?>student/gallery"><i class="s16 fa fa-picture-o"></i>
-                                                <span class=txt>Gallery </span>
-                                            </a>
-                                        </li>  
-=======
+                                    <?php } ?>
+                                        <?php if (check_permission($permission, 'Media')) {  ?>
+                                        <li  style="display:none;">
+
                                             <a <?php echo active_single_menu('gallery', $page); ?> href="<?php echo base_url(); ?>media/photo_gallery"><i class="s16 fa fa-picture-o"></i>
                                                 <span class=txt>Gallery </span>
                                             </a>
+                                        </li>  
+                                        <?php } ?>
+                                            
                                         </li> 
                                         <?php
                                     $pages = [
@@ -303,7 +337,7 @@
                                     ];
                                     ?>
 
-                                    <li class="hasSub<?php echo highlight_menu($page, $pages); ?>">
+                                    <li class="hasSub<?php echo highlight_menu($page, $pages); ?>"  style="display:none;">
                                         <a href="#" class="<?php echo exapnd_not_expand_menu($page, $pages); ?>"><i class="icomoon-icon-arrow-down-2 s16 hasDrop"></i><i class="s16 fa fa-book"></i>
                                             <span class="txt">Quiz</span></a>
                                         <ul <?php echo navigation_show_hide_ul($page, $pages); ?>>
@@ -321,13 +355,12 @@
                                             </li>  
                                         </ul>
                                     </li>
-     
->>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
+	    
                                         <?php
                                         $news_conent = $this->db->get_where('cms_manager', array('c_status' => 1))->result_array();
                                         foreach ($news_conent as $row) {
                                             ?>
-                                            <li>
+                                            <li  style="display:none;">
                                                 <a <?php echo active_single_menu($row['c_slug'], $page); ?> href="<?php echo base_url(); ?>pages/<?php echo @$row['c_slug']; ?>">
                                                     <i class="s16 fa fa-universal-access"></i>
                                                     <span class=txt><?php echo @$row['c_title']; ?> </span>
@@ -369,6 +402,7 @@
                                     <ul class="dropdown-menu">
                                         <li class="menu">
                                             <ul>
+                                                 <?php if (check_permission($permission, 'Student')) { ?>
                                                 <li>
                                                     <label>
                                                         <input type="checkbox" value="student" name="student"
@@ -376,6 +410,8 @@
                                                         <span>Student</span>
                                                     </label>
                                                 </li>
+                                                 <?php } ?>
+                                                <?php if (check_permission($permission, 'Branch')) { ?>
                                                 <li>
                                                     <label>
                                                         <input type="checkbox" value="course" name="course"
@@ -383,6 +419,8 @@
                                                         <span>Branch</span>
                                                     </label>
                                                 </li>
+                                                <?php } ?>
+                                                <?php if (check_permission($permission, 'Exam')) { ?>
                                                 <li>
                                                     <label>
                                                         <input type="checkbox" value="exam" name="exam"
@@ -390,6 +428,8 @@
                                                         <span>Exam</span>
                                                     </label>
                                                 </li>
+                                                <?php } ?>
+                                                <?php if (check_permission($permission, 'Event')) { ?>
                                                 <li>
                                                     <label>
                                                         <input type="checkbox" value="event" name="event"
@@ -397,6 +437,8 @@
                                                         <span>Event</span>
                                                     </label>
                                                 </li>
+                                                <?php } ?>
+                                                <?php if (check_permission($permission, 'Assignment')) { ?>
                                                 <li>
                                                     <label>
                                                         <input type="checkbox" value="assignment" name="assignment"
@@ -404,6 +446,7 @@
                                                         <span>Assignment</span>
                                                     </label>
                                                 </li>
+                                                <?php } ?>
                                             </ul>                                           
                                         </li>
                                     </ul> 

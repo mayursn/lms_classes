@@ -1482,16 +1482,14 @@ class Crud_model extends CI_Model {
      * @param string $student
      * @return int
      */
-    function check_attendance_status($department, $branch, $batch, $semester, $class, $class_routine, $date, $student) {
+    function check_attendance_status($branch, $course, $admission_plan, $class, $date, $student) {
         return $this->db->select('attendance_id, is_present, student_id')
                         ->from('attendance')
                         ->where(array(
-                            'department_id' => $department,
+                            'course_id' => $course,
                             'branch_id' => $branch,
-                            'batch_id' => $batch,
-                            'semester_id' => $semester,
+                            'admission_plan_id' => $admission_plan,
                             'class_id' => $class,
-                            'class_routine_id' => $class_routine,
                             'date_taken' => $date,
                             'student_id' => $student
                         ))->get()->row();

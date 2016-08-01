@@ -17,8 +17,8 @@ if (!function_exists('video_streaming_email_notification')) {
             'protocol' => 'smtp',
             'smtp_host' => 'ssl://smtp.googlemail.com',
             'smtp_port' => 465,
-            'smtp_user' => 'mayur.ghadiya@searchnative.in',
-            'smtp_pass' => 'the mayurz97375',
+            'smtp_user' => 'mayur.panchal@searchnative.in',
+            'smtp_pass' => 'Mayur@@123',
             'mailtype' => 'html',
             'charset' => 'iso-8859-1'
         );
@@ -28,7 +28,7 @@ if (!function_exists('video_streaming_email_notification')) {
 
         foreach ($emails as $email) {
             $CI->email->clear(TRUE);
-            $CI->email->from('mayur.ghadiya@searchnative.in', 'Search Native India');
+            $CI->email->from('mayur.panchal@searchnative.in', 'Search Native India');
             $CI->email->to($email->email);
             $CI->email->subject($subject);
             $CI->email->message($message);
@@ -49,8 +49,8 @@ if (!function_exists('email_configuration')) {
             'protocol' => 'smtp',
             'smtp_host' => 'ssl://smtp.googlemail.com',
             'smtp_port' => 465,
-            'smtp_user' => 'mayur.ghadiya@searchnative.in',
-            'smtp_pass' => 'the mayurz97375',
+            'smtp_user' => 'mayur.panchal@searchnative.in',
+            'smtp_pass' => 'Mayur@@123',
             'mailtype' => 'html',
             'charset' => 'iso-8859-1'
         );
@@ -167,15 +167,19 @@ if (!function_exists('create_notification')) {
      * @param string $semester
      * @param int $data_id
      */
-    function create_notification($notification_type, $degree, $course, $batch, $semester, $data_id, $student_id = '') {
+    function create_notification($notification_type, $branch, $course, $admission_plan, $class='', $data_id, $student_id = '') {
         $CI = & get_instance();
 
+                if(!empty($class))
+                {
+                    $CI->db->where('student.class_id', $class);
+                }
         $students = $CI->db->select()
                 ->from('student')
-                ->where('student.std_degree', $degree)
+                ->where('student.branch_id', $branch)
                 ->where('student.course_id', $course)
-                ->where('student.std_batch', $batch)
-                ->where('student.semester_id', $semester)
+                ->where('student.admission_plan_id', $admission_plan)
+                
                 ->get()
                 ->result();
 

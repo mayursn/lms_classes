@@ -14,16 +14,26 @@ class Payment extends MY_Controller {
         $this->load->model('fees/Fees_structure_model');
         $this->load->model('student/Student_model');
         $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
-        $this->load->model('semester/Semester_model');
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
+        $this->load->model('admission_plan/Admission_plan_model');
+        $this->load->model('classes/Class_model');
         $this->load->model('feerecord/Student_fees_model');
         $this->load->model('payment_gateway_config/Authorize_net_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**
      * index page
      */
     function index() {
+        if($this->session->userdata('std_id'))
+        {
+            redirect(base_url().'payment/student_fees');
+        }
         $this->data['department'] = '';
         $this->data['branch'] = '';
         $this->data['batch'] = '';
@@ -33,11 +43,11 @@ class Payment extends MY_Controller {
         $this->data['title'] = 'Make Payment';
         $this->data['page'] = 'make_payment';
         $this->data['authorize_net'] = $this->Authorize_net_model->order_by_column('login_id');
-        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+        $this->data['class'] = $this->Class_model->order_by_column('class_name');
         $this->data['course'] = $this->Course_model->order_by_column('c_name');
-        $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
+        $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');
         $this->data['student_fees'] = $this->Student_fees_model->all_student_fees();
-
 
         $this->__template('payment/index', $this->data);
     }
@@ -47,31 +57,35 @@ class Payment extends MY_Controller {
      */
     function due_amount() {
         $this->load->model('student/Student_model');
-        $this->data['department'] = '';
+        $this->data['course'] = '';
         $this->data['branch'] = '';
-        $this->data['batch'] = '';
-        $this->data['semester'] = '';
+        $this->data['admission_plan'] = '';
+        $this->data['class'] = '';
         $this->data['fee_structure'] = '';
         if ($_POST) {
-            $this->data['department'] = $_POST['degree'];
-            $this->data['branch'] = $_POST['course'];
-            $this->data['batch'] = $_POST['batch'];
-            $this->data['semester'] = $_POST['semester'];
+            $this->data['course'] = $_POST['course'];
+            $this->data['branch'] = $_POST['branch'];
+            $this->data['admission_plan'] = $_POST['admission_plan'];
+            $this->data['class'] = $_POST['class'];
             $this->data['fee_structure'] = $_POST['fee_structure'];
 
             $students = $this->Student_model->get_many_by(array(
-                'std_degree' => $this->data['department'],
-                'course_id' => $this->data['branch'],
-                'std_batch' => $this->data['batch'],
-                'semester_id' => $this->data['semester']
-            ));
+                'branch_id' => $this->data['branch'],
+                'course_id' => $this->data['course'],
+                'admission_plan_id' => $this->data['admission_plan'],
+                'class_id' => $this->data['class']));
 
             $this->data['students'] = $students;
             $this->data['fee_structure_info'] = $this->Fees_structure_model->get($_POST['fee_structure']);
         }
         $this->data['title'] = 'Due Amount';
         $this->data['page'] = 'due_amount';
-        $this->data['degree'] = $this->Degree_model->get_all();
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('course/Course_model');
+        $this->load->model('classes/Class_model');
+        $this->data['branch'] = $this->Branch_location_model->get_all();
+        $this->data['course'] = $this->Course_model->get_all();
+        $this->data['class'] = $this->Class_model->get_all();
         $this->__template('payment/due_amount', $this->data);
     }
 
@@ -84,7 +98,9 @@ class Payment extends MY_Controller {
             'fees_structure_id' => $_POST['fees_structure'],
             'paid_amount' => $_POST['fees'],
             'course_id' => $_POST['course'],
-            'sem_id' => $_POST['semester'],
+            'branch_id' => $_POST['branch'],
+            'admission_plan_id' => $_POST['admission_plan'],
+            'class_id' => $_POST['class'],
             'fee_title' => '',
             'remarks' => $_POST['c_description'],
             'payment_type' => 'cheque',
@@ -117,8 +133,8 @@ class Payment extends MY_Controller {
      * @param string $semester
      * @param string $fee_structure
      */
-    function make_payment_student_list($degree = '', $course = '', $batch = '', $semester = '', $fee_structure = '') {
-        $this->data['student_fees'] = $this->Student_fees_model->make_payment_student_list($degree, $course, $batch, $semester, $fee_structure);
+    function make_payment_student_list($branch = '', $course = '', $admission_plan = '', $class = '', $fee_structure = '') {
+        $this->data['student_fees'] = $this->Student_fees_model->make_payment_student_list($branch, $course, $admission_plan, $class, $fee_structure);
 
         $this->load->view('payment/make_payment_student_list', $this->data);
     }
@@ -130,8 +146,8 @@ class Payment extends MY_Controller {
      * @param string $batch
      * @param string $semester
      */
-    function student_fee_structure($degree, $branch, $batch, $semester) {
-        $fee_structure = $this->Student_fees_model->fee_structure_filter($degree, $branch, $batch, $semester);
+    function student_fee_structure($branch,$course, $admission_plan, $class) {
+        $fee_structure = $this->Student_fees_model->fee_structure_filter($branch, $course, $admission_plan, $class);
 
         echo json_encode($fee_structure);
     }
@@ -182,8 +198,9 @@ class Payment extends MY_Controller {
     function student_fees() {
         $this->load->model('Student/Student_model');
         $this->data['student_detail'] = $this->Student_model->get($this->session->userdata('std_id'));
-        $this->data['fees_structure'] = '';
-        $this->data['semester'] = $this->Semester_model->get_all();
+        $student_detail = $this->data['student_detail'];
+        $this->data['fees_structure'] = $this->Student_fees_model->get_fees_list($student_detail);
+        //$this->data['semester'] = $this->Semester_model->get_all();
         $this->data['fees_record'] = $this->Student_fees_model->fees_record($this->session->userdata('std_id'));
         $this->data['page'] = 'student_fees';
         $this->data['title'] = 'Pay Online';
@@ -221,13 +238,18 @@ class Payment extends MY_Controller {
      */
     function payment_gateway_type($type) {
         $this->load->model('payment_gateway_config/Authorize_net_model');
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
+        $this->load->model('admission_plan/Admission_plan_model');
+        $this->load->model('classes/Class_model');
         
         if ($type == 'authorize.net') {
             //load authorize.net payment getaway page
             $this->data['authorize_net'] = $this->Authorize_net_model->order_by_column('login_id');
-            $this->data['degree'] = $this->Degree_model->get_all();
+            $this->data['branch'] = $this->Degree_model->get_all();
             $this->data['course'] = $this->Course_model->get_all();
-            $this->data['semester'] = $this->Semester_model->get_all();
+            $this->data['class'] = $this->Class_model->get_all();
+            $this->data['admission_plan'] = $this->Admission_plan_model->get_all();
         }
         $this->data['title'] = 'Make Payment';
         $this->data['page'] = 'make_payment';
@@ -364,7 +386,9 @@ class Payment extends MY_Controller {
                         'fees_structure_id' => $this->session->userdata('payment_info')['fees_structure'],
                         'paid_amount' => $this->session->userdata('payment_info')['amount'],
                         'course_id' => $student_detail->course_id,
-                        'sem_id' => $this->session->userdata('payment_info')['semester'],
+                        'branch_id' => $student_detail->branch_id,
+                        'admission_plan_id' => $student_detail->admission_plan_id,
+                        'class_id' => $student_detail->class_id,                        
                         'fee_title' => $this->session->userdata('payment_info')['title'],
                         'remarks' => $this->session->userdata('payment_info')['remarks']
                     ));
@@ -444,7 +468,7 @@ class Payment extends MY_Controller {
                     'x_zip' => $student_detail->zip,
                     'x_country' => 'India',
                     'x_phone' => $student_detail->std_mobile,
-                    'x_email' => 'mayur.ghadiya@searchnative.in',
+                    'x_email' => 'mayur.panchal@searchnative.in',
                     'x_customer_ip' => $this->input->ip_address(),
                 );
                 $this->authorize_net->setData($auth_net);
@@ -482,5 +506,16 @@ class Payment extends MY_Controller {
             }
         }
     }
+    
+    function get_fees_structure($branch='',$course='',$admission_plan='')
+    {
+        $this->db->where("branch_id",$branch);
+        $this->db->where("course_id",$course);
+        $this->db->where("admission_plan_id",$admission_plan);
+        
+        $res = $this->db->get('fees_structure')->result();
+        echo json_encode($res);
+    }
+    
 
 }

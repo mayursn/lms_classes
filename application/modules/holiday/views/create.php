@@ -62,27 +62,36 @@ $semesters = $this->db->get('semester')->result_array();
     $(document).ready(function () {
         var date = '';
         var start_date = '';
-
+        var js_format = '<?php echo js_dateformat(); ?>';
         $("#holiday_startdate").datepicker({
-            format: ' MM dd, yyyy',
+            format: js_format,
             startDate: new Date(),
             todayHighlight: true,
             autoclose: true
+        }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+        $('#holiday_enddate').datepicker('setStartDate', minDate);
         });
-
-        $('#holiday_startdate').on('change', function () {
-            date = new Date($(this).val());
-            start_date = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-            console.log(start_date);
-            setTimeout(function () {
-                $("#holiday_enddate").datepicker({
-                    format: ' MM dd, yyyy',
+          $("#holiday_enddate").datepicker({
+                    format: js_format,
                     todayHighlight: true,
                     startDate: start_date,
                     autoclose: true,
                 });
-            }, 700);            
-        });
+
+//        $('#holiday_startdate').on('change', function () {
+//            date = new Date($(this).val());
+//            start_date = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+//            console.log(start_date);
+//            setTimeout(function () {
+//                $("#holiday_enddate").datepicker({
+//                    format: ' MM dd, yyyy',
+//                    todayHighlight: true,
+//                    startDate: start_date,
+//                    autoclose: true,
+//                });
+//            }, 700);            
+//        });
 
         $("#holidayform").validate({
             rules: {

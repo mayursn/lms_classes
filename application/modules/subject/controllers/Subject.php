@@ -12,6 +12,10 @@ class Subject extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('subject/Subject_manager_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
@@ -33,7 +37,7 @@ class Subject extends MY_Controller {
         $this->load->model('user/User_model');
 
         $this->data['title'] = 'Subject Detail';
-        $this->data['page'] = 'subject detail';
+        $this->data['page'] = 'subject_detail';
         $this->data['param'] = $id;           
         $this->data['subjectdetail']= $this->Subject_manager_model->subjectdetail($id);
 
@@ -45,7 +49,9 @@ class Subject extends MY_Controller {
     }
     function create() {
         if ($_POST) {
-            
+         
+            $data['course_id'] = $_POST['course'];
+            //$data['admission_plan_id']= implode(",",$_POST['admission_plan']);
             $data['subject_name'] = $this->input->post('subname');
             $data['subject_code'] = $this->input->post('subcode');
             $data['sm_status'] = $this->input->post('status');
@@ -117,8 +123,10 @@ class Subject extends MY_Controller {
     }
     
     function update($id = '') {
-        if ($_POST) {
-            
+        if ($_POST) {            
+          
+            $data['course_id'] = $_POST['course'];
+            //$data['admission_plan_id']= implode(",",$_POST['admission_plan']);
             $data['subject_name'] = $this->input->post('subname');
             $data['subject_code'] = $this->input->post('subcode');
             $this->Subject_manager_model->update($id, $data);
@@ -131,11 +139,10 @@ class Subject extends MY_Controller {
     function subject_detail_create($param1="")
     {
          if ($_POST) {
-            $data['degree_id'] = $this->input->post('degree');
-            $data['course_id'] = $this->input->post('course');
-            $data['sem_id'] = $this->input->post('semester');
+            $data['branch_id'] = $this->input->post('branch');            
+            $data['admission_plan_id'] = $this->input->post('admission_plan');            
             $data['sm_id'] = $param1;
-            $data['professor_id'] = implode(',', $this->input->post('professor'));
+            $data['professor_id'] = $this->input->post('professor');
             $data['created_date'] = date('Y-m-d');
             $this->Subject_manager_model->subject_detail_create($data);
             $this->flash_notification('Subject detail is successfully added.');
@@ -146,10 +153,9 @@ class Subject extends MY_Controller {
     function subject_detail_update($param1="",$param2="")
     {
          if ($_POST) {            
-            $data['degree_id'] = $this->input->post('degree');
-            $data['course_id'] = $this->input->post('course');
-            $data['sem_id'] = $this->input->post('semester');
-            $data['professor_id'] = implode(',', $this->input->post('professor'));  
+            $data['branch_id'] = $this->input->post('branch');            
+            $data['admission_plan_id'] = $this->input->post('admission_plan');            
+            $data['professor_id'] = $this->input->post('professor');  
             $this->Subject_manager_model->subject_detail_update($param1,$data);
             $this->flash_notification('Subject detail is successfully updated.');
          }
@@ -175,17 +181,16 @@ class Subject extends MY_Controller {
     
     function professor_subject()
     {
-        $this->load->model('branch/Course_model');
+        $this->load->model('courses/Course_model');
         $this->load->model('semester/Semester_model');
         
-        $this->db->select('sa.*,sm.*,d.d_name,c.c_name,s.s_name');
+        $this->db->select('sa.*,sm.*,b.branch_name,b.branch_location,c.c_name,a.admission_duration');
         $this->db->where("FIND_IN_SET('".$this->session->userdata('user_id')."',sa.professor_id) !=",0);
         $this->db->from('subject_association sa');
         $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id');
-        $this->db->join('degree d','d.d_id=sa.degree_id');
-	$this->db->join('degree d','d.d_id=sa.degree_id');
-        $this->db->join('course c','c.course_id=sa.course_id');
-        $this->db->join('semester s','s.s_id=sa.sem_id');
+        $this->db->join('branch_location b','b.branch_id=sa.branch_id');
+        $this->db->join('course c','c.course_id=sm.course_id');
+        $this->db->join('admission_plan a','a.admission_plan_id=sa.admission_plan_id');        
         $this->data['subject']= $this->db->get()->result();
         
         $this->data['course'] = $this->Course_model->get_all();
@@ -203,6 +208,24 @@ class Subject extends MY_Controller {
         $this->db->where("sa.course_id",$branch);
         $this->db->where("sa.sem_id",$sem);
         $res = $this->db->get_where("subject_association sa")->result();
+        echo json_encode($res);
+    }
+    
+    function subejct_list_branch_sem($course,$admission_plan)    
+    {
+        $this->db->where('course_id',$course);
+        $this->db->where('admission_plan_id',$admission_plan);
+        $res =  $this->db->get('subject_manager')->result();
+        echo json_encode($res);
+    }
+    
+    function subject_list_admission_plan($branch,$course,$admission_plan)
+    {
+        $this->db->where('sm.course_id',$course);
+        $this->db->where('sa.branch_id',$branch);
+        $this->db->where('sa.admission_plan_id',$admission_plan);
+        $this->db->join("subject_association sa",'sa.sm_id=sm.sm_id');
+        $res =  $this->db->get('subject_manager sm')->result();
         echo json_encode($res);
     }
 }

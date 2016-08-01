@@ -12,23 +12,26 @@ class Examschedual extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('exam/Exam_manager_model');
-        $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
         $this->load->model('batch/Batch_model');
-        $this->load->model('semester/Semester_model');
+        $this->load->model('admission_plan/Admission_plan_model');
         $this->load->model('classes/Class_model');
         $this->load->model('student/Student_model');
         $this->load->model('exam/Exam_seat_no_model');
         $this->load->model('examschedual/Exam_time_table_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
-        $this->data['title'] = 'Exam Schedual';          
+        $this->data['title'] = 'Exam Schedule';          
         $this->data['time_table'] = $this->Exam_time_table_model->time_table();
         $this->data['course'] = $this->Course_model->order_by_column('c_name');
-        $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
-        $this->data['batch'] = $this->Batch_model->order_by_column('b_name');
-        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');        
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
         $this->data['page'] = 'exam_time_table';
         $this->__template('examschedual/index', $this->data);
     }
@@ -47,18 +50,51 @@ class Examschedual extends MY_Controller {
                     if ($this->form_validation->run('time_table_insert_update') != FALSE) {
                         //create
                         $insert_id = $this->Exam_time_table_model->insert(array(
-                            'degree_id' => $this->input->post('degree', TRUE),
+                            'branch_id' => $this->input->post('branch', TRUE),
                             'course_id' => $this->input->post('course', TRUE),
-                            'batch_id' => $this->input->post('batch', TRUE),
-                            'semester_id' => $this->input->post('semester', TRUE),
+                            'admission_plan_id' => $this->input->post('admission_plan', TRUE),                            
                             'exam_id' => $this->input->post('exam', TRUE),
                             'subject_id' => $this->input->post('subject', TRUE),
                             'exam_date' => $this->input->post('exam_date', TRUE),
                             'exam_start_time' => $this->input->post('start_time', TRUE),
                             'exam_end_time' => $this->input->post('end_time', TRUE),
                         ));
-                        
-                        create_notification('exam_time_table', $_POST['degree'], $_POST['course'], $_POST['batch'], $_POST['semester'], $insert_id);
+                           $admission_plan = $_POST['admission_plan'];
+                $branch = $_POST['branch'];
+                $course = $_POST['course'];      
+                
+                $this->db->where('branch_id', $branch);                  
+                $this->db->where('course_id', $course);
+                $this->db->where('admission_plan_id', $admission_plan);
+                
+                $students = $this->db->get('student')->result();
+                
+                $std_id = '';
+                foreach ($students as $std) {
+                    $id = $std->std_id;
+                    $std_id[] = $id;
+                    //  $student_id = implode(",",$id);
+                    // $std_ids[] =$student_id;
+                }
+                if ($std_id != '') {
+                    $student_ids = implode(",", $std_id);
+                } else {
+                    $student_ids = '';
+                }
+                $this->db->where("notification_type", "exam_time_table");
+                $res = $this->db->get("notification_type")->row();
+                if ($res != '') {
+                    $notification_id = $res->notification_type_id;
+                    $notify['notification_type_id'] = $notification_id;
+                    $notify['student_ids'] = $student_ids;
+                    $notify['branch_id'] = $branch;
+                    $notify['course_id'] = $course;
+                    $notify['admission_plan_id'] = $admission_plan;                                    
+                    $notify['data_id'] = $insert_id;
+                    $this->db->insert("notification", $notify);
+                 
+                }
+                       // create_notification('exam_time_table', $_POST['degree'], $_POST['course'], $_POST['batch'], $_POST['semester'], $insert_id);
                         $this->flash_notification("Exam Schedual successfully added.");
                         redirect(base_url('examschedual'));
                     }
@@ -71,9 +107,9 @@ class Examschedual extends MY_Controller {
            if ($this->form_validation->run('time_table_insert_update') != FALSE) {
                     //update
                     $this->Exam_time_table_model->update($param2,array(
-                        'degree_id' => $this->input->post('degree', TRUE),
+                        'branch_id' => $this->input->post('branch', TRUE),
                         'course_id' => $this->input->post('course', TRUE),
-                        'batch_id' => $this->input->post('batch', TRUE),
+                        'admission_plan_id' => $this->input->post('admission_plan', TRUE),
                         'exam_id' => $this->input->post('exam', TRUE),
                         'subject_id' => $this->input->post('subject', TRUE),
                         'exam_date' => $this->input->post('exam_date', TRUE),
@@ -100,8 +136,8 @@ class Examschedual extends MY_Controller {
     
     function delete($id='')
     {
-        $this->Exam_manager_model->delete($id);
-        $this->flash_notification("Exam Deleted successfully");
+        $this->Exam_time_table_model->delete($id);
+        $this->flash_notification("Exam schedule Deleted successfully");
         redirect(base_url().'examschedual');
         
     }
@@ -139,19 +175,20 @@ class Examschedual extends MY_Controller {
      */
     function get_exam_list($degree_id = '', $course_id = '', $batch_id = '', $semester_id = '', $time_table = '') {
         $this->load->model('department/Degree_model');
-        $exam_detail = $this->Degree_model->get_many_by(array(
+        $exam_detail = $this->db->get_where('exam_manager', array(
                             'course_id' => $course_id,
                             'em_semester' => $semester_id,
                             'degree_id' => $degree_id,
                             'batch_id' => $batch_id,
                             'exam_ref_name' => 'reguler'
-                        ));
+                        ))->result();
+                        
         echo "<option value=''>Select</option>";
         foreach ($exam_detail as $row) {
             ?>
             <option value="<?php echo $row->em_id ?>"
             <?php if ($row->em_id == $time_table) echo 'selected'; ?>><?php echo $row->em_name . '  (Marks' . $row->total_marks . ')'; ?></option>
-            <!--echo "<option value={$row->em_id}>{$row->em_name}  (Marks{$row->total_marks})</option>";-->
+          
             <?php
         }
     }
@@ -159,7 +196,7 @@ class Examschedual extends MY_Controller {
     function schedule($id = '')
     {
        
-         $student_detail = $this->db->select('std_id, semester_id, std_degree, course_id, class_id, std_batch')
+         $student_detail = $this->db->select('std_id, semester_id, std_degree, course_id, class_id, std_batch,branch_id,admission_plan_id')
                 ->from('student')
                 ->where('std_id', $this->session->userdata('std_id'))
                 ->get()
@@ -171,6 +208,7 @@ class Examschedual extends MY_Controller {
         if(!empty($id))
         {
          $this->data['exam_details'] = $this->Exam_time_table_model->exam_detail($id);
+         
         
          $this->data['time_table'] = $this->Exam_time_table_model->exam_schedule($id);
         }
@@ -255,8 +293,8 @@ class Examschedual extends MY_Controller {
      * @param string $semester
      * @param string $exam
      */
-    function get_exam_schedule_filter($degree, $course, $batch, $semester, $exam) {
-        $this->data['time_table'] = $this->Exam_time_table_model->exam_schedule_filter($degree, $course, $batch, $semester, $exam);
+    function get_exam_schedule_filter($branch, $course, $admission_plan, $exam) {
+        $this->data['time_table'] = $this->Exam_time_table_model->exam_schedule_filter($branch, $course,  $admission_plan, $exam);
         $this->load->view("examschedual/exam_schedule_filter", $this->data);
     }
 

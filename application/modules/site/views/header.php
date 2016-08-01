@@ -81,12 +81,12 @@
                             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
                                 <div class="cs-logo cs-logo-dark">
                                     <div class="cs-media">
-                                        <figure><a href="<?php echo base_url('home'); ?>"><img style="margin-top: -20px;" src="<?php echo base_url(); ?>assets/img/logo.png" alt=""/></a></figure>
+                                        <figure><a href="<?php echo base_url(); ?>"><img style="margin-top: -20px;" src="<?php echo base_url(); ?>assets/img/logo.png" alt=""/></a></figure>
                                     </div>
                                 </div>
                                 <div class="cs-logo cs-logo-light">
                                     <div class="cs-media">
-                                        <figure><a href="<?php echo base_url('home'); ?>"><img src="<?php echo base_url(); ?>site_assets/images/xcs-logo-light.png.pagespeed.ic.Q1HdweYLsy.png" alt=""/></a></figure>
+                                        <figure><a href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>site_assets/images/xcs-logo-light.png.pagespeed.ic.Q1HdweYLsy.png" alt=""/></a></figure>
                                     </div>
                                 </div>
                             </div>
@@ -94,9 +94,9 @@
                                 <div class="cs-main-nav pull-right">
                                     <nav class="main-navigation">
                                         <ul>
-                                            <li><a href="<?php echo base_url('home'); ?>">Home</a><span>About College</span></li>
+                                            <li><a href="<?php echo base_url(); ?>">Home</a><span>About College</span></li>
                                             <li><a href="<?php echo base_url('about'); ?>">About</a><span>About Us</span></li>
-                                            <li class="menu-item-has-children"><a href="#">Courses</a>
+                                            <li style="display:none;" class="menu-item-has-children"><a href="#">Courses</a>
                                                 <span>Online Education</span>
                                                 <ul>
                                                     <?php foreach ($courses as $course) { ?>
@@ -107,10 +107,10 @@
                                             <li><a href="<?php echo base_url('events'); ?>">Events</a><span>University Events</span>
 
                                             </li>
-                                            <li><a href="<?php echo base_url('syllabus'); ?>">Syllabus</a><span>Syllabus</span>
+                                            <li><a href="<?php echo base_url('get_syllabus'); ?>">Syllabus</a><span>Syllabus</span>
                                             </li>
                                             <li><a href="<?php echo base_url(); ?>site/gallery">Gallery</a><span>Gallery</span></li>
-                                            <li><a href="<?php echo base_url('site/forums'); ?>">Forum</a><span>Forum</span>
+                                            <li  style="display:none;"><a href="<?php echo base_url('site/forums'); ?>">Forum</a><span>Forum</span>
                                             </li>
 
                                             <li><a href="<?php echo base_url('contact'); ?>">Contact</a><span>inquire with us</span>

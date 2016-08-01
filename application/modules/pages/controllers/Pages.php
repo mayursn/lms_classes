@@ -6,7 +6,7 @@ class Pages extends MY_Controller {
 
     function __construct() {
         parent::__construct();
-        if ($this->session->userdata('login_type') != 'student') {
+        if ($this->session->userdata('role_name') != 'Student') {
             redirect(base_url('site/user_login'));
         }
     }

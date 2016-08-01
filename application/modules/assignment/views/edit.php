@@ -34,7 +34,7 @@ $row = $this->Assignment_manager_model->get($param2);
                                         <option value="">Select department</option>
                                         <?php
                                         $this->load->model('department/Degree_model');
-                                        $degree = $this->Degree_model->get_all();
+                                        $degree = $this->Degree_model->order_by_column('d_name');
                                         foreach ($degree as $dgr) {
                                             ?>
                                             <option value="<?= $dgr->d_id ?>" <?php

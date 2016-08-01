@@ -1,12 +1,23 @@
 <?php
- $this->db->select('sa.*,sm.*,d.d_name,c.c_name,s.s_name');
-    $this->db->where("FIND_IN_SET('".$param2."',sa.professor_id) !=",0);
-    $this->db->from('subject_association sa');
-    $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id');
-    $this->db->join('degree d','d.d_id=sa.degree_id');
-    $this->db->join('course c','c.course_id=sa.course_id');
-    $this->db->join('semester s','s.s_id=sa.sem_id');
-  $subject=$this->db->get()->result();
+//    $this->db->select('sa.*,sm.*,b.branch_name,c.c_name,a.admission_duration');
+//    $this->db->where("FIND_IN_SET('".$param2."',sa.professor_id) !=",0);
+//    $this->db->from('subject_association sa');
+//    $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id');
+//    $this->db->join('branch_location b','b.branch_id=sa.branch_id');
+//    $this->db->join('course c','c.course_id=sm.course_id');
+//    $this->db->join('admission_plan a','a.admission_plan_id=a.admission_plan_id');
+//    $subject=$this->db->get()->result();
+
+$this->db->join('branch_location b','b.branch_id=sa.branch_id');
+$this->db->join('subject_manager sm','sm.sm_id=sa.sm_id');
+$this->db->join('course c','c.course_id=sm.course_id');
+$this->db->join('admission_plan a','a.admission_plan_id=sa.admission_plan_id');
+$this->db->where('professor_id',$param2);
+$subject = $this->db->get('subject_association sa')->result();
+
+    
+  
+  
 ?>
 
 <div class=row>                      
@@ -21,9 +32,9 @@
                             <th>No</th>											
                             <th>Subject Name</th>											
                             <th>Subject Code</th>											
-                            <th>Department</th>											
                             <th>Branch</th>											
-                            <th>Semester</th>		
+                            <th>Course</th>											
+                            <th>Admission Plan</th>		
                         </tr>
                     </thead>
 
@@ -37,9 +48,9 @@
                                 <td><?php echo $i;?></td>	
                                 <td><?php echo $row->subject_name; ?></td>												
                                 <td><?php echo $row->subject_code; ?></td>
-                                <td><?php echo $row->d_name; ?> </td>
+                                <td><?php echo $row->branch_name; ?> </td>
                                 <td><?php echo $row->c_name; ?> </td>
-                                <td><?php echo $row->s_name; ?> </td>
+                                <td><?php echo $row->admission_duration; ?> </td>
                             </tr>
                         <?php endforeach; ?>																						
                     </tbody>

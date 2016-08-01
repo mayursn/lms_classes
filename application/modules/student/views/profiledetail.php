@@ -6,10 +6,10 @@
    $student= $this->db->get()->row();
   //$student=  $this->db->get_where("student", array('std_id' => $param2))->result();
   
-$degree = $this->db->get_where("degree", array("d_id" => $student->std_degree))->row()->d_name;
+$branch = $this->db->get_where("branch_location", array("branch_id" => $student->branch_id))->row()->branch_name;
 $course = $this->db->get_where("course", array("course_id" => $student->course_id))->row()->c_name;
-$batch = $this->db->get_where("batch", array("b_id" => $student->std_batch))->row()->b_name;
-$semester = $this->db->get_where("semester", array("s_id" => $student->semester_id))->row()->s_name;
+$admission_plan = $this->db->get_where("admission_plan", array("admission_plan_id" => $student->admission_plan_id))->row()->admission_duration;
+$class = $this->db->get_where("class", array("class_id" => $student->class_id))->row()->class_name;
 
 ?>
 
@@ -34,16 +34,16 @@ $semester = $this->db->get_where("semester", array("s_id" => $student->semester_
                             <th>Student Name</th> <td><?php echo $student->first_name . ' ' . $student->last_name; ?></td>						
                         </tr>
                         <tr>		
-                            <th>Department </th><td><?php echo $degree; ?></td>
+                            <th>Branch </th><td><?php echo $branch; ?></td>
                         </tr>
                         <tr>
-                            <th>Branch </th>  <td><?php echo $course; ?></td>
+                            <th>Course </th>  <td><?php echo $course; ?></td>
                         </tr>
                         <tr>
-                            <th>Batch </th> <td><?php echo $batch; ?></td>
+                            <th>Admission Plan </th> <td><?php echo $admission_plan; ?></td>
                         </tr>
                         <tr>
-                            <th>Semester </th>  <td><?php echo $semester; ?></td>                  			
+                            <th>Class </th>  <td><?php echo $class; ?></td>                  			
                         </tr>
                         <tr>
                             <th>Roll No </th>  <td><?php echo $student->std_roll; ?></td>                  			

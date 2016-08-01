@@ -77,4 +77,6 @@
     </div>
     <!-- col-md-12 end here -->
 </div>
+</div>
+</div>
 <!-- End .row -->

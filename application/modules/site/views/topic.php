@@ -1,3 +1,4 @@
+ <script src="//cdn.ckeditor.com/4.5.9/full/ckeditor.js"></script>
 <script src="<?php echo base_url(); ?>plugins/ckeditor/ckeditor.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>plugins/ckeditor/toolbarconfigurator/lib/codemirror/neo.css">
 <style type="text/css">
@@ -119,28 +120,27 @@
                                                                             <div class="row">
                                                                                 <input type="hidden" name="forum_id" value="<?php echo $param; ?>" />
                                                                                 <div class="cs-form-holder">
-
-                                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                                         <div class="input-holder"> <i class="icon-user"></i>
-                                                                                            <input name="subject"  type="text" placeholder="Subject">
+                                                                                            <input name="subject" id="subject" type="text" placeholder="Subject">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="cs-form-holder">
-
-
                                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                                 <div class="input-holder"> 
                                                                                     <textarea name="discussion" id="editor1" placeholder="Start the discussion here"></textarea>
+                                                                                <label for="editor1" generated="true" class="error"></label>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                    
                                                                         <div class="col-lg-4 col-md-4 col-sm-12 col-md-12">
                                                                             <div class="cs-field">
                                                                                 <div class="cs-btn-submit"> 
-                                                                                    <input type="file" name="topicfile"  >
+                                                                                    <input type="file" name="topicfile" id="topicfile" >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -180,7 +180,7 @@
                                     <tr>
                                         <td width="50%" class="text-left">
                                               <?php if(!empty($topic->topic_file)) {?>
-                                                    <a href="<?php echo base_url().'uploads/forum_file/'.$topic->topic_file; ?>" download=""><img src="<?php echo base_url(); ?>assets/images/pdf-icon.jpg" height="32" width="32" /></a>
+                                                    <a href="<?php echo base_url().'uploads/forum_file/'.$topic->topic_file; ?>" download=""><img src="<?php echo base_url(); ?>uploads/file-download.png" height="32" width="32" /></a>
                                     <?php } ?>
                                             <a class="links_forum" href="<?php echo base_url() . 'site/viewtopic/' . $topic->forum_topic_id; ?>"><?php echo $topic->forum_topic_title; ?>         
                                             </a><span class="error"><?php echo countcommenttopic($topic->forum_topic_id); ?></span>                                        
@@ -209,29 +209,23 @@
                 CKEDITOR.replace( 'editor1' );
             </script>
     <script type="text/javascript">
-
-        $(document).ready(function () {
-           
-            $("#topicform").validate({
-                rules: {
-                    subject: "required",
-                    discussion: "required",  
-                    topicfile:{                       
-                        extension:'gif|jpg|png|jpeg|pdf|xlsx|xls|doc|docx|ppt|pptx|txt'
-                    },
+ $(document).ready(function () {
+          $("#topicform").validate({
+            rules: {
+                subject: "required",
+                discussion: "required",  
+                 topicfile: {
+                    accept: 'gif|jpg|png|jpeg|pdf|xlsx|xls|doc|docx|ppt|pptx|txt',
                 },
-                messages: {
-                    subject: "Enter subject name",
-                    discussion: "Enter topic discussion description",
-                    topicfile:{                       
-                        extension:"Upload valid file",
-                    },
-                },
-                  submitHandler: function (form) {
-                    //  filecheck(img);
-                    form.submit();
-
+            },
+            messages: {
+                subject: "Enter subject",
+                 discussion: "Enter topic discussion description",
+                topicfile: {
+                    accept: "Select valid file",
                 }
-            });
+            },
+        });
+
         });
     </script>

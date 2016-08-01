@@ -32,6 +32,7 @@ class MY_Controller extends MX_Controller {
         if ($this->session->userdata('last_activity')) {
             user_activity();
         }
+        //$this->output->enable_profiler(TRUE);
     }
 
     /**
@@ -119,8 +120,8 @@ class MY_Controller extends MX_Controller {
             'protocol' => 'smtp',
             'smtp_host' => 'smtp.gmail.com',
             'smtp_port' => 465,
-            'smtp_user' => 'mayur.ghadiya@searchnative.in',
-            'smtp_pass' => 'the mayurz97375',
+            'smtp_user' => 'mayur.panchal@searchnative.in',
+            'smtp_pass' => 'Mayur@@123',
             'mailtype' => 'html',
             'charset' => 'iso-8859-1'
         );

@@ -29,9 +29,9 @@ class Exam_time_table_model extends MY_Model {
                         ->join('exam_manager', 'exam_manager.em_id = exam_time_table.exam_id')
                         ->join('subject_manager', 'subject_manager.sm_id = exam_time_table.subject_id')
                         ->join('course', 'course.course_id = exam_manager.course_id')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
-                        ->join('batch', 'batch.b_id = exam_time_table.batch_id')
-                        ->join('degree', 'degree.d_id = exam_time_table.degree_id')
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
+                        ->join('branch_location', 'branch_location.branch_id = exam_time_table.branch_id')
+                        
                         ->order_by('em_date', 'DESC')
                         ->get()
                         ->result();
@@ -126,10 +126,11 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
       return  $this->db->select()
                 ->from('exam_manager')
                 ->join('exam_type', 'exam_type.exam_type_id = exam_manager.em_type')
-                ->join('semester', 'semester.s_id = exam_manager.em_semester')
+                ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
                 ->where(array(
+                    'exam_manager.branch_id'=>$student_details->branch_id,
                     'exam_manager.course_id' => $student_details->course_id,
-                    'exam_manager.em_semester' => $student_details->semester_id,
+                    'exam_manager.admission_plan_id' => $student_details->admission_plan_id,
                     'exam_manager.exam_ref_name' => 'reguler'
                 ))
                 ->order_by('exam_manager.em_start_time', 'DESC')
@@ -179,15 +180,18 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
      * @return object
      */
     function exam_detail($exam_id) {
-        return $this->db->select()
+         return $this->db->select()
                         ->from('exam_manager')
                         ->join('course', 'course.course_id = exam_manager.course_id')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
                         ->join('exam_seat_no', 'exam_seat_no.exam_id = exam_manager.em_id')
+                        ->join('branch_location', 'branch_location.branch_id = exam_manager.branch_id')
+                    
                         ->where('em_id', $exam_id)
                         ->where('exam_seat_no.student_id', $this->session->userdata('std_id'))
                         ->get()
                         ->row();
+         
     }
     
      /**
@@ -213,20 +217,18 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, semester.*')
      * @param string $exam
      * @return mixed
      */
-    function exam_schedule_filter($degree, $course, $batch, $semester, $exam) {
+    function exam_schedule_filter($branch, $course, $admission_plan, $exam) {
         return $this->db->select()
                         ->from('exam_time_table')
                         ->join('exam_manager', 'exam_manager.em_id = exam_time_table.exam_id')
                         ->join('subject_manager', 'subject_manager.sm_id = exam_time_table.subject_id')
-                        ->join('course', 'course.course_id = exam_manager.course_id')
-                        ->join('semester', 'semester.s_id = exam_manager.em_semester')
-                        ->join('batch', 'batch.b_id = exam_time_table.batch_id')
-                        ->join('degree', 'degree.d_id = exam_time_table.degree_id')
+                        ->join('course', 'course.course_id = exam_manager.course_id')                        
+                        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_time_table.admission_plan_id')
+                        ->join('branch_location', 'branch_location.branch_id = exam_time_table.branch_id')
                         ->where(array(
-                            'exam_time_table.degree_id' => $degree,
+                            'exam_time_table.branch_id' => $branch,
                             'exam_time_table.course_id' => $course,
-                            'exam_time_table.batch_id' => $batch,
-                            'exam_time_table.semester_id' => $semester,
+                            'exam_time_table.admission_plan_id' => $admission_plan,                            
                             'exam_time_table.exam_id' => $exam
                         ))
                         ->order_by('em_date', 'DESC')

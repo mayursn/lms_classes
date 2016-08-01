@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/select2.min.css"/>
 <script src="//cdn.ckeditor.com/4.5.9/full/ckeditor.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/select2.full.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/plugins/select2.js"></script>
 <style>
 
     .select2-container-multi .select2-choices .select2-search-field input{
@@ -29,40 +30,35 @@
                 </div>
                 <div class="student_user hide">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label"><?php echo ucwords("department"); ?></label>
+                        <label class="col-sm-2 control-label"><?php echo ucwords("Branch"); ?></label>
                         <div class="col-sm-5">
-                            <select class="form-control" id="department" name="department">
+                            <select class="form-control" id="branch" name="branch">
                                 <option value="">Select</option>
-                                <?php foreach ($degree as $row) { ?>
-                                    <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                                <?php foreach ($branch as $row) { ?>
+                                    <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label"><?php echo ucwords("Branch"); ?></label>
+                        <label class="col-sm-2 control-label"><?php echo ucwords("Course"); ?></label>
                         <div class="col-sm-5">
-                            <select class="form-control" id="branch" name="branch">
+                            <select class="form-control" id="course" name="course">
                                 <option value="">Select</option>
+                                <?php foreach ($course as $course_array): ?>
+                                <option value="<?php echo $course_array->course_id;  ?>"><?php echo $course_array->c_name;  ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label"><?php echo ucwords("batch"); ?></label>
+                        <label class="col-sm-2 control-label"><?php echo ucwords("admission plan"); ?></label>
                         <div class="col-sm-5">
-                            <select class="form-control" id="batch" name="batch">
+                            <select class="form-control" id="admission_plan" name="admission_plan">
                                 <option value="">Select</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group" id="main_semester">
-                        <label class="col-sm-2 control-label">Semester</label>
-                        <div class="col-sm-5">
-                            <select class="form-control" id="semester" name="semester">
-                                <option value="">Select</option>   
-                            </select>
-                        </div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="form-group email_box hide">
                     <label class="col-sm-2 control-label"><?php echo ucwords("users"); ?></label>
@@ -174,31 +170,40 @@
             }
         });
 
-        $('#department').on('change', function () {
-            var department_id = $(this).val();
-            department_branch(department_id);
+         $('#course').on('change', function () {
+        var course_id = $(this).val();          
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
         });
+    }
+    
+     $('#admission_plan').on('change', function(){
+     var branch = $("#branch").val();
+     var course = $("#course").val();
+     var admission_plan = $("#admission_plan").val();
+        student_list(branch,course,admission_plan);
+     });
 
-        $('#branch').on('change', function () {
-            var department_id = $('#department').val();
-            var branch_id = $(this).val();
-            batch_from_department_branch(department_id, branch_id);
-            semester_from_branch(branch_id);
-        });
-
-        $('#semester').on('change', function () {
-            var department = $('#department').val();
-            var branch = $('#branch').val();
-            var batch = $('#batch').val();
-            var semester = $('#semester').val();
-            student_list(department, branch, batch, semester);
-        });
-
-        function student_list(department, branch, batch, semester) {
+        function student_list(branch, course, admission_plan) {
             $('#email').find('option').remove().end();
             $('.select2-search-choice').remove();
             $.ajax({
-                url: '<?php echo base_url(); ?>student/student_list/' + department + '/' + branch + '/' + batch + '/' + semester,
+                url: '<?php echo base_url(); ?>student/student_list/' + branch + '/' + course + '/' + admission_plan,
                 type: 'GET',
                 success: function (content) {
                     var students = jQuery.parseJSON(content);

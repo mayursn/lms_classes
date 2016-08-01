@@ -30,8 +30,10 @@
                     <div class="widget widget-categores">
                         <div class="widget-section-title"><h6 style="color:#fff !important">Programme & Courses</h6></div>
                         <ul>
-                            <?php foreach ($courses as $course) { ?>
-                                <li><a href="<?php echo base_url('course/' . $course->d_id); ?>"><?php echo $course->d_name; ?></a></li>
+                            <?php 
+                            $courses = $this->db->get('course')->result();
+                            foreach ($courses as $course) { ?>
+                                <li><a href="<?php echo base_url('courses/detail/' . $course->course_id); ?>"><?php echo $course->c_name; ?></a></li>
                             <?php } ?>
                         </ul>	
                     </div>

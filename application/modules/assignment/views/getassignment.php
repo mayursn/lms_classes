@@ -141,7 +141,7 @@ if ($param == 'submitted') {
                 <tr>
                     <td><?php echo $count++; ?></td>
                     <td><?php echo $rowsub->assign_title; ?></td>
-                    <td><?php echo $rowsub->name; ?></td>
+                    <td><?php echo $rowsub->std_first_name.' '.$rowsub->std_last_name; ?></td>
                     <td><?php
                         foreach ($degree as $dgr):
                             if ($dgr->d_id == $rowsub->assign_degree):
@@ -220,7 +220,7 @@ if ($param == 'assessments') {
                 <tr>
                     <td><?php echo $count++; ?></td>
                     <td><?php echo $rowsub->assign_title; ?></td>
-                    <td><?php echo $rowsub->name; ?></td>
+                    <td><?php echo $rowsub->std_first_name.' '.$rowsub->std_last_name; ?></td>
                     <td><?php
                         foreach ($degree as $dgr):
                             if ($dgr->d_id == $rowsub->assign_degree):
@@ -308,7 +308,7 @@ if ($param == 'assessments') {
                     <tr>
                         <td><?php echo $countn++; ?></td>
                         <td><?php echo $assignment->assign_title; ?></td>
-                        <td><?php echo $rownot->name; ?></td>
+                        <td><?php echo $rownot->std_first_name.' '.$rownot->std_last_name; ?></td>
                         <td><?php echo $rownot->email; ?></td>
                         <td>
                             <?php

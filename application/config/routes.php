@@ -52,5 +52,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'site';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;
+$route['exam-schedule'] = 'examschedual';
 $route['pages/(:any)'] = 'pages/view/pages/$1';
 $route['module_name'] = 'site';
+$route['home'] = 'site/home';
+$route['course/(:any)'] = 'site/course/$1';
+$route['branchs/(:any)'] = 'site/branch_details/$1';
+$route['about'] = 'site/about';
+$route['get_syllabus'] = 'site/get_syllabus';
+$route['contact'] = 'site/contact';
+$route['events'] = 'site/events';
+$route['alumni'] = 'site/alumni';
+$route['forums'] = 'site/forums';
+

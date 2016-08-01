@@ -12,6 +12,10 @@ class Cms extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('cms/Cms_manager_model');
+         if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
@@ -29,7 +33,7 @@ class Cms extends MY_Controller {
               $data['c_title'] = $this->input->post('c_title');
                 $data['c_slug'] = $this->input->post('c_slug');
                 $data['c_description'] = $this->input->post('c_description');
-                $data['c_status'] = $this->input->post('c_status');
+                $data['c_status'] = $this->input->post('c_status');              
                 $this->Cms_manager_model->insert($data);
                 
                 $this->flash_notification('CMS page is successfully added.');

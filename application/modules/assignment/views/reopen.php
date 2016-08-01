@@ -1,14 +1,14 @@
 <?php
 $this->load->model('assignment/Assignment_submission_model');
-$this->db->select('d.d_id,b.b_id,c.course_id,s.s_id,a.assign_id,cl.class_id');
+$this->db->select();
 $this->db->join("degree d","d.d_id=a.assign_degree");
 $this->db->join("course c","c.course_id=a.course_id");
-$this->db->join("batch b","b.b_id=a.assign_batch");
+$this->db->join("subject_manager sb","sb.sm_id=a.sm_id");
 $this->db->join("semester s","s.s_id=a.assign_sem");
 $this->db->join("class cl","cl.class_id=a.class_id");
 $edit_data = $this->db->get_where('assignment_manager a', array('assign_id' => $param2))->result();
 $this->db->select('std_id,std_first_name,std_last_name');
-$student_list= $this->db->get_where("student",array("std_degree"=>$edit_data[0]->d_id,"course_id"=>$edit_data[0]->course_id,"std_batch"=>$edit_data[0]->b_id,"semester_id"=>$edit_data[0]->s_id,"class_id"=>$edit_data[0]->class_id))->result();
+$student_list= $this->db->get_where("student",array("std_degree"=>$edit_data[0]->d_id,"course_id"=>$edit_data[0]->course_id,"semester_id"=>$edit_data[0]->s_id,"class_id"=>$edit_data[0]->class_id))->result();
 $reopen_student = $this->Assignment_submission_model->get_student_reopen($param2);
 
  ?>

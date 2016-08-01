@@ -43,6 +43,7 @@ $edit =$this->Charity_fund_model->get($param2);
                     <div class="col-sm-8">
                         <select class="form-control" name="donation_type" id="donation_type">
                             <option value="">Select</option>
+                            <option value="authorize" <?php if ($edit->donation_type == 'authorize') echo 'selected'; ?>>Authorize.net</option>
                             <option value="cheque"
                                     <?php if ($edit->donation_type == 'cheque') echo 'selected'; ?>>Cheque</option>
                             <option value="dd"
@@ -50,6 +51,51 @@ $edit =$this->Charity_fund_model->get($param2);
                         </select>
                     </div>	
                 </div>
+                 <div class="form-group authorize-details hidden">
+                        <label class="col-sm-4 control-label">Card Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="card_number" class="form-control" name="card_number" required="">
+                            <p id="card_status_details" class="hidden-md hidden-sm hidden-xs hidden-lg authorize-details-fields"></p>
+                        </div>
+                    </div>
+                    <div class="form-group authorize-details hidden">
+                        <label class="col-sm-4 control-label">Card Holder Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="card_holder_name" name="card_holder_name" class="form-control authorize-details-fields" parsley-trigger="change" required>
+                        </div>
+                    </div>
+                    <div class="form-group authorize-details hidden">
+                        <label class="col-sm-4 control-label" for="example-email">Expiry Date</label>
+                        <div class="col-sm-8">
+                        <div class="col-sm-6">
+                            <select id="month" name="month" class="form-control authorize-details-fields" parsley-trigger="change" required>
+                                <option value="">Select month</option>
+                                <?php
+                                for ($i = 1; $i < 13; $i++)
+                                    print("<option value=" . date('m', strtotime('01.' . $i . '.2001')) . ">" . date('M', strtotime('01.' . $i . '.2001')) . "(" . date('m', strtotime('01.' . $i . '.2001')) . ")</option>");
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <select id="year" name="year" class="form-control authorize-details-fields" parsley-trigger="change" required>
+                                <option value="">Select Year</option>
+                                <?php
+                                $cur_year = date('Y');
+                                ?>
+                                <?php
+                                for ($i = $cur_year; $i <= 2050; $i++)
+                                    print("<option val=" . $i . ">" . $i . "</option>");
+                                ?>
+                            </select>
+                        </div>	   
+                        </div>
+                    </div>
+                    <div class="col-sm-8 form-group authorize-details hidden">
+                        <label class="col-md-4 control-label" for="example-email">CVV</label>
+                        <div class="col-sm-8">
+                            <input type="password" id="cvv" maxlength="3" name="cvv" class="form-control authorize-details-fields" parsley-trigger="change" required>
+                        </div>
+                    </div>
                 <div class="form-group cheque-details hidden">
                     <label class="col-sm-4 control-label"><?php echo ucwords("cheque nomber"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
@@ -167,11 +213,12 @@ $edit =$this->Charity_fund_model->get($param2);
     $(document).ready(function () {
 
         var donation_type = $('#donation_type').val();
-        if (donation_type) {
+        if (donation_type!='authorize') {
             show_hide_information(donation_type);
         } else {
             hide_cheque_details();
             hide_dd_details();
+            hide_authorize_detail();
         }
 
         $('#donation_type').on('change', function () {
@@ -184,16 +231,37 @@ $edit =$this->Charity_fund_model->get($param2);
             }
         });
 
+         
         function show_hide_information(donation_type) {
             if (donation_type == 'cheque') {
                 hide_dd_details();
                 show_cheque_details();
+                 hide_authorize_detail();
             } else if (donation_type == 'dd') {
                 hide_cheque_details();
                 show_dd_details();
+                hide_authorize_detail();
 
             }
+            else if(donation_type == 'authorize')
+                {
+                    hide_cheque_details();
+                    hide_dd_details();
+                    show_authorize_detail();
+                }
         }
+        
+        function show_authorize_detail()
+            {
+                $('.authorize-details').attr('class', 'form-group authorize-details');
+                $('.authorize-details-fields').attr('required', 'required');
+            }
+            
+            function hide_authorize_detail()
+            {
+                $('.authorize-details').attr('class', 'form-group authorize-details hidden');
+                $('.authorize-details-fields').removeAttr('required');
+            }
 
         function show_cheque_details() {
             $('.cheque-details').attr('class', 'form-group cheque-details');
@@ -221,7 +289,10 @@ $edit =$this->Charity_fund_model->get($param2);
             format: js_date_format, 
             changeMonth: true,
             changeYear: true,
-            minDate: new Date(),
+            startDate: new Date(),
+            autoclose:true
+            
+            
         });
     })
 </script>

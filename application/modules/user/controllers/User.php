@@ -30,6 +30,7 @@ class User extends MY_Controller {
      * Login
      */
     function login() {
+        
         if ($this->is_user_logged_in()) {
             redirect('user/dashboard');
         }
@@ -155,9 +156,157 @@ class User extends MY_Controller {
     }
 
     function forgot_password() {
-        
+         $this->load->model('site/Site_model');
+        if ($_POST) {
+           
+            //check for student
+            $record = $this->Site_model->is_user_email_present($_POST['email']);
+            
+            if ($record) {
+                // send email for forgot password
+                $config = Array(
+                    'protocol' => 'smtp',
+                    'smtp_host' => 'ssl://smtp.googlemail.com',
+                    'smtp_port' => 465,
+                    'smtp_user' => 'mayur.panchal@searchnative.in',
+                    'smtp_pass' => 'Mayur@@123',
+                    'mailtype' => 'html',
+                    'charset' => 'iso-8859-1'
+                );
+
+                $user_id = $record->user_id;
+                $random_string = $this->random_string_generate();
+               
+                $this->update_forgot_password_key('', $user_id, $random_string);
+                $url = $this->forgot_password_url('', $user_id, $random_string);
+              
+                $this->load->library('email', $config);
+                $this->email->set_newline("\r\n");
+                $this->email->from('mayur.panchal@searchnative.in', 'Learning Management System');
+                $this->email->to($_POST['email']);
+                $this->email->subject('Reset your LMS password');
+                $message = "Please click on below link to reset your LMS password";
+                $message .= "<br/>";
+                $message .= $url;
+                
+                $this->email->message($message);
+                $this->email->send();
+                $this->session->set_flashdata('success', 'Please check email to reset your password.');
+                redirect(base_url('user/login'));
+            } else {
+                // email is not registered in the system
+                $this->session->set_flashdata('email_not_found', 'Email is not registered in the system.');
+                redirect(base_url('user/login'));
+            }
+            //check for admin
+            //check for professor
+        } else {
+           redirect(base_url('user/login'));
+    }
     }
 
+      /**
+     * Generate random string
+     * @return string
+     */
+    function random_string_generate() {
+        $this->load->helper('string');
+        return random_string('alnum', 16);
+    }
+    
+    
+    /**
+     * Update forgot password key for user
+     * @param string $user_type
+     * @param string $user_id
+     * @param string $key
+     */
+    function update_forgot_password_key($user_type, $user_id, $key) {
+        if ( $user_id != '' && $key != '') {
+            $this->Site_model->update_forgot_password_key($user_type, $user_id, $key);
+        } else {
+            redirect(base_url('user/login'));
+        }
+    }
+    
+      /**
+     * Forgot password url
+     * @param string $user_type
+     * @param string $user_id
+     * @param string $random_string
+     * @return string
+     */
+    function forgot_password_url($user_type, $user_id, $random_string) {
+        $this->load->library('encrypt');
+        $base_url = base_url();
+        $user_type = hash('md5', $user_type . config_item('encryption_key'));
+
+        return $base_url . 'user/reset_password/' .$user_id. '/' . 'user' . '/' . $random_string;
+    }
+    
+     /**
+     * Reset password
+     * @param string $user_id
+     * @param string $user_type
+     * @param string $key
+     */
+    function reset_password($user_id = '', $user_type = '', $key = '') {
+        $this->load->model('site/Site_model');
+        if ($_POST) {
+            if ($this->compare_reset_password($_POST['password'], $_POST['confirm_password'])) {
+                // update password
+                //$user_type = $this->check_user_type_hash($user_type);
+
+                $data = array(
+                    'password' => $this->__hash(trim($_POST['password']))
+                    //'password' => hash('md5', $_POST['password'])
+                );
+                
+
+                $user_data = $this->Site_model->update_password($user_type, $user_id, $data);
+
+                //reset forgot password key
+                $this->Site_model->reset_forgot_password_key($user_data['type'], $user_data['type_id'], $user_data['user_id']);
+
+                $this->flash_notification('success', 'Password was successully reseted.');
+                redirect(base_url('user/login'));
+            } else {
+                $this->flash_notification('danger', 'Password was mismatched.');
+                redirect(base_url('user/reset_password/' . $user_id . '/' . $user_type . '/' . $key));
+            }
+        }
+
+        if ($user_id && $user_type && $key) {
+           // $user_type = $this->check_user_type_hash($user_type);
+            $is_key_present = $this->Site_model->check_for_forgot_password_key($user_type, $key);
+            if ($is_key_present) {
+                $this->data['title'] = 'Forgot Password';
+                $this->load->view('user/user/reset_password', $this->data);
+                
+            } else {
+                show_404();
+            }
+        } else {
+            show_404();
+        }
+    }
+    
+     /**
+     * Check user type hash
+     * @param string $hash
+     * @return string
+     */
+    function check_user_type_hash($hash) {
+//        if (hash('md5', 'admin' . config_item('encryption_key')) == $hash)
+//            return 'admin';
+//        elseif (hash('md5', 'student' . config_item('encryption_key')) == $hash)
+//            return 'student';
+//        elseif (hash('md5', 'professor' . config_item('encryption_key')) == $hash)
+//            return 'professor';
+         if (hash('md5', 'user' . config_item('encryption_key')) == $hash)
+            return 'user';
+    }
+    
     /**
      * User list
      */

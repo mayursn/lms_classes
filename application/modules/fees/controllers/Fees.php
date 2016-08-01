@@ -14,10 +14,13 @@ class Fees extends MY_Controller {
         $this->load->model('fees/Fees_structure_model');
         $this->load->model('student/Student_model');
         $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
+        $this->load->model('courses/Course_model');
         $this->load->model('semester/Semester_model');
          $this->load->model('batch/Batch_model');
-         
+         if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
         
        
       
@@ -39,10 +42,10 @@ class Fees extends MY_Controller {
     {
          //check for duplication
                 $is_record_present = $this->Fees_structure_model->get_many_by(array(
-                    'degree_id' => $_POST['degree'],
+                    'branch_id' => $_POST['branch'],
                     'course_id' => $_POST['course'],
-                    'batch_id' => $_POST['batch'],
-                    'sem_id' => $_POST['semester'],
+                    'admission_plan_id' => $_POST['admission_plan'],
+                    'class_id' => $_POST['class'],                    
                     'title' => $_POST['title']
                 ));
                 if (count($is_record_present)) {
@@ -51,10 +54,10 @@ class Fees extends MY_Controller {
                 } else {
                  $inser_data = array(
                         'title' => $this->input->post('title', TRUE),
-                        'degree_id' => $this->input->post('degree', TRUE),
+                        'branch_id' => $this->input->post('branch', TRUE),
                         'course_id' => $this->input->post('course', TRUE),
-                        'batch_id' => $this->input->post('batch', TRUE),
-                        'sem_id' => $this->input->post('semester', TRUE),
+                        'admission_plan_id' => $this->input->post('admission_plan', TRUE),
+                        'class_id' => $this->input->post('class', TRUE),
                         'total_fee' => $this->input->post('fees', TRUE),
                         'description' => $this->input->post('description', TRUE),
                         'fee_start_date' => nice_date($this->input->post('start_date', TRUE),"Y-m-d"),
@@ -63,8 +66,46 @@ class Fees extends MY_Controller {
                         'penalty' => $this->input->post('penalty', TRUE)
                     );
                    $insert_id = $this->Fees_structure_model->insert($inser_data);
+                   
+                
+                $admission_plan = $_POST['admission_plan'];
+                $branch = $_POST['branch'];
+                $course = $_POST['course'];      
+                $class = $_POST['class'];      
+                $this->db->where('branch_id', $branch);                  
+                $this->db->where('course_id', $course);
+                $this->db->where('admission_plan_id', $admission_plan);
+                $this->db->where('class_id', $class);
+                $students = $this->db->get('student')->result();
+                
+                $std_id = '';
+                foreach ($students as $std) {
+                    $id = $std->std_id;
+                    $std_id[] = $id;
+                    //  $student_id = implode(",",$id);
+                    // $std_ids[] =$student_id;
+                }
+                if ($std_id != '') {
+                    $student_ids = implode(",", $std_id);
+                } else {
+                    $student_ids = '';
+                }
+                $this->db->where("notification_type", "fees_structure");
+                $res = $this->db->get("notification_type")->row();
+                if ($res != '') {
+                    $notification_id = $res->notification_type_id;
+                    $notify['notification_type_id'] = $notification_id;
+                    $notify['student_ids'] = $student_ids;
+                    $notify['branch_id'] = $branch;
+                    $notify['course_id'] = $course;
+                    $notify['admission_plan_id'] = $admission_plan;                    
+                    $notify['class_id'] = $class;                    
+                    $notify['data_id'] = $insert_id;
+                    $this->db->insert("notification", $notify);
+                 
+                }
                     //create notification for students
-                    create_notification('fees_structure', $_POST['degree'], $_POST['course'], $_POST['batch'], $_POST['semester'], $insert_id);
+                    //create_notification('fees_structure', $_POST['branch'], $_POST['course'], $_POST['admission_plan'], $_POST['class'], $insert_id);
                     $this->flash_notification('Fee structure is successfully added.');
                     redirect(base_url().'fees');
                 }
@@ -74,10 +115,10 @@ class Fees extends MY_Controller {
         
          $this->Fees_structure_model->update($param2,array(
                     'title' => $this->input->post('title', TRUE),
-                    'degree_id' => $this->input->post('degree', TRUE),
+                    'branch_id' => $this->input->post('branch', TRUE),
                     'course_id' => $this->input->post('course', TRUE),
-                    'batch_id' => $this->input->post('edit_batch', TRUE),
-                    'sem_id' => $this->input->post('semester', TRUE),
+                    'admission_plan_id' => $this->input->post('admission_plan', TRUE),
+                    'class_id' => $this->input->post('class', TRUE),
                     'total_fee' => $this->input->post('fees', TRUE),
                    'fee_start_date' => nice_date($this->input->post('start_date', TRUE),"Y-m-d"),
                    'fee_end_date' => nice_date($this->input->post('end_date', TRUE),"Y-m-d"),
@@ -96,29 +137,13 @@ class Fees extends MY_Controller {
      * @param string $batch
      * @param string $semester
      */
-    function fee_structure_filter($degree, $course, $batch, $semester) {
-         if ($degree == "All") {
-             $this->data['fees_structure'] = $this->Fees_structure_model->get_all();
-         }else {
-            if ($course == "All") {
-                
-                $this->data['fees_structure'] = $this->Fees_structure_model->get_many_by(array("degree_id"=>$degree));
-            }
-            else{
-                if ($batch == "All") {
-                    $this->data['fees_structure'] = $this->Fees_structure_model->get_many_by(array("degree_id"=>$degree,"course_id"=>$course));
-                }
-                else{
-                    if ($semester == "All") {
-                           $this->data['fees_structure'] = $this->Fees_structure_model->get_many_by(array("degree_id"=>$degree,"course_id"=>$course,"batch_id"=>$batch));
-                    }
-                    else{
-                    $this->data['fees_structure'] = $this->Fees_structure_model->get_many_by(array("degree_id"=>$degree,"course_id"=>$course,"batch_id"=>$batch,"sem_id"=>$semester));    
-                    }
-                    
-                }
-            }
-            }
+    function fee_structure_filter($branch, $course, $admission_plan, $class) {
+ 
+        $this->data['fees_structure'] = $this->Fees_structure_model->get_many_by(
+                array("branch_id"=>$branch,
+            "course_id"=>$course,
+            "admission_plan_id"=>$admission_plan,
+            "class_id"=>$class));    
       //  $this->data['fees_structure'] = $this->Fees_structure_model->fee_structure_filter($degree, $course, $batch, $semester);
         $this->load->view("fees/fee_structure_filter", $this->data);
     }

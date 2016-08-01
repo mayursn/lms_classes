@@ -22,10 +22,18 @@ class Reports_model extends MY_Model {
      * @return array
      */
     function student_cout_with_regions() {
-        return $this->db->select('COUNT(*) AS Total, city')
-                ->from('student')
-                ->group_by('city')
-                ->get()->result();
+//        return $this->db->select('COUNT(*) AS Total, city')
+//                ->from('student')
+//                ->group_by('city')                
+//                ->get()->result();
+         
+       return $this->db->select('count(city) AS Total, city')
+               ->from('student')
+               ->group_by('city')   
+               ->order_by('Total','desc')
+               ->limit(5)
+               ->get()
+               ->result();        
     }
     
     /**

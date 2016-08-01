@@ -1,6 +1,11 @@
 <?php
 $edit_data = $this->db->get_where('fees_structure', array('fees_structure_id' => $param2))->row();
-
+    $this->load->model('admission_plan/Admission_plan_model');
+$this->load->model('classes/Class_model');
+$this->load->model('courses/Course_model');
+$course = $this->Course_model->order_by_column('c_name');
+$class = $this->Class_model->order_by_column('class_name');
+$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
 ?>
 <div class="row">
     <div class=col-lg-12>
@@ -20,117 +25,62 @@ $edit_data = $this->db->get_where('fees_structure', array('fees_structure_id' =>
                     </div>
                 </div>                  
                   <div class="form-group">
-                                <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
-                                <div class="col-sm-8">
-                                    <select name="degree" id="degree2" class="form-control">
-                                        <option value="">Select department</option>
-                                        <option value="All" <?php
-                                        if ($edit_data->degree_id == "All") {
-                                            echo "selected=selected";
-                                        }
-                                        ?>>All</option>
-                                                <?php
-                                                $this->load->model('department/Degree_model');
-                                                $datadegree = $this->Degree_model->get_many_by( array('d_status' => 1));                                                 
-                                                foreach ($datadegree as $rowdegree) {
-                                                    if ($rowdegree->d_id == $edit_data->degree_id) {
-                                                        ?>
-                                                <option value="<?= $rowdegree->d_id ?>" selected><?= $rowdegree->d_name ?></option>
-                                                <?php
-                                            } else {
-                                                ?>
-                                                <option value="<?= $rowdegree->d_id ?>"><?= $rowdegree->d_name ?></option>							
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>	
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"><?php echo ucwords("Branch "); ?><span style="color:red">*</span></label>
-                                <div class="col-sm-8">
-                                    <select name="course" id="course2" class="form-control">
-                                        <option value="">Select Branch</option>
-                                        <option value="All" <?php
-                                        if ($edit_data->course_id == "All") {
-                                            echo "selected=selected";
-                                        }
-                                        ?>>All</option>
-                                                <?php
-                                                $this->load->model('branch/Course_model');
-                                                $course = $this->Course_model->get_many_by(array('course_status' => 1));                                                
-                                                foreach ($course as $crs) {
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <?php $this->load->model('branch/Branch_location_model'); 
+                            $branch = $this->Branch_location_model->order_by_column('branch_name');
+                            ?>
+                            <select name="branch" class="form-control" id="branch">
+                                <option value="">Select</option>
+                                <?php foreach ($branch as $rows) { ?>
+                                    <option value="<?php echo $rows->branch_id; ?>" <?php if($edit_data->branch_id==$rows->branch_id){ echo "selected=selected"; } ?>><?php echo $rows->branch_name.' - '.$rows->branch_location; ?></option>
+                                <?php } ?>                                
+                            </select>
+                        </div>
+                    </div>	
+                         <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="course" class="form-control" id="course">
+                                <option value="">Select</option>
+                                <?php foreach($course as $rowcourse): ?>
+                                <option value="<?php echo $rowcourse->course_id; ?>" <?php if($edit_data->course_id==$rowcourse->course_id){ echo "selected=selected"; } ?>><?php echo $rowcourse->c_name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="admission_plan">
+                                <option value="">Select</option>
+                                <?php foreach ($admission_plan as $plan): ?>
+                                <option value="<?php echo $plan->admission_plan_id; ?>" <?php if($edit_data->admission_plan_id==$plan->admission_plan_id){ echo "selected=selected"; } ?>><?php echo $plan->admission_duration; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>	
+                <div class="form-group">                        
+                      <label class="col-sm-4 control-label"><?php echo ucwords("class"); ?><span style="color:red">*</span></label>
+                                    <div class="col-sm-8">
+                                        <select name="class" class="form-control" id="class1">
+                                            <option value="">Select class</option>
+                                            <?php
+                                            foreach ($class as $c) {
+                                                if ($c->class_id == $edit_data->class_id) {
                                                     ?>
-                                            <option value="<?php echo $crs->course_id ?>" <?php
-                                            if ($crs->course_id == $edit_data->course_id) {
-                                                echo "selected='selected'";
-                                            }
-                                            ?> ><?= $crs->c_name ?></option>
+                                                    <option selected value="<?php echo $c->class_id; ?>"><?php echo $c->class_name; ?></option>
+                                                    <?php
+                                                } else {
+                                                    ?>
+                                                    <option value="<?php echo $c->class_id; ?>"><?php echo $c->class_name; ?></option>
                                                     <?php
                                                 }
-                                                ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"><?php echo ucwords("Batch "); ?><span style="color:red">*</span></label>
-                                <div class="col-sm-8">
-                                    <select name="edit_batch" id="batch2" onchange="get_student(this.value);" class="form-control"  >
-                                        <option value="">Select batch</option>
-                                        <option value="All" <?php
-                                        if ($edit_data->batch_id == "All") {
-                                            echo "selected=selected";
-                                        }
-                                        ?>>All</option>
-                                                <?php
-                                                $this->load->model('batch/Batch_model');
-                                                $databatch = $this->Batch_model->get_many_by(array('b_status' => 1));
-                                                foreach ($databatch as $row1) {
-                                                    if ($row1->b_id == $edit_data->batch_id) {
-                                                        ?>
-                                                <option value="<?= $row1->b_id ?>" selected><?= $row1->b_name ?></option>
-                                                <?php
-                                            } else {
-                                                ?>
-                                                <option value="<?= $row1->b_id ?>" ><?= $row1->b_name ?></option>
-                                                <?php
                                             }
-                                        }
-                                        ?>
-                                    </select>
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>	
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"><?php echo ucwords("Semester "); ?><span style="color:red">*</span></label>
-                                <div class="col-sm-8">
-                                    <select name="semester" id="semester2" onchange="get_students(this.value);" class="form-control">
-                                        <option value="">Select semester</option>
-                                        <option value="All" <?php
-                                        if ($edit_data->sem_id == "All") {
-                                            echo "selected=selected";
-                                        }
-                                        ?>>All</option>   
-                                                <?php
-                                                $this->load->model('semester/Semester_model');
-                                                $datasem = $this->Semester_model->get_many_by(array('s_status' => 1));
-                                                
-                                                foreach ($datasem as $rowsem) {
-                                                    if ($rowsem->s_id == $edit_data->sem_id) {
-                                                        ?>
-                                                <option value="<?= $rowsem->s_id ?>" selected><?= $rowsem->s_name ?></option>
-                                                <?php
-                                            } else {
-                                                ?>
-                                                <option value="<?= $rowsem->s_id ?>" ><?= $rowsem->s_name ?></option>
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><?php echo ucwords("Fee"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">                                        
@@ -224,135 +174,60 @@ $edit_data = $this->db->get_where('fees_structure', array('fees_structure_id' =>
 </script>
 
 <script>
-   
-    $("#degree2").change(function () {
-        var degree = $(this).val();
-        var dataString = "degree=" + degree;
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'fees/get_cource/'; ?>",
-            data: dataString,
-            success: function (response) {
-                $('#course2').find('option').remove().end();
-                $('#course2').append('<option value>Select</option>');
-                $('#course2').append('<option value="All">All</option>');
-                if (degree == "All")
-                {
-                    $("#course2").val($("#course2 option:eq(1)").val());
-                    $("#batch2").val($("#batch2 option:eq(1)").val());
-                    $("#semester2").val($("#semester2 option:eq(1)").val());
-                } else {
-                    var branch = jQuery.parseJSON(response);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#course2').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-                }
-
-            }
-        });
+     $('#course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);
+        
     });
-
-
-    $("#batch2").change(function () {
-        var batches = $("#batch2").val();
-        if (batches == 'All')
-        {
-            $("#semester2").val($("#semester2 option:eq(1)").val());
-        }
-    });
-
-
-    $("#course2").change(function () {
-        var course = $(this).val();
-        var degree = $("#degree2").val();
-        var dataString = "course=" + course + "&degree=" + degree;
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value="">Select</option>');
         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'fees/get_batchs/'; ?>",
-            data: dataString,
-            success: function (response) {
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url() . 'fees/get_semesterall/'; ?>",
-                    data: {'course': course},
-                    success: function (response1) {
-                        $('#semester2').find('option').remove().end();
-                        $('#semester2').append('<option value>Select</option>');
-                        $('#semester2').append('<option value="All">All</option>');
-                        if (course == "All")
-                        {
-                            $("#semester2").val($("#semester2 option:eq(1)").val());
-                        } else {
-                            var sem_value = jQuery.parseJSON(response1);
-                            console.log(sem_value);
-                            $.each(sem_value, function (key, value) {
-                                $('#semester2').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                            });
-                        }
-
-
-
-                    }
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
                 });
-                $('#batch2').find('option').remove().end();
-                $('#batch2').append('<option value>Select</option>');
-                $('#batch2').append('<option value="All">All</option>');
-                //$("#semester").val($("#semester option:eq(1)").val());
-                if (course == "All")
-                {
-                    $("#batch2").val($("#batch2 option:eq(1)").val());
-                    $("#semester2").val($("#semester2 option:eq(1)").val());
-                } else {
-
-                    var batch_value = jQuery.parseJSON(response);
-                    console.log(batch_value);
-                    $.each(batch_value, function (key, value) {
-                        $('#batch2').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                    });
-                }
             }
         });
-    });
+    }
 
 
 </script>
 
-<script>
-    $(document).ready(function () {  
-         var js_date_format = '<?php echo js_dateformat(); ?>';
-         $("#edit_start_date").datepicker({
+<script>    
+     $(document).ready(function () {
+        var js_date_format = '<?php echo js_dateformat(); ?>';
+        $("#edit_start_date").datepicker({
             format: js_date_format,
             todayHighlight: true,
             autoclose: true,
-            startDate: new Date()
+            startDate: new Date(),
+        }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+        $('#edit_end_date').datepicker('setStartDate', minDate);
         });
-        $('#edit_start_date').on('change', function () {
-            
-            date = new Date($(this).val());
-            start_date = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-            console.log(start_date);
-            
-            setTimeout(function () {
-                $("#edit_end_date").datepicker({
+        $("#edit_end_date").datepicker({
                     format: js_date_format,
                     autoclose: true,
-                    todayHighlight: true,
-                    startDate: start_date
+                    todayHighlight: true                  
                 }).on('changeDate', function (selected) {
-            var minDate = new Date(selected.date.valueOf());
-            $('#edit_expiry_date').datepicker('setStartDate', minDate);
+                        var minDate = new Date(selected.date.valueOf());
+                    $('#edit_expiry_date').datepicker('setStartDate', minDate);
         });
-            }, 200);
-        });
-          
+                  
            $("#edit_expiry_date").datepicker({
                     format: js_date_format,
                     autoclose: true,
                     todayHighlight: true
                 });
-
-    })
+        
+    });
     //minDate: new Date(),
 
 </script>

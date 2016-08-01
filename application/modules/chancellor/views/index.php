@@ -1,8 +1,8 @@
 <?php
-$create = create_permission($permission, 'Department');
-$read = read_permission($permission, 'Department');
-$update = update_permisssion($permission, 'Department');
-$delete = delete_permission($permission, 'Department');
+$create = create_permission($permission, 'Chancellor');
+$read = read_permission($permission, 'Chancellor');
+$update = update_permisssion($permission, 'Chancellor');
+$delete = delete_permission($permission, 'Chancellor');
 ?>
 <!-- Start .row -->
 <div class=row>       
@@ -10,11 +10,11 @@ $delete = delete_permission($permission, 'Department');
         <!-- col-lg-12 start here -->
         <div class="panel-default toggle panelMove panelClose panelRefresh">
             <div class=panel-body>
-                <?php if ($create) { ?>
+                <?php if ($create) { ?> 
                 <a class="links"  onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/chancellor_create/');" href="#" id="navfixed" data-toggle="tab"><i class="fa fa-plus"></i> Chancellor</a>
+               <?php } ?>
+                <?php if ($create || $read || $update || $delete) { ?>
                 <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
-                     <?php } ?>
-                     <?php if ($create || $read || $update || $delete) { ?>
                     <thead>
                         <tr>
                             <th>No</th>

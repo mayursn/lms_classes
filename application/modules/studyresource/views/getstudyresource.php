@@ -4,6 +4,9 @@ $create = create_permission($permission, 'Study_Resource');
 $read = read_permission($permission, 'Study_Resource');
 $update = update_permisssion($permission, 'Study_Resource');
 $delete = delete_permission($permission, 'Study_Resource');
+$this->load->model('branch/Branch_location_model');
+$this->load->model('courses/Course_model');
+$this->load->model('admission_plan/Admission_plan_model');
 ?>
 <?php if($create || $read || $update || $delete){ ?>
 <table class="table table-striped table-bordered table-responsive" cellspacing=0 width=100% id="data-tables">
@@ -11,10 +14,9 @@ $delete = delete_permission($permission, 'Study_Resource');
         <tr>
             <th>No</th>											
             <th><div>Title</div></th>											
-            <th><div>Department</div></th>
             <th><div>Branch</div></th>
-            <th><div>Batch</div></th>											
-            <th><div>Semester</div></th>											                                                           
+            <th><div>Course</div></th>
+            <th><div>Admission Plan</div></th>											            											                                                           
             <th><div>File</div></th>											
             <?php if( $update || $delete){ ?>
                 <th>Action</th>											
@@ -29,59 +31,22 @@ $delete = delete_permission($permission, 'Study_Resource');
             <tr>
                 <td><?php echo $count++; ?></td>	
                 <td><?php echo $row->study_title; ?></td>	
-                <td>
-                    <?php
-                    if ($row->study_degree != "All") {
-                        foreach ($degree as $deg) {
-                            if ($deg->d_id == $row->study_degree) {
-                                echo $deg->d_name;
-                            }
-                        }
-                    } else {
-                        echo "All";
-                    }
+                <td><?php
+                   $get_branch =$this->Branch_location_model->get($row->branch_id);
+                   echo $get_branch->branch_name.' - '.$get_branch->branch_location;
                     ?>
                 </td>	
-                <td>
-                    <?php
-                    if ($row->study_course != "All") {
-                        foreach ($course as $crs) {
-                            if ($crs->course_id == $row->study_course) {
-                                echo $crs->c_name;
-                            }
-                        }
-                    } else {
-                        echo "All";
-                    }
+                <td><?php
+                    $get_course = $this->Course_model->get($row->course_id);
+                    echo $get_course->c_name;
                     ?>
                 </td>
                 <td>
                     <?php
-                    if ($row->study_batch != "All") {
-                        foreach ($batch as $bch) {
-                            if ($bch->b_id == $row->study_batch) {
-                                echo $bch->b_name;
-                            }
-                        }
-                    } else {
-                        echo "All";
-                    }
+                    $get_plan = $this->Admission_plan_model->get($row->admission_plan_id);
+                    echo $get_plan->admission_duration;
                     ?>
-                </td>	
-                <td>
-                    <?php
-                    if ($row->study_sem != "All") {
-                        foreach ($semester as $sem) {
-                            if ($sem->s_id == $row->study_sem) {
-                                echo $sem->s_name;
-                            }
-                        }
-                    } else {
-                        echo "All";
-                    }
-                    ?>
-
-                </td>	
+                </td>	                
              <td><a href="<?php echo base_url() . 'uploads/project_file/' . $row->study_filename; ?>" download=""  title="<?php echo $row->study_filename; ?>"><i class="fa fa-download"></i></a></td>	
              <?php if($update || $delete){ ?>
                 <td class="menu-action">

@@ -50,7 +50,9 @@ class Photo_gallery extends MY_Controller {
         $this->data['add_title'] ="Add Folder";
         $this->data['edit_title'] = "Update Folder";
         $this->data['folder'] = $this->Gallery_folder_model->get_all_folder();
+        
         $this->data['folder_photo'] = $this->Photo_gallery_model->get_all_folder_photo($id);
+        
         $this->data['folder_id']  = $id;
         $this->__template('media/photogallery/folderview', $this->data);
     }

@@ -5,6 +5,7 @@ $create = create_permission($permission, 'Subject');
 $read = read_permission($permission, 'Subject');
 $update = update_permisssion($permission, 'Subject');
 $delete = delete_permission($permission, 'Subject');
+$this->load->model('admission_plan/Admission_plan_model');
 ?>
 
 <div class=row>                      
@@ -52,10 +53,9 @@ $delete = delete_permission($permission, 'Subject');
                     <thead>
                         <tr>
                             <th>No</th>												
-                            <th><?php echo ucwords("Professor"); ?></th>											
-                            <th><?php echo ucwords("Department"); ?></th>											
-                            <th><?php echo ucwords("Branch"); ?></th>											
-                            <th><?php echo ucwords("Semester"); ?></th>	
+                            <th><?php echo ucwords("Professor"); ?></th>											                            
+                            <th><?php echo ucwords("Branch"); ?></th>											                            
+                            <th><?php echo ucwords("Admission Plan"); ?></th>											                            
                             <?php if ($update || $delete) { ?>
                             <th><?php echo ucwords("Action"); ?></th>	
                              <?php } ?> 
@@ -79,9 +79,11 @@ $delete = delete_permission($permission, 'Subject');
                                         }
                                     }
                                     ?></td>
-                                <td><?php echo $row->d_name; ?></td>												                                             
-                                <td><?php echo $row->c_name; ?></td>												                                             
-                                <td><?php echo $row->s_name; ?></td>
+                                <td><?php echo $row->branch_name.' - '.$row->branch_location; ?></td>												                                                                             
+                                <td><?php $plan = $this->Admission_plan_model->get($row->admission_plan_id); 
+                                echo $plan->admission_duration;
+                                ?></td>
+                                
                                  <?php if ($update || $delete) { ?>
                                 <td>
                                     <?php 

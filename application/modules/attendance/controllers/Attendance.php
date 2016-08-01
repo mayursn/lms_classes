@@ -13,64 +13,99 @@ class Attendance extends MY_Controller {
         parent::__construct();
         $this->load->model('attendance/Attendance_model');
         $this->load->model('department/Degree_model');
-        $this->load->model('branch/Course_model');
+        $this->load->model('courses/Course_model');
         $this->load->model('batch/Batch_model');
         $this->load->model('semester/Semester_model');
         $this->load->model('classes/Class_model');
         $this->load->model('student/Student_model');
         $this->load->model('professor/Professor_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
       
     }
 
     function index() {
-         $this->data['department'] = '';
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
+        $this->load->model('admission_plan/Admission_plan_model');
+        $this->load->model('subject/Subject_manager_model');
+         $this->data['course'] = '';
         $this->data['branch'] = '';
-        $this->data['batch'] = '';
-        $this->data['semester'] = '';
+        $this->data['admission_plan'] = '';
+        $this->data['class'] = '';
         $this->data['class_name'] = '';
         $this->data['professor'] = '';
         $this->data['class_routine'] = '';
         $this->data['date'] = '';
         $this->data['student'] = array();
-        $this->data['professor_class_routine_list'] = array();
+        //$this->data['professor_class_routine_list'] = array();
         if ($_POST) {
-            $this->data['professor_class_routine_list'] = $this->professor_date_wise_class_routine(
-                    $this->session->userdata('professor_id'), $_POST['date']);
+            $this->data['title'] = 'Attendance';
+            $this->data['page'] = 'attendance'; 
+            $this->data['student'] = $this->get_student_list($_POST);
             $this->data['date'] = $_POST['date'];
-           
+            $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+            $this->data['branch_name'] = $this->Branch_location_model->get($_POST['branch']);
+            $this->data['course_name'] = $this->Course_model->get($_POST['course']);
+            $this->data['course'] = $this->Course_model->order_by_column('c_name');
+            $this->data['class'] = $this->Class_model->order_by_column('class_name');
+            $this->data['class_name'] = $this->Class_model->get($_POST['class']);
+            $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');            
+            $this->data['subject'] = $this->Subject_manager_model->order_by_column('subject_name');            
+            $this->data['subject_name'] = $this->Subject_manager_model->get($_POST['subject']);            
+            $this->data['admission_duration'] = $this->Admission_plan_model->get($_POST['admission_plan']);            
+            $this->__template('attendance/attendance', $this->data);
+           die;
         }
         $this->data['title'] = 'Attendance';
-        $this->data['page'] = 'attendance';        
-        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        $this->data['page'] = 'attendance';                
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+        $this->data['course'] = $this->Course_model->order_by_column('c_name');
+        $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');
         $this->data['class'] = $this->Class_model->order_by_column('class_name');
+      //  $this->data['professor_class_routine_list'] = '';
          $this->__template('attendance/index', $this->data);
     }
     
+    function get_student_list($post)
+    {
+        $branch = $post['branch'];
+        $course = $post['course'];
+        $admission_plan = $post['admission_plan'];
+        $class = $post['class'];
+        return $this->Student_model->get_many_by(array(
+            'branch_id' => $branch,
+            'course_id' => $course,
+            'class_id' => $class,
+            'admission_plan_id' => $admission_plan));
+        
+        
+    }
     /**
      * Submit student class routine attendance
      */
     function take_class_routine_attendance() {
         if ($_POST) {
+           
+            
             $this->load->model('admin/Crud_model');
             $student = $this->Student_model->get_many_by(array(
-                    'std_degree' => $_POST['department'],
-                    'course_id' => $_POST['branch'],
-                    'std_batch' => $_POST['batch'],
-                    'semester_id' => $_POST['semester'],
+                    'branch_id' => $_POST['branch'],
+                    'course_id' => $_POST['course'],
+                    'admission_plan_id' => $_POST['admission_plan'],                    
                     'class_id' => $_POST['class']
                 ));                    
             foreach ($student as $row) {
+               
                 $date = date('Y-m-d', strtotime($_POST['date']));
-                $status = $this->Attendance_model->get(array(
-                            'department_id' => $_POST['department'],
-                            'branch_id' => $_POST['branch'],
-                            'batch_id' => $_POST['batch'],
-                            'semester_id' => $_POST['semester'],
-                            'class_id' => $_POST['class'],
-                            'class_routine_id' => $_POST['class_routine'],
-                            'date_taken' => $date,
-                            'student_id' => $row->std_id
-                        ));
+                
+                
+                
+                $status = $this->Attendance_model->get_attendance_status($_POST['branch'],$_POST['course'],
+                                                $_POST['admission_plan'],$_POST['class'],$date,$row->std_id,$_POST['subject']);
+                                                
                 //check for existing attendnace
                 if ($status) {
                     //update existing attendance of the student
@@ -84,14 +119,12 @@ class Attendance extends MY_Controller {
                     $this->Attendance_model->save_student_attendance($update, $status->attendance_id);
                 } else {
                     $save = array(
-                        'department_id' => $_POST['department'],
+                        'course_id' => $_POST['course'],
                         'branch_id' => $_POST['branch'],
-                        'batch_id' => $_POST['batch'],
-                        'semester_id' => $_POST['semester'],
-                        'class_id' => $_POST['class'],
-                        'professor_id' => $_POST['professor'],
-                        'class_routine_id' => $_POST['class_routine'],
-                        'date_taken' => $date
+                        'admission_plan_id' => $_POST['admission_plan'],                        
+                        'class_id' => $_POST['class'],                                                
+                        'date_taken' => $date,
+                        'sm_id'=>$_POST['subject']
                     );
                     if (isset($_POST['student_' . $row->std_id])) {
                         //present student
@@ -197,4 +230,72 @@ class Attendance extends MY_Controller {
         $this->__template('attendance/attendance', $this->data);
     }
 
+    function class_routine()
+    {
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/course_model');
+        $this->load->model('classes/Class_model');
+        $this->load->model('admission_plan/Admission_plan_model');
+        $this->load->model('subject/Subject_manager_model');
+        
+        if($_POST)
+        {
+            $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+            $this->data['branch_name'] = $this->Branch_location_model->get($_POST['branch']);
+            $this->data['course_name'] = $this->Course_model->get($_POST['course']);
+            $this->data['course'] = $this->Course_model->order_by_column('c_name');
+            $this->data['class'] = $this->Class_model->order_by_column('class_name');
+            $this->data['class_name'] = $this->Class_model->get($_POST['class']);
+            $this->data['admission_plan'] = $this->Admission_plan_model->order_by_column('admission_duration');            
+            $this->data['subject'] = $this->Subject_manager_model->order_by_column('subject_name');            
+            $this->data['subject_name'] = $this->Subject_manager_model->get($_POST['subject']);            
+            $this->data['admission_duration'] = $this->Admission_plan_model->get($_POST['admission_plan']);            
+             $this->data['date'] = $_POST['date'];
+            $branch = $_POST['branch'];
+            $course = $_POST['course'];
+            $admission_plan = $_POST['admission_plan'];
+            $class = $_POST['class'];
+            $subject = $_POST['subject'];
+            $date = $_POST['date'];
+            $this->data['page'] = 'attendance';
+            $this->data['title'] = 'Attendance';
+        //$this->db->join('branch_location','branch_location.branch_id=attendance.branch_id');
+                                        //$this->db->join('course','course.course_id=attendance.course_id');
+                                        //$this->db->join('admission_plan','admission_plan.admission_plan_id=attendance.admission_plan_id');
+                                        //$this->db->join('class','class.class_id=attendance.class_id');
+                                        //$this->db->join('subject_manager','subject_manager.sm_id=attendance.sm_id');
+                                        
+                                         $this->db->select();
+                                         $this->db->join('course','course.course_id=attendance.course_id');
+                                         $this->db->join('branch_location','branch_location.branch_id=attendance.branch_id');
+                                         $this->db->join('admission_plan','admission_plan.admission_plan_id=attendance.admission_plan_id');
+                                         $this->db->join('subject_manager','attendance.sm_id=subject_manager.sm_id');
+                                         $this->db->join('class','class.class_id=attendance.class_id');
+                                         $this->db->join('student','student.std_id=attendance.student_id');
+                               $this->data['attendance'] =    $this->db->get_where('attendance',array("attendance.branch_id"=>$branch,
+                                            "attendance.course_id"=>$course,
+                                            "attendance.admission_plan_id"=>$admission_plan,
+                                            "attendance.sm_id"=>$subject,
+                                            "attendance.class_id"=>$class,
+                                            'attendance.date_taken'=>$date
+                                            ))->result(); 
+                                
+        $this->__template('attendance/attendance_std_list', $this->data);
+        }
+    }
+    
+    function get_date_list($branch='',$course='',$admission_plan,$subject,$class_name)
+    {
+        $this->db->order_by('attendance_id','DESC');
+        $this->db->group_by('date_taken');
+        $dates = $this->db->get_where('attendance',array("branch_id"=>$branch,
+                    "course_id"=>$course,
+                    "admission_plan_id"=>$admission_plan,
+                    "sm_id"=>$subject,
+                    "class_id"=>$class_name  
+                    ))->result();
+        
+        echo json_encode($dates);
+        
+    }
 }

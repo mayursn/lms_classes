@@ -52,7 +52,7 @@ $delete = delete_permission($permission, 'Project');
                         }
                         if (count($stu) > 2) {
                             ?>
-                            <a onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/view_student_name/<?php echo $row->pm_id; ?>');" style="cursor:pointer; text-decoration: none;">Read More</a>
+                            <a onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/project_studentname/<?php echo $row->pm_id; ?>');" style="cursor:pointer; text-decoration: none;">Read More</a>
                             <?php
                         }
                         ?>

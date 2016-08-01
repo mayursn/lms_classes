@@ -4,6 +4,9 @@ $create = create_permission($permission, 'Study_Resource');
 $read = read_permission($permission, 'Study_Resource');
 $update = update_permisssion($permission, 'Study_Resource');
 $delete = delete_permission($permission, 'Study_Resource');
+$this->load->model('branch/Branch_location_model');
+$this->load->model('courses/Course_model');
+$this->load->model('admission_plan/Admission_plan_model');
 ?>
 <div class=row>                      
 
@@ -18,43 +21,31 @@ $delete = delete_permission($permission, 'Study_Resource');
                     <?php if ($create || $read || $update || $delete) { ?>
                         <form action="#" method="post" id="searchform">
                             <div class="form-group col-sm-3 validating">
-                                <label>Department</label>
-                                <select id="courses" name="degree" class="form-control">
-                                    <option value="">Select department</option>
-                                    <option value="All">All</option>
-
-                                    <?php foreach ($degree as $row) { ?>
-                                        <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                                <label>Branch</label>
+                                <select id="search-branch" name="branch" class="form-control">
+                                    <option value="">Select Branch</option>
+                                    <?php $branch =  $this->Branch_location_model->order_by_column('branch_name'); ?>
+                                    <?php foreach ($branch as $row) { ?>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group col-sm-3 validating">
                                 <label>Branch</label>
-                                <select id="branches" name="course" class="form-control">
-                                    <option value="">Select Branch</option>
-                                    <option value="All">All</option>
-
+                                <select id="search-course" name="course" class="form-control">
+                                    <option value="">Select Course</option>
+                                    <?php  foreach ($course as $row_crs): ?>
+                                    <option value="<?php echo $row_crs->course_id; ?>"><?php echo $row_crs->c_name; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="form-group col-sm-3 validating">
-                                <label>Batch</label>
-                                <select id="batches" name="batch" class="form-control">
-                                    <option value="">Select Batch</option>
-                                    <option value="All">All</option>
+                                <label>Admission Plan</label>
+                                <select id="search-admission_plan" name="admission_plan" class="form-control">
+                                    <option value="">Select Admission Plan</option>
+                                
                                 </select>
-                            </div>
-                            <div class="form-group col-sm-2 validating">
-                                <label>Select Semester</label>
-                                <select id="semesters" name="semester" class="form-control">
-                                    <option value="">Select Semester</option>
-                                    <option value="All">All</option>
-
-                                    <?php foreach ($semester as $row) { ?>
-                                        <option value="<?php echo $row->s_id; ?>"
-                                                ><?php echo $row->s_name; ?></option>
-                                            <?php } ?>
-                                </select>
-                            </div>
+                            </div>                            
                             <div class="form-group col-sm-1">
                                 <label>&nbsp;</label><br/>
                                 <button type="submit" id="btnsubmit" class="submit btn btn-info vd_bg-green">Go</button>
@@ -69,11 +60,10 @@ $delete = delete_permission($permission, 'Study_Resource');
                             <thead>
                                 <tr>
                                     <th>No</th>											
-                                    <th>Title</th>											
-                                    <th>Department</th>
+                                    <th>Title</th>											                                    
                                     <th>Branch</th>
-                                    <th>Batch</th>											
-                                    <th>Semester</th>											                                                                                               
+                                    <th>Course</th>											
+                                    <th>Admission Plan</th>											                                                                                               
                                     <th>File</th>
 				    <th>Status</th>
                                     <?php if ($update || $delete) { ?>
@@ -84,6 +74,7 @@ $delete = delete_permission($permission, 'Study_Resource');
 
                             <tbody>
                                 <?php
+                                
                                 foreach ($studyresource as $row):
                                     ?>
                                     <tr>
@@ -91,57 +82,22 @@ $delete = delete_permission($permission, 'Study_Resource');
                                         <td><?php echo $row->study_title; ?></td>	
                                         <td>
                                             <?php
-                                            if ($row->study_degree != "All") {
-                                                foreach ($degree as $deg) {
-                                                    if ($deg->d_id == $row->study_degree) {
-                                                        echo $deg->d_name;
-                                                    }
-                                                }
-                                            } else {
-                                                echo "All";
-                                            }
+                                           $branch = $this->Branch_location_model->get($row->branch_id);
+                                           echo $branch->branch_name.' - '.$branch->branch_location;
                                             ?>
                                         </td>	
                                         <td>
                                             <?php
-                                            if ($row->study_course != "All") {
-                                                foreach ($course as $crs) {
-                                                    if ($crs->course_id == $row->study_course) {
-                                                        echo $crs->c_name;
-                                                    }
-                                                }
-                                            } else {
-                                                echo "All";
-                                            }
+                                            $course_array = $this->Course_model->get($row->course_id);
+                                            echo $course_array->c_name;
                                             ?>
                                         </td>
                                         <td>
                                             <?php
-                                            if ($row->study_batch != "All") {
-                                                foreach ($batch as $bch) {
-                                                    if ($bch->b_id == $row->study_batch) {
-                                                        echo $bch->b_name;
-                                                    }
-                                                }
-                                            } else {
-                                                echo "All";
-                                            }
+                                           $plan = $this->Admission_plan_model->get($row->admission_plan_id);
+                                           echo $plan->admission_duration;
                                             ?>
-                                        </td>	
-                                        <td>
-                                            <?php
-                                            if ($row->study_sem != "All") {
-                                                foreach ($semester as $sem) {
-                                                    if ($sem->s_id == $row->study_sem) {
-                                                        echo $sem->s_name;
-                                                    }
-                                                }
-                                            } else {
-                                                echo "All";
-                                            }
-                                            ?>
-
-                                        </td>	
+                                        </td>	                                  
 
                                         <td id="downloadedfile"><a href="<?php echo base_url() . 'uploads/project_file/' . $row->study_filename; ?>" download=""  title="download"><i class="fa fa-download"></i></a></td>	
 					<td>
@@ -183,15 +139,37 @@ $delete = delete_permission($permission, 'Study_Resource');
 <script type="text/javascript">
     $(document).ready(function () {
 
+
+  $('#search-course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#search-admission_plan').find('option').remove().end();
+        $('#search-admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#search-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
         $("#searchform #btnsubmit").click(function () {
-            var degree = $("#courses").val();
-            var course = $("#branches").val();
-            var batch = $("#batches").val();
-            var semester = $("#semesters").val();
+            var branch = $("#search-branch").val();
+            var course = $("#search-course").val();
+            var admission_plan = $("#search-admission_plan").val();            
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>studyresource/getstudyresource/",
-                data: {'degree': degree, 'course': course, 'batch': batch, "semester": semester},
+                data: {'branch': branch, 'course': course, 'admission_plan': admission_plan},
                 success: function (response)
                 {
                     $("#getresponse").html(response);
@@ -201,74 +179,7 @@ $delete = delete_permission($permission, 'Study_Resource');
             });
             return false;
         });
-        $("#courses").change(function () {
-            var degree = $(this).val();
-
-            var dataString = "degree=" + degree;
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url() . 'studyresource/get_cource_all/'; ?>",
-                data: dataString,
-                success: function (response) {
-                    $('#branches').find('option').remove().end();
-                    $('#branches').append('<option value>Select</option>');
-                    $('#branches').append('<option value="All">All</option>');
-                    if (degree == 'All')
-                    {
-                        //  $("#branches").html(response);
-                        $("#batches").val($("#batches option:eq(1)").val());
-                        $("#branches").val($("#branches option:eq(1)").val());
-                        $("#semesters").val($("#semesters option:eq(1)").val());
-
-                    } else {
-                        var branch = jQuery.parseJSON(response);
-                        console.log(branch);
-                        $.each(branch, function (key, value) {
-                            $('#branches').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                        });
-
-                    }
-                }
-            });
-        });
-        $("#batches").change(function () {
-            var batches = $("#batches").val();
-            if (batches == 'All')
-            {
-                $("#semesters").val($("#semesters option:eq(1)").val());
-            }
-        });
-        $("#branches").change(function () {
-            //var course = $(this).val();
-            // var degree = $("#degree").val();
-            var degree = $("#courses").val();
-            var course = $("#branches").val();
-            var dataString = "course=" + course + "&degree=" + degree;
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url() . 'studyresource/get_batchs_all/'; ?>",
-                data: dataString,
-                success: function (response) {
-                    $('#batches').find('option').remove().end();
-                    $('#batches').append('<option value>Select</option>');
-                    $('#batches').append('<option value="All">All</option>');
-                    if (course == 'All')
-                    {
-                        //$("#batches").html(response);
-                        $("#batches").val($("#batches option:eq(1)").val());
-                        $("#semesters").val($("#semesters option:eq(1)").val());
-
-                    } else {
-                        var batch = jQuery.parseJSON(response);
-                        console.log(batch);
-                        $.each(batch, function (key, value) {
-                            $('#batches').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                        });
-                    }
-
-                }
-            });
-        });
+       
     });
     $(document).ready(function () {
         $('#studyresource-tables').dataTable({"language": {"emptyTable": "No data available"}});

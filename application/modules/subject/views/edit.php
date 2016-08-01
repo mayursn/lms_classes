@@ -1,9 +1,12 @@
 <?php
 $degree = $this->db->order_by('d_name', 'ASC')->get('degree')->result_array();
 $edit_data = $this->db->get_where('subject_manager', array('sm_id' => $param2))->result_array();
-$branch = $this->db->order_by('course_id', 'ASC')->get_where('course', [
-    'course_id' => $edit_data[0]['sm_course_id']
-])->row();
+
+    $this->load->model('admission_plan/Admission_plan_model');
+$this->load->model('classes/Class_model');
+$this->load->model('courses/Course_model');
+$course = $this->Course_model->order_by_column('c_name');
+$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
 foreach ($edit_data as $row):
     ?>
     <div class=row>                      
@@ -31,6 +34,19 @@ foreach ($edit_data as $row):
                                     <input type="text" class="form-control" name="subcode" id="subcode" value="<?php echo $row['subject_code']; ?>" />
                                 </div>
                             </div>
+                         
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="course" class="form-control" id="course">
+                                <option value="">Select</option>
+                                <?php foreach($course as $rowcourse): ?>
+                                <option value="<?php echo $rowcourse->course_id; ?>" <?php if($row['course_id']==$rowcourse->course_id){ echo "selected=selected"; } ?>><?php echo $rowcourse->c_name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                   	
  				<div class="form-group">
                                 <label class="col-sm-4 control-label"><?php echo ucwords("status");?></label>
                                 <div class="col-sm-8">
@@ -114,24 +130,27 @@ endforeach;
             }
         });
         
-        $('#edit_degree').on('change', function(){
-            var degree_id = $(this).val();
-            branch_from_department(degree_id);
+        $('#course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);
+        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value="">Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
         });
-
-        function branch_from_department(department_id) {
-            $('#course1').find('option').remove().end();
-            $('#course1').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>admin/course_list_from_degree/' + department_id,
-                type: 'get',
-                success: function (content) {
-                    var course = jQuery.parseJSON(content);
-                    $.each(course, function (key, value) {
-                        $('#course1').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    })
-                }
-            })
-        }
+    }
     });
 </script>

@@ -43,6 +43,7 @@ $delete = delete_permission($permission, 'Forum');
                                         <span class="label label-danger mr6 mb6" >InActive</span>
                                     <?php } ?>
                                 </td>
+                                <?php  if($update || $delete ){?>
                                 <td class="menu-action">
                                     <?php  if($update){?>
                                     <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/forum_edit/<?php echo $row->forum_id; ?>');"  data-toggle="tooltip" data-placement="top"><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
@@ -51,6 +52,7 @@ $delete = delete_permission($permission, 'Forum');
                                     <a href="#" onclick="confirm_modal('<?php echo base_url(); ?>forum/delete/<?php echo $row->forum_id; ?>');"  data-toggle="tooltip" data-placement="top" ><span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span></a>
                                     <?php } ?>
                                 </td>
+                                <?php } ?>
                             </tr>
                         <?php endforeach; ?>									
                     </tbody>

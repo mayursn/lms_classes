@@ -180,18 +180,17 @@ class Site_model extends CI_Model {
      * @return object
      */
     function is_user_email_present($email) {
-        $users = ['student', 'admin', 'professor'];
-        foreach ($users as $user) {
+        //$users = ['student', 'admin', 'professor'];
+//        foreach ($users as $user) {
             $record = $this->db->select()
-                            ->from($user)
+                            ->from('user')
                             ->where('email', $email)
                             ->get()->row();
 
             if ($record) {
-                $record->user_type = $user;
                 return $record;
             }
-        }
+       // }
 
         return '';
     }
@@ -203,30 +202,34 @@ class Site_model extends CI_Model {
      * @param string $key
      */
     function update_forgot_password_key($user_type, $user_id, $key) {
-        switch ($user_type) {
-            case 'admin':
-                $this->db->where('admin_id', $user_id);
-                $this->db->update('admin', [
-                    'forgot_password_link' => $key
-                ]);
-                break;
-            case 'student':
-                $this->db->where('std_id', $user_id);
-                $this->db->update('student', [
-                    'forgot_password_link' => $key
-                ]);
-                break;
-            case 'professor':
-                $this->db->where('professor_id', $user_id);
-                $this->db->update('professor', [
-                    'forgot_password_link' => $key
-                ]);
-                break;
-        }
+             $this->db->where('user_id', $user_id);
+            $this->db->update('user', [
+                'password_key' => $key
+            ]);
+        
+//             switch ($user_type) {
+//            case 'admin':
+//                $this->db->where('admin_id', $user_id);
+//                $this->db->update('admin', [
+//                    'forgot_password_link' => $key
+//                ]);
+//                break;
+//            case 'student':
+//                $this->db->where('std_id', $user_id);
+//                $this->db->update('student', [
+//                    'forgot_password_link' => $key
+//                ]);
+//                break;
+//            case 'professor':
+//                $this->db->where('professor_id', $user_id);
+//                $this->db->update('professor', [
+//                    'forgot_password_link' => $key
+//                ]);
+//                break;
+//        }
     }
 
-    /**
-      <<<<<<< HEAD
+    /**     
      * Check for forgot password link
      * @param string $type
      * @param string $key
@@ -234,7 +237,7 @@ class Site_model extends CI_Model {
      */
     function check_for_forgot_password_key($type, $key) {
         return $this->db->get_where($type, [
-                    'forgot_password_link' => $key
+                    'password_key' => $key
                 ])->num_rows();
     }
 
@@ -246,23 +249,26 @@ class Site_model extends CI_Model {
      */
     function update_password($type, $id, $data) {
         $user_data = array();
-        switch ($type) {
-            case 'admin':
-                $this->db->where('admin_id', $id);
-                $this->db->update('admin', $data);
-                $user_data['type_id'] = 'admin_id';
-                break;
-            case 'student':
-                $this->db->where('std_id', $id);
-                $this->db->update('student', $data);
-                $user_data['type_id'] = 'std_id';
-                break;
-            case 'professor':
-                $this->db->where('professor_id', $id);
-                $this->db->update('professor', $data);
-                $user_data['type_id'] = 'professor_id';
-                break;
-        }
+        $this->db->where('user_id', $id);
+            $this->db->update($type, $data);
+            $user_data['type_id'] = 'user_id';
+//        switch ($type) {
+//            case 'admin':
+//                $this->db->where('admin_id', $id);
+//                $this->db->update('admin', $data);
+//                $user_data['type_id'] = 'admin_id';
+//                break;
+//            case 'student':
+//                $this->db->where('std_id', $id);
+//                $this->db->update('student', $data);
+//                $user_data['type_id'] = 'std_id';
+//                break;
+//            case 'professor':
+//                $this->db->where('professor_id', $id);
+//                $this->db->update('professor', $data);
+//                $user_data['type_id'] = 'professor_id';
+//                break;
+//        }
         $user_data['type'] = $type;
         $user_data['user_id'] = $id;
 
@@ -278,7 +284,7 @@ class Site_model extends CI_Model {
     function reset_forgot_password_key($type, $type_id, $id) {
         $this->db->where($type_id, $id);
         $this->db->update($type, [
-            'forgot_password_link' => ''
+            'password_key' => ''
         ]);
     }
 

@@ -13,6 +13,10 @@ class Comments extends MY_Controller {
         parent::__construct();
         $this->load->model('comments/Forum_comment_model');
         $this->load->model('forumtopic/Forum_topics_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index($id='') {

@@ -1,5 +1,13 @@
-<?php $this->load->model('department/Degree_model');
-$degree =  $this->Degree_model->get_all();
+<?php 
+$this->load->model('branch/Branch_location_model');
+$this->load->model('courses/Course_model');
+$this->load->model('classes/Class_model');
+$this->load->model('admission_plan/Admission_plan_model');
+$branch = $this->Branch_location_model->order_by_column('branch_name');
+$course = $this->Course_model->order_by_column('c_name');
+$class = $this->Class_model->order_by_column('class_name');
+$plan = $this->Admission_plan_model->order_by_column('admission_duration');
+
 ?>
 <div class="row">
     <div class=col-lg-12>
@@ -15,42 +23,48 @@ $degree =  $this->Degree_model->get_all();
                     <br/>
                     <div class="padded">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Department<span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Branch<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="degree" id="degree" required="">
+                                <select class="form-control" name="branch" id="branch" required="">
                                     <option value="">Select</option>
-                                    <?php foreach ($degree as $row) { ?>
-                                        <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                                    <?php foreach ($branch as $row) { ?>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Branch<span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Course<span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select class="form-control" name="course" id="course" required="">
-
+                                    <option  value="">Select</option>
+                                    <?php  foreach($course as $crs): ?>
+                                    <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Batch<span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Admission Plan<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="batch" id="batch" required="">
-
+                                <select class="form-control" name="admission_plan" id="admission_plan" required="">
+                                    <option value="">Select</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Semester<span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Class<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="semester" id="semester" required="">
-                                    <option value="">Select</option>                                                        
+                                <select class="form-control" name="class" id="create-class" required="">
+                                    <option value="">Select</option>                
+                                    <?php foreach($class as $cl): ?>
+                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_id; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Student<span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Student <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select style="width: 100%;" class="student form-control" id="student" name="student" required="">
 
@@ -181,26 +195,100 @@ $degree =  $this->Degree_model->get_all();
 
 <script>
     $(document).ready(function () {
-        $('#course').on('change', function () {
-            var course_id = $(this).val();
-            $.ajax({
-                url: '<?php echo base_url(); ?>student/course_students/' + course_id,
+      
+  $('#course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
+    
+    $("#admission_plan").change(function(){
+        var admission_plan = $(this).val();
+        var branch = $("#branch").val();
+        var course = $("#course").val();
+        var class_name = $("#create-class").val();
+        
+        get_fee_structure(branch,course,admission_plan,class_name);
+    });
+    $("#create-class").change(function(){
+        var class_name = $(this).val();
+        var admission_plan = $("#admission_plan").val();
+        var branch = $("#branch").val();
+        var course = $("#course").val();
+        
+        get_class_student(branch,course,admission_plan,class_name);
+    });
+    function get_class_student(branch,course,admission_plan,class_name)
+    {
+       var dataString = 'branch='+branch+"&course="+course+"&admission_plan="+admission_plan+"&class="+class_name;
+       $.ajax({
+           url:"<?php echo base_url(); ?>student/get_student_list",
+           type:"GET",
+           data:dataString,
+           success:function(content){
+                var students = jQuery.parseJSON(content);
+                console.log(students);
+                $('#student').find('option').remove();
+                $('#student').append("<option value=''>Select</option>");
+                $.each(students, function (key, value) {
+                    $('#student').append('<option value=' + value.std_id + '>' + value.std_first_name + ' ' + value.std_last_name + '</option>');
+                });
+                  
+           }
+           
+       })
+    }
+    
+//    {
+//        $.ajax({
+//                url: '<?php echo base_url(); ?>student/get_class_student/' + branch + '/' + course + '/' + admission_plan+'/'+class_name,
+//                type: 'get',
+//                success: function (content) {
+//                    var students = jQuery.parseJSON(content);
+//                    $('#student').find('option').remove();
+//                    $('#student').append("<option value=''>Select</option>");
+//                    $.each(students, function (key) {
+//                        $('#student').append("<option value=" + students[key].std_id + ">" + students[key].std_first_name +' '+students[key].std_last_name "</option>");
+//                    })
+//                    //console.log(fees_struture);
+//                }
+//            })
+//    }
+    
+        function get_fee_structure(branch,course,admission_plan,class_name)
+        {
+             $.ajax({
+                url: '<?php echo base_url(); ?>payment/get_fees_structure/' + branch + '/' + course + '/' + admission_plan,
                 type: 'get',
                 success: function (content) {
-                     var student = jQuery.parseJSON(content);
-                    //$('#student').html(content);
-                     $('#student').find('option').remove();
-                    $('#student').append("<option value=''>Select</option>");
-                    $.each(student, function (key) {
-                        $('#student').append("<option value=" + student[key].std_id + ">" + student[key].std_first_name + ' '+ student[key].std_last_name +"</option>");
-                    });
+                    var fees_struture = jQuery.parseJSON(content);
+                    $('#fees_structure').find('option').remove();
+                    $('#fees_structure').append("<option value=''>Select</option>");
+                    $.each(fees_struture, function (key) {
+                        $('#fees_structure').append("<option value=" + fees_struture[key].fees_structure_id + ">" + fees_struture[key].title + "</option>");
+                    })
+                    //console.log(fees_struture);
                 }
             })
-            $('#main_total_fees').css('display', 'none');
-            $('#main_total_amount').css('display', 'none');
-            $('#main_due_amount').css('display', 'none');
-        });
-
+        }
+    
         $('#semester').on('change', function () {
             var semester_id = $(this).val();
             var course_id = $('#course').val();
@@ -286,70 +374,5 @@ $degree =  $this->Degree_model->get_all();
 
 
 <script>
-    $(document).ready(function () {
-        //course by degree
-        $('#degree').on('change', function () {
-            var course_id = $('#course').val();
-            var degree_id = $(this).val();
-
-            //remove all present element
-            $('#course').find('option').remove().end();
-            $('#course').append('<option value="">Select</option>');
-            var degree_id = $(this).val();
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + degree_id,
-                type: 'get',
-                success: function (content) {
-                    var course = jQuery.parseJSON(content);
-                    $.each(course, function (key, value) {
-                        $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    })
-                }
-            })
-            batch_from_degree_and_course(degree_id, course_id);
-        });
-
-        //batch from course and degree
-        $('#course').on('change', function () {
-            var degree_id = $('#degree').val();
-            var course_id = $(this).val();
-            batch_from_degree_and_course(degree_id, course_id);
-            get_semester_from_branch(course_id);
-        })
-
-        //find batch from degree and course
-        function batch_from_degree_and_course(degree_id, course_id) {
-            //remove all element from batch
-            $('#batch').find('option').remove().end();
-            $.ajax({
-                url: '<?php echo base_url(); ?>batch/department_branch_batch/' + degree_id + '/' + course_id,
-                type: 'get',
-                success: function (content) {
-                    $('#batch').append('<option value="">Select</option>');
-                    var batch = jQuery.parseJSON(content);
-                    console.log(batch);
-                    $.each(batch, function (key, value) {
-                        $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                    })
-                }
-            })
-        }
-
-        //get semester from brach
-        function get_semester_from_branch(branch_id) {
-            $('#semester').find('option').remove().end();
-            $.ajax({
-                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch_id,
-                type: 'get',
-                success: function (content) {
-                    $('#semester').append('<option value="">Select</option>');
-                    var semester = jQuery.parseJSON(content);
-                    $.each(semester, function (key, value) {
-                        $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                    })
-                }
-            })
-        }
-
-    })
+    
 </script>

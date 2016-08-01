@@ -4,7 +4,11 @@
     $this->db->from('student s');
     $this->db->join('user u','u.user_id=s.user_id');
     $edit_data= $this->db->get()->result_array();
-    
+    $this->load->model('admission_plan/Admission_plan_model');
+$this->load->model('classes/Class_model');
+$this->load->model('courses/Course_model');
+$course = $this->Course_model->order_by_column('c_name');
+$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
 foreach ($edit_data as $row):
     ?>
     <div class=row>                      
@@ -60,25 +64,7 @@ foreach ($edit_data as $row):
                                         <input type="radio" name="gen" value="female" <?php echo $female; ?>>Female
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Parent Name"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="parentname" id="parentname" value="<?php echo $row['parent_name'] ?>" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Parent Contact No"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="parentcontact" id="parentcontact" value="<?php echo $row['parent_contact'] ?>" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Parent Email Id"); ?><span style="color:red"></span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="parent_email_id" id="parent_email_id" value="<?php echo $row['parent_email'] ?>" />
-                                        <span id="emailerror" style="color: red"></span>
-                                    </div>
-                                </div>
+                                
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label"><?php echo ucwords("Address"); ?><span style="color:red">*</span></label>
                                     <div class="col-sm-8">
@@ -103,122 +89,43 @@ foreach ($edit_data as $row):
                                         <input type="text" class="form-control" name="birthdate" id="basic-datepicker" value="<?php echo date("F d, Y",strtotime($row['std_birthdate'])); ?>" />
                                     </div>
                                 </div>	
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Marital Status"); ?></label>
-                                    <div class="col-sm-8">
-                                        <?php
-                                        $single = "";
-                                        $married = "";
-                                        $separated = "";
-                                        $widowed = "";
-                                        if ($row['std_marital'] == 'Single') {
-                                            $single = "selected";
-                                        } elseif ($row['std_marital'] == 'Married') {
-                                            $married = "selected";
-                                        } elseif ($row['std_marital'] == 'Separated') {
-                                            $separated = "selected";
-                                        } elseif ($row['std_marital'] == 'Widowed') {
-                                            $widowed = "selected";
-                                        }
-                                        ?>
-                                        <select name="maritalstatus" class="form-control" id="maritalstatus">
-                                            <option value="">Select marital status</option>
-                                            <option value="single" <?= $single; ?>>Single</option>
-                                            <option value="married" <?= $married; ?>>Married</option>
-                                            <option value="separated" <?= $separated; ?>>Separated</option>
-                                            <option value="widowed" <?= $widowed; ?>>Widowed</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-                                        <select name="degree" class="form-control" id="degree2">
-                                            <option value="">Select department</option>
-                                            <?php
-                                            $degree = $this->db->get_where('degree', array('d_status' => 1))->result();
-                                            foreach ($degree as $dgr) {
-                                                ?>
-                                                <option value="<?= $dgr->d_id ?>" <?php
-                                                if ($row['std_degree'] == $dgr->d_id) {
-                                                    echo "selected=selected";
-                                                }
-                                                ?>><?= $dgr->d_name ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
-                                        </select>
-                                    </div>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <?php $this->load->model('branch/Branch_location_model'); 
+                            $branch = $this->Branch_location_model->order_by_column('branch_name');
+                            ?>
+                            <select name="branch" class="form-control" id="branch">
+                                <option value="">Select</option>
+                                <?php foreach ($branch as $rows) { ?>
+                                    <option value="<?php echo $rows->branch_id; ?>" <?php if($row['branch_id']==$rows->branch_id){ echo "selected=selected"; } ?>><?php echo $rows->branch_name.' - '.$rows->branch_location; ?></option>
+                                <?php } ?>                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="course" class="form-control" id="course">
+                                <option value="">Select</option>
+                                <?php foreach($course as $rowcourse): ?>
+                                <option value="<?php echo $rowcourse->course_id; ?>" <?php if($row['course_id']==$rowcourse->course_id){ echo "selected=selected"; } ?>><?php echo $rowcourse->c_name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="admission_plan">
+                                <option value="">Select</option>
+                                <?php foreach ($admission_plan as $plan): ?>
+                                <option value="<?php echo $plan->admission_plan_id; ?>" <?php if($row['admission_plan_id']==$plan->admission_plan_id){ echo "selected=selected"; } ?>><?php echo $plan->admission_duration; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>	
 
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-                                        <select name="course" class="form-control" id="course2">
-                                            <option value="">Select branch</option>
-                                            <?php
-                                            $datacourse = $this->db->get_where('course', array('course_status' => 1))->result();
-                                            foreach ($datacourse as $rowcourse) {
-                                                if ($rowcourse->course_id == $row['course_id']) {
-                                                    ?>
-                                                    <option value="<?= $rowcourse->course_id ?>" selected><?= $rowcourse->c_name ?></option>
-                                                    <?php
-                                                } else {
-                                                    ?>
-                                                    <option value="<?= $rowcourse->course_id ?>"><?= $rowcourse->c_name ?></option>
-
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Batch"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-                                        <select name="batch" class="form-control" id="batch2">
-                                            <option value="">Select batch</option>
-                                            <?php
-                                            $databatch = $this->db->get_where('batch', array('b_status' => 1))->result();
-                                            foreach ($databatch as $row1) {
-                                                if ($row1->b_id == $row['std_batch']) {
-                                                    ?>
-                                                    <option value="<?= $row1->b_id ?>" selected><?= $row1->b_name ?></option>
-                                                    <?php
-                                                } else {
-                                                    ?>
-                                                    <option value="<?= $row1->b_id ?>"><?= $row1->b_name ?></option>
-
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>	
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-                                        <select name="semester" class="form-control"  id="semester1">
-                                            <option value="">Select semester</option>
-                                            <?php
-                                            $datasem = $this->db->get_where('semester', array('s_status' => 1))->result();
-                                            foreach ($datasem as $rowsem) {
-                                                if ($rowsem->s_id == $row['semester_id']) {
-                                                    ?>
-                                                    <option value="<?= $rowsem->s_id ?>" selected><?= $rowsem->s_name ?></option>
-                                                    <?php
-                                                } else {
-                                                    ?>
-                                                    <option value="<?= $rowsem->s_id ?>"><?= $rowsem->s_name ?></option>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label"><?php echo ucwords("class"); ?><span style="color:red">*</span></label>
                                     <div class="col-sm-8">
@@ -249,47 +156,10 @@ foreach ($edit_data as $row):
                                     </div>
                                 </div>	
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Facebook URL"); ?></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="facebook" id="facebook" value="<?php echo $row['std_fb'] ?>"/>
-                                    </div>
-                                </div>	
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Twitter URL"); ?></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="twitter" id="twitter" value="<?php echo $row['std_twitter'] ?>"/>
-                                    </div>
-                                </div>		
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label"><?php echo ucwords("Admission Type"); ?><span style="color:red">*</span></label>
-                                    <div class="col-sm-8">
-
-                                        <select name="admissiontype" class="form-control" id="admissiontype">
-                                            <option value="">Select admission type</option>
-
-                                            <?php
-                                            $admissiontype = $this->db->get_where('admission_type', array('at_status' => 1))->result();
-                                            foreach ($admissiontype as $rowtype) {
-                                                if ($rowtype->at_id == $row['admission_type_id']) {
-                                                    ?>
-                                                    <option value="<?= $rowtype->at_id ?>" selected><?= $rowtype->at_name ?></option>
-                                                    <?php
-                                                } else {
-                                                    ?>
-                                                    <option value="<?= $rowtype->at_id ?>"><?= $rowtype->at_name ?></option>
-
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-sm-4 control-label"><?php echo ucwords("File Upload"); ?></label>
                                     <div class="col-sm-8">
                                         <input type="hidden" name="txtoldfile" id="txtoldfile" value="<?php echo $row['profile_pic']; ?>" />
-                                        <input type="file" class="form-control" name="userfile" id="userfile" />
+                                        <input type="file" class="form-control" name="profilefile" id="profilefile" />
 
                                         <img src="<?= base_url() ?>/uploads/system_image/<?= $row['profile_pic']; ?>" height="100px" width="100px" id="blah"  />
 
@@ -340,27 +210,28 @@ endforeach;
         });
     });
 
-    $("#course2").change(function () {
-        var course = $(this).val();
-        var degree = $("#degree2").val();
-        var dataString = "course=" + course + "&degree=" + degree;
+   $('#course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);
+        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value="">Select</option>');
         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url() . 'admin/get_batchs/student'; ?>",
-            data: dataString,
-            success: function (response) {
-                $("#batch2").html(response);
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url() . 'admin/get_semester'; ?>",
-                    data: dataString,
-                    success: function (response1) {
-                        $("#semester1").html(response1);
-                    }
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
                 });
             }
         });
-    });
+    }
 
     $.validator.setDefaults({
         submitHandler: function (form) {
@@ -457,11 +328,10 @@ endforeach;
                             required: true,
                             zip_code: true,
                         },
-                address:"required",
-                        degree: "required",
+                
+                branch: "required",
                 course: "required",
-                batch: "required",
-                semester: "required",
+                admission_plan: "required", 
                 class: "required",
                 facebook:
                         {
@@ -475,7 +345,7 @@ endforeach;
                         {
                             extension: 'gif|jpg|png|jpeg',
                         },
-                admissiontype: "required",
+                
             },
             messages: {
                 name: {
@@ -493,6 +363,7 @@ endforeach;
                         },
                 email_id: {
                     required: "Enter email id",
+                    remote:"This email is already present in system",
                 },
                 password: "Enter password",
                 gen: "Slect gender",
@@ -527,16 +398,15 @@ endforeach;
                         {
                             required: "Enter zip code",
                         },
-                degree: "Select department",
-                course: "Select branch",
-                batch: "Select batch",
-                semester: "Select semester",
+                
+                branch: "Select branch",
+                course: "Select course",
+                admission_plan: "Select admission plan",
                 class: "Select class",
                 profilefile:
                         {
                             extension: 'Upload valid file',
-                        },
-                admissiontype: "Select admission type",
+                        },              
             }
         });
     });

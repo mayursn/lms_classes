@@ -25,6 +25,13 @@ class Fees_structure_model extends MY_Model {
      * @return array
      */
     function get_all_fees_structure() {
+        
+        if($this->session->userdata('professor_id'))
+        {
+            $degree_id = $this->session->userdata('professor_department');
+            $this->db->where('degree_id', $degree_id);
+            $this->db->or_where('degree_id ', 'All'); 
+        }
         return $this->db->select()
                         ->from('fees_structure')                      
                         ->get()

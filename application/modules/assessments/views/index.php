@@ -23,7 +23,8 @@
                                     <tr>
                                         <th >No</th>		
                                         <th >Assignment</th>
-                                        <th >Student</th>                           
+                                        <th >Student</th>
+                                        <th >Image</th>
                                         <th >Assignment-File</th>
                                         <th >Submitted-File</th>
                                         <th >Department</th>
@@ -45,8 +46,9 @@
                                         <tr>
                                             <td ><?php echo $count++; ?></td>	
                                             <td ><?php echo $row['assign_title']; ?></td>   
-                                            <td ><?php echo $row['name']; ?></td>                               
-                                            <td  id="downloadedfile"><a href="<?php echo $row['assign_url']; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>	
+                                            <td ><?php echo $row['name']; ?></td>
+                                            <td ><img src="<?php echo base_url().'uploads/system_image/'.$row['profile_pic']; ?>" height="50" width="50" ></td>
+                                            <td  id="downloadedfile"><a href="<?php echo base_url() . 'uploads/project_file/' . $row['assign_filename']; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>	
                                             <td  id="downloadedfile"><a href="<?php echo base_url() . 'uploads/project_file/' . $row['document_file']; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>	
                                             <td ><?php
                                                     foreach ($degree as $dgr):
@@ -150,6 +152,7 @@
                                             <th ><?php echo ucwords("Department"); ?></th>
                                             <th ><?php echo ucwords("Branch"); ?></th>												                                         
                                             <th ><?php echo ucwords("Semester"); ?></th>	
+                                            <th><?php echo ucwords("Subject"); ?></th>
                                             <th ><?php echo ucwords("Submission date"); ?></th>	
                                             <th ><?php echo ucwords("Submitted-date"); ?></th>	
                                             <th ><?php echo ucwords("Comment"); ?></th>
@@ -185,7 +188,7 @@
                                                     }
                                                     ?>
                                                 </td>
-                                                <td >
+                                                <td>
                                                     <?php
                                                     foreach ($semester as $sem) {
                                                         if ($sem->s_id == $rowsub->assign_sem) {
@@ -194,10 +197,17 @@
                                                     }
                                                     ?>													
                                                 </td>	
+                                                 <td>
+                                                    <?php
+                                                    $this->load->model('subject/Subject_manager_model');
+                                                    $name = $this->Subject_manager_model->get_subject_name($rowsub->sm_id);
+                                                    echo $name;
+                                                    ?>
+                                                </td>
                                                 <td ><?php echo date_formats($rowsub->assign_dos); ?></td>	
                                                 <td ><?php echo date_formats($rowsub->submited_date); ?></td>	
                                                 <td ><?php echo $rowsub->comment; ?></td>
-                                                <td id="downloadedfile"><a href="uploads/project_file/<?php echo $rowsub->document_file; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>                      	
+                                                <td id="downloadedfile"><a href="<?php echo base_url(); ?>uploads/project_file/<?php echo $rowsub->document_file; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>                      	
                                                 <td  class="menu-action">
                                                     <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/assessments_create/<?php echo $rowsub->assignment_submit_id; ?>');" data-toggle="modal"><span class="label label-primary mr6 mb6">Assessment</span></a>
 

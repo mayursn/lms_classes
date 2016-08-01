@@ -1,3 +1,10 @@
+<!-- Start .row -->
+<?php
+$create = create_permission($permission, 'Report');
+$read = read_permission($permission, 'Report');
+$update = update_permisssion($permission, 'Report');
+$delete = delete_permission($permission, 'Report');
+?>
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
@@ -6,6 +13,7 @@
     <div class=col-lg-12>
         <!-- col-lg-12 start here -->
         <div class="panel-default toggle">
+            <?php if($read || $create || $update || $delete){ ?>
             <div class=panel-body>
                 <div class="col-md-6">
                     <div id="daily-registered-students" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -19,6 +27,7 @@
                     <div id="department-wise-student" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
+            <?php } ?>
         </div>
         <!-- End .panel -->
     </div>

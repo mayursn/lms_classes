@@ -97,4 +97,17 @@ class Attendance_model extends MY_Model {
                     'date_taken'    => $date
                 ])->get()->num_rows();
     }
+    
+    
+    function get_attendance_status($branch,$course,$admission_plan,$class,$date,$std_id,$subject)
+    {
+                $this->db->where('course_id',$course);
+                $this->db->where('branch_id',$branch);
+                $this->db->where('admission_plan_id',$admission_plan);
+                $this->db->where('date_taken',$date);
+                $this->db->where('class_id',$class);                
+                $this->db->where('student_id',$std_id);
+                $this->db->where('sm_id',$subject);
+                return $this->db->get('attendance')->row();
+    }
 }

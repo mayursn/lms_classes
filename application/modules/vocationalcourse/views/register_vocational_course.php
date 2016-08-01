@@ -34,7 +34,7 @@
                                         <label class="col-sm-3 control-label">Date</label>
                                         <div class="col-sm-9">
                                             <div class="input-group date ebro_datepicker" data-date-format="yyyy-M-dd">
-                                                <input type="text" id="datepicker-normal"  class="form-control" name="date" />
+                                                <input type="text" id="datepicker-normal"  class="form-control" name="date" value="<?php echo date_formats(date('Y-m-d')) ?>" />
                                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
                                             </div>
                                         </div>
@@ -78,8 +78,7 @@
                                         <label class="col-sm-3 control-label">Method</label>
                                         <div class="col-sm-9">
                                             <select name="method" class="form-control">
-                                                <option value="">Select</option>
-                                                <option value="paypal">Paypal</option>
+                                                <option value="">Select</option>                                              
                                                 <option value="authorize.net">Authorize.net</option>
                                             </select>
                                         </div>

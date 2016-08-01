@@ -1,39 +1,37 @@
 <?php
-$edit_data = $this->db->select()
+$this->load->model('subject/Subject_manager_model');
+$edit_data = $this->db->select('exam_time_table.*,exam_time_table.branch_id as schedule_branch,exam_manager.*,subject_manager.*')
         ->from('exam_time_table')
         ->join('exam_manager', 'exam_manager.em_id = exam_time_table.exam_id')
         ->join('subject_manager', 'subject_manager.sm_id = exam_time_table.subject_id')
         ->join('course', 'course.course_id = exam_manager.course_id')
-        ->join('semester', 'semester.s_id = exam_manager.em_semester')
+        ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
         ->where('exam_time_table.exam_time_table_id', $param2)
         ->get()
         ->row();
 
+
 $course_id = $edit_data->course_id;
-$semester_id = $edit_data->semester_id;
-$degree_id = $edit_data->degree_id;
-$batch_id = $edit_data->batch_id;
+$branch_id = $edit_data->schedule_branch;
+$admission_plan_id = $edit_data->admission_plan_id;
+$this->load->model('admission_plan/Admission_plan_model');
+$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
+
+
 $this->db->distinct('em_name');
 $exam_list = $this->db->get_where('exam_manager', array('course_id' => $course_id,
-            'em_semester' => $semester_id,
-            'degree_id' => $degree_id,
-            'batch_id' => $batch_id))->result();
+            'admission_plan_id' => $admission_plan_id,
+            'branch_id' => $branch_id) )->result();
+
 $exam_type = $this->db->get('exam_type')->result();
-$degree = $this->db->get('degree')->result();
-$course = $this->db->get_where('course', array(
-            'degree_id' => $edit_data->degree_id
-        ))->result();
-$query = "SELECT * FROM batch ";
-$query .= "WHERE FIND_IN_SET($edit_data->degree_id, degree_id) ";
-$query .= "AND FIND_IN_SET($edit_data->course_id, course_id)";
-$batch = $this->db->query($query)->result();
-$semester = explode(',', $edit_data->semester_id);
-$this->db->where_in('s_id', $semester);
-$semester = $this->db->get('semester')->result();
-$subjects = $this->db->get_where('subject_manager',[
-    'sm_course_id'  => $course_id,
-    'sm_sem_id' => $semester_id
-])->result();
+$branch = $this->db->get('branch_location')->result();
+$course = $this->db->get_where('course')->result();
+
+$subjects = $this->Subject_manager_model->subject_list_admission_plan($branch_id,$course_id,$admission_plan_id);
+       // $this->db->get_where('subject_manager',[
+  //  'sm_course_id'  => $course_id,
+   //'sm_sem_id' => $semester_id
+//])->result();
 ?>
 <div class="row">
 
@@ -44,19 +42,19 @@ $subjects = $this->db->get_where('subject_manager',[
             <div class=panel-body>
                 <?php echo form_open(base_url() . 'examschedual/update/' . $edit_data->exam_time_table_id, array('class' => 'form-horizontal form-groups-bordered validate', 'id' => 'edit-exam-time-table', 'target' => '_top')); ?>
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
+                    <label class="col-sm-4 control-label"><?php echo ucwords("Branch").$edit_data->branch_id; ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
-                        <select name="degree" id="edit_degree" class="form-control" required="">
+                        <select name="branch" id="edit_branch" class="form-control" required="">
                             <option value="">Select</option>
-                            <?php foreach ($degree as $d) { ?>
-                                <option value="<?php echo $d->d_id; ?>"
-                                        <?php if ($d->d_id == $edit_data->degree_id) echo 'selected'; ?>><?php echo $d->d_name; ?></option>
+                            <?php foreach ($branch as $d) { ?>
+                                <option value="<?php echo $d->branch_id; ?>"
+                                        <?php if ($d->branch_id == $edit_data->schedule_branch) echo 'selected'; ?>><?php echo $d->branch_name.' - '.$d->branch_location; ?></option>
                                     <?php } ?>
                         </select>
                     </div>
                 </div>                  
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                    <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
                         <select name="course" id="edit_course" class="form-control" required="">
                             <option value="">Select</option>
@@ -68,29 +66,17 @@ $subjects = $this->db->get_where('subject_manager',[
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><?php echo ucwords("Batch"); ?><span style="color:red">*</span></label>
-                    <div class="col-sm-8">
-                        <select name="batch" id="edit_batch" class="form-control" required="">
-                            <option value="">Select</option>
-                            <?php foreach ($batch as $b) { ?>
-                                <option value="<?php echo $b->b_id; ?>" 
-                                        <?php if ($b->b_id == $edit_data->batch_id) echo 'selected'; ?>><?php echo $b->b_name; ?></option>
-                                    <?php } ?>
-                        </select>
-                    </div>
-                </div>                 
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                    <div class="col-sm-8">
-                        <select class="form-control" id="edit_semester" name="semester" required="">
-                            <option value="">Select</option>
-                            <?php foreach ($semester as $row) { ?>
-                                <option value="<?php echo $row->s_id; ?>"
-                                        <?php if ($edit_data->s_id == $row->s_id) echo 'selected'; ?>><?php echo $row->s_name; ?></option>
-                                    <?php } ?>
-                        </select>
-                    </div>
-                </div>                   
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span> <?php echo $edit_data->admission_plan_id; ?></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="edit_admission_plan">
+                                <option value="">Select</option>
+                                <?php foreach ($admission_plan as $plan): ?>
+                                <option value="<?php echo $plan->admission_plan_id; ?>" <?php if($edit_data->admission_plan_id==$plan->admission_plan_id){ echo "selected=selected"; } ?>><?php echo $plan->admission_duration; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>            
+                              
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><?php echo ucwords("Exam"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
@@ -123,7 +109,7 @@ $subjects = $this->db->get_where('subject_manager',[
                     <label class="col-sm-4 control-label"><?php echo ucwords("Date"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
                         <input readonly="" type="text" required=""  name="exam_date" class="form-control datepicker-normal-edit"
-                               value="<?php echo $edit_data->em_date; ?>"/>
+                               value="<?php echo date_formats($edit_data->em_date); ?>"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -142,7 +128,7 @@ $subjects = $this->db->get_where('subject_manager',[
                          <div class="input-group bootstrap-timepicker">
                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                         <input type="text" id="end_time" class="form-control" name="end_time"
-                               value="<?php echo $edit_data->exam_end_time ?>" required=""/>
+                               value="<?php echo $edit_data->exam_end_time; ?>" required=""/>
                          </div>
                     </div>	
                 </div>
@@ -243,122 +229,67 @@ var js_date_format = '<?php echo js_dateformat(); ?>';
 </script>
 
 <script>
-    var time_table_exam_id = '<?php echo $edit_data->exam_id; ?>';
-    var subject_id = '<?php echo $edit_data->subject_id; ?>';
-
-    function get_exam_list(course_id, semester_id) {
-        var edit_degree = $("#edit_degree").val();
-        var batch_id = $("#edit_batch").val();
-        $.ajax({
-            url: '<?php echo base_url(); ?>examschedual/get_exam_list/' + edit_degree + '/' + course_id + '/' + batch_id + '/' + semester_id + '/' + time_table_exam_id,
-            type: 'get',
-            success: function (content) {
-                $('#edit_exam').html(content);
-            }
-        });
-    }
-    
-    function exam_subjects(exam_id) {
-    
-    }
-
-    function subject_list(course_id, semester_id) {
-        $.ajax({
-            url: '<?php echo base_url(); ?>examschedual/subject_list/' + course_id + '/' + semester_id + '/' + subject_id,
-            type: 'get',
-            success: function (content) {
-                $('#edit_subject').html(content);
-            }
-        })
-    }
-
+   
     $(document).ready(function () {
-        var course_id = $('#edit_course').val();
-        var semester_id = $('#edit_semester').val();
-        // get_exam_list(course_id, semester_id, time_table_exam_id);
-        subject_list(course_id, semester_id, subject_id);
-
-        $('#edit_course').on('click', function () {
-            var course_id = $(this).val();
-            var semester_id = $('#edit_semester').val();
-            get_exam_list(course_id, semester_id, time_table_exam_id);
-            subject_list(course_id, semester_id, subject_id);
-        })
-
-        $('#edit_semester').on('click', function () {
-            var course_id = $('#edit_course').val();
-            var semester_id = $(this).val();
-            get_exam_list(course_id, semester_id, time_table_exam_id);
-            subject_list(course_id, semester_id, subject_id);
-        })
-    })
-</script>
-
-<script>
-    $(document).ready(function () {
-        //course by degree
-        $('#edit_degree').on('change', function () {
-            var course_id = $('#edit_course').val();
-            var degree_id = $(this).val();
-
-            //remove all present element
-            $('#edit_course').find('option').remove().end();
-            $('#edit_course').append('<option value="">Select</option>');
-            var degree_id = $(this).val();
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + degree_id,
-                type: 'get',
-                success: function (content) {
-                    var course = jQuery.parseJSON(content);
-                    $.each(course, function (key, value) {
-                        $('#edit_course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    })
-                }
-            })
-            batch_from_degree_and_course(degree_id, course_id);
-        });
-
-        //batch from course and degree
         $('#edit_course').on('change', function () {
-            var degree_id = $('#edit_degree').val();
-            var course_id = $(this).val();
-            batch_from_degree_and_course(degree_id, course_id);
-            get_semester_from_branch(course_id);
-        })
-
-        //find batch from degree and course
-        function batch_from_degree_and_course(degree_id, course_id) {
-            //remove all element from batch
-            $('#edit_batch').find('option').remove().end();
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#edit_admission_plan').find('option').remove().end();
+        $('#edit_admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#edit_admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
+    
+    $("#edit_admission_plan").on('change',function(){
+        var admission_plan = $(this).val();
+        var course = $("#edit_course").val();
+        var branch = $("#edit_branch").val();
+        exam_list_from_degree_and_course(branch,course,admission_plan);
+        subject_list(branch,course, admission_plan);
+    });
+    //exam list from degree and course
+        function exam_list_from_degree_and_course(branch, course, admission_plan) {
+            $('#edit_exam').find('option').remove().end();
             $.ajax({
-                url: '<?php echo base_url(); ?>batch/department_branch_batch/' + degree_id + '/' + course_id,
+                url: '<?php echo base_url(); ?>exam/exam_list_from_degree_and_course/' + branch + '/' + course + '/' + admission_plan +'/reguler',
                 type: 'get',
                 success: function (content) {
-                    $('#edit_batch').append('<option value="">Select</option>');
-                    var batch = jQuery.parseJSON(content);
-                    console.log(batch);
-                    $.each(batch, function (key, value) {
-                        $('#edit_batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
+                    $('#edit_exam').append('<option value="">Select</option>');
+                    var exam_list = jQuery.parseJSON(content);
+                    $.each(exam_list, function (key, value) {
+                        $('#edit_exam').append('<option value=' + value.em_id + '>' + value.em_name + '</option>');
                     })
                 }
             })
         }
-
-        //get semester from brach
-        function get_semester_from_branch(branch_id) {
-            $('#edit_semester').find('option').remove().end();
+        // subject list from course and semester
+        function subject_list(branch,course, admission_plan) {
+            $('#edit_subject').find('option').remove().end();
             $.ajax({
-                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch_id,
+                url: '<?php echo base_url(); ?>subject/subject_list_admission_plan/'+branch+ '/' + course + '/' + admission_plan,
                 type: 'get',
                 success: function (content) {
-                    $('#edit_semester').append('<option value="">Select</option>');
-                    var semester = jQuery.parseJSON(content);
-                    $.each(semester, function (key, value) {
-                        $('#edit_semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
+                    $('#edit_subject').append('<option value="">Select</option>');
+                    var subject = jQuery.parseJSON(content);
+                    $.each(subject, function (key, value) {
+                        $('#edit_subject').append('<option value=' + value.sm_id + '>' + value.subject_name + '</option>');
                     })
                 }
             })
         }
-
-    })
+    });
 </script>

@@ -19,7 +19,7 @@
                                     <option value="">Select</option>
                                     <?php foreach ($exam_listing as $row) { ?>
                                         <option value="<?php echo $row->em_id; ?>"
-                                                <?php if ($exam_id == $row->em_id) echo 'selected'; ?>><?php echo $row->s_name . ' -- ' . $row->em_name; ?></option>
+                                                <?php if ($exam_id == $row->em_id) echo 'selected'; ?>><?php echo $row->admission_duration . ' -- ' . $row->em_name; ?></option>
                                             <?php } ?>
                                 </select>
                             </div>
@@ -41,16 +41,16 @@
                                     <td><?php echo $student_detail->std_roll; ?></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Department:</strong></td>
-                                    <td><?php echo $department->d_name; ?></td>
+                                    <td><strong>Branch :</strong></td>
+                                    <td><?php echo $branch->branch_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Branch: </strong></td>
-                                    <td><?php echo $batch_detail->b_name; ?></td>
+                                    <td><strong>Course: </strong></td>
+                                    <td><?php echo $course->c_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Semester: </strong></td>
-                                    <td><?php echo $exam_details->s_name; ?></td>
+                                    <td><strong>Admission Plan: </strong></td>
+                                    <td><?php echo $exam_details->admission_duration; ?></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Exam Name: </strong></td>
@@ -70,8 +70,13 @@
                                                             <th>Subject Name</th>
                                                             <th>Total Marks</th>
                                                             <th>Passing Marks</th>
-                                                            <th>Obtained Marks</th>
+                                                             <th>Obtained Marks</th>                                      
+                                                                <?php 
+                                                            if($exam_details->result_type=='grade')
+                                                            {   ?>                                                            
+                                                          
                                                             <th>Grade</th>
+                                                            <?php } ?>
                                                             <th>Results</th>
                                                             
                                                         </tr>
@@ -91,13 +96,19 @@
                                                                 <td><?php echo $exam_details->total_marks; ?></td>
                                                                 <?php $total_marks += $exam_details->total_marks; ?>
                                                                 <td><?php echo $exam_details->passing_mark; ?></td>
+                                                                <?php
+                                                                if($exam_details->result_type=="grade")
+                                                                {
+                                                                ?>
                                                                 <td><?php echo $current_marks += $row->mark_obtained; ?></td>
-                                                                <?php if ($row->mark_obtained < $exam_details->passing_mark) $is_failed = TRUE; ?>
+                                                                <?php if ($row->mark_obtained < $exam_details->passing_mark) 
+                                                                    $is_failed = TRUE; ?>
                                                                 <?php $obtained_marks += $row->mark_obtained; ?>
                                                                 <?php
                                                                 $percentage = ($row->mark_obtained * 100) / $exam_details->total_marks;
+                                                                
                                                                 ?>
-                                                                <td>
+                                                                <td >
                                                                     <?php
                                                                     $grade = $percentage;
                                                                     $grade = (int) (100 * $row->mark_obtained) / $exam_details->total_marks;
@@ -119,6 +130,44 @@
                                                                     }
                                                                     ?>
                                                                 </td>
+                                                               <?php
+                                                                }
+                                                                else
+                                                                {
+                                                                    
+                                                                    ?>
+                                                                 <?php if ($row->mark_obtained < $exam_details->passing_mark) $is_failed = TRUE; ?>
+                                                                <?php $obtained_marks += $row->mark_obtained; ?>
+                                                                <?php
+                                                                $percentage = ($row->mark_obtained * 100) / $exam_details->total_marks;
+                                                                
+                                                                ?>
+                                                                 <?php
+                                                                    $grade = $percentage;
+                                                                    $grade = (int) (100 * $row->mark_obtained) / $exam_details->total_marks;
+                                                                    $grade_data = $this->db->select()
+                                                                            ->from('grade')
+                                                                            ->where('from_marks <= ', $grade)
+                                                                            ->order_by('from_marks', 'DESC')
+                                                                            ->limit(1)
+                                                                            ->get()
+                                                                            ->row();
+                                                                    $is_pass = TRUE;
+
+                                                                    if ($row->mark_obtained < $exam_details->passing_mark) {
+                                                                        echo 'F';
+                                                                        $is_pass = FALSE;
+                                                                    } else {
+                                                                        echo $grade_data->grade_name;
+                                                                        $is_pass = TRUE;
+                                                                    }
+                                                                    ?>
+                                                                <td >
+                                                                   <?php echo $current_marks += $row->mark_obtained; ?>
+                                                                </td>
+                                                                <?php
+                                                                }
+                                                               ?>
                                                                 <td><?php
                                                                     if ($is_pass)
                                                                         echo 'Pass';
@@ -132,6 +181,7 @@
 
                                                     </tbody>
                                                 </table>
+                                               
                                             </div><!--/box-body-->
                                             <div class="box-footer">
                                                 <fieldset>
@@ -174,15 +224,51 @@
                                                             <?php echo $row->mm_remarks; ?>
                                                         </div>
                                                     </div>
-                                                </fieldset>  
+                                                </fieldset> 
                                             </div>
+                                             <?php
+                                                $exam_id = $this->uri->segment(3);
+                                                $std_id = $this->session->userdata('std_id');
+                                                $this->db->where('im.em_id',$exam_id);                                                
+                                                $this->db->where('im.std_id',$std_id);                                                
+                                                $this->db->join('exam_manager em','em.em_id=im.em_id');                                                
+                                                $this->db->join('internal_exam ie','ie.internal_id=im.internal_id');
+                                                $this->db->join('subject_manager sm','sm.sm_id=im.sm_id');
+                                                $result = $this->db->get('internal_marks im')->result();                                                
+                                                ?>
+                                            <table class="table table-bordered table-striped" style="display:none;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>SI NO.</th>                                                            
+                                                            <th>Internal Exam</th>
+                                                            <th>Subject Name</th>
+                                                            
+                                                            <th>Total Marks</th>                                                            
+                                                            <th>Obtained Marks</th>                                                                                                                                                             
+                                                            
+                                                        </tr>
+                                                        
+                                                        <?php
+                                                        $count = 1;
+                                                        foreach($result as $res): ?>
+                                                        <tr>
+                                                            <td><?php echo $count++; ?></td>
+                                                            <td><?php echo $res->internal_title; ?></td>
+                                                            
+                                                            <td><?php echo $res->subject_name; ?></td>
+                                                            <td><?php echo $res->internal_marks; ?></td>                                                            
+                                                            <td><?php echo $res->internal_obtained_marks; ?></td>                                                            
+                                                        </tr>
+                                                        <?php endforeach; ?>
+                                                    </tbody>
+                                                 </table>
                                         </div><!--/box-footer-->
                                     </div><!--/box-->
 
                                 </div><!--/box-body-->
                             </div><!--/box-->
                         </div><!--/box-body-->
-                    </div><!--/box-->
+                    
                 <?php } else { ?> 
                     <br/>
                     <div class="well well-sm">
@@ -194,15 +280,13 @@
                 <?php } ?>
             <?php } ?>
 
-
+            </div><!--/box-->
         </div>
     </div>
     <!-- End .panel -->
 </div>
 <!-- End .row -->
-</div>
-<!-- End contentwrapper -->
-</div>
+
 <!-- End #content -->
 
 
@@ -215,3 +299,6 @@
         })
     })
 </script>
+</div>
+<!-- End contentwrapper -->
+</div>

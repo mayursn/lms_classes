@@ -15,10 +15,62 @@
                         </div>-->
             <div class=panel-body>
                 <div class="row filter-row">
+                    <div class=panel-heading>
+                            <h4 class=panel-title><?php echo "Take Attendance"; ?></h4>                            
+                        </div>
                     <form id="attendance-routine" action="#" method="post" class="form-groups-bordered form-horizontal validate">
+                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Branch<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="branch" id="branch" required="">
+                                    <option value="">Select</option>
+                                    <?php foreach ($branch as $row) { ?>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Course<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="course" id="course" required="">
+                                    <option  value="">Select</option>
+                                    <?php  foreach($course as $crs): ?>
+                                    <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Admission Plan<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="admission_plan" id="admission_plan" required="">
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Class<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="class" id="create-class" required="">
+                                    <option value="">Select</option>                
+                                    <?php foreach($class as $cl): ?>
+                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_id; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Subject<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="subject" id="subject" required="">
+                                    <option value="">Select</option>                                                    
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Date<span style="color:red">*</span></label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <input id="date" type="text" class="form-control datepicker-normal" name="date" placeholder="Select"
                                        value="<?php echo $date; ?>"/>
                             </div>
@@ -30,10 +82,79 @@
                         </div>
                     </form>
                 </div>
-                <div id="student-attendance-list">
+                <div id="student-attendance-list"  >
+                    <div class="panel-heading">
+                                    <div class="panel-title">
+                                        <h4>Search Attendance</h4>
+                                    </div>
+                                </div>
                     <div class="col-md-12">
-                        <?php if (count($professor_class_routine_list)) { ?>
-                            <div class="panel panel-default">
+                        <form id="attendance-list-filter" action="<?php echo base_url(); ?>attendance/class_routine" method="post" class="form-groups-bordered form-horizontal validate">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Branch<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="branch" id="filter-branch" required="">
+                                    <option value="">Select</option>
+                                    <?php foreach ($branch as $row) { ?>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Course<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="course" id="filter-course" required="">
+                                    <option  value="">Select</option>
+                                    <?php  foreach($course as $crs): ?>
+                                    <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Admission Plan<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="admission_plan" id="filter-admission_plan" required="">
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Class<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="class" id="filter-class" required="">
+                                    <option value="">Select</option>                
+                                    <?php foreach($class as $cl): ?>
+                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_id; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Subject<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="subject" id="filter-subject" required="">
+                                    <option value="">Select</option>                                                    
+                                </select>
+                            </div>
+                        </div>   
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Date <span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="date" id="filter-date" required="">
+                                    <option value="">Select</option>                                                    
+                                </select>
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <div class="col-sm-6 col-md-offset-2">
+                                <input id="search-filter-attendance" type="submit" value="Submit" class="btn btn-info vd_bg-green"/>
+                            </div>
+                        </div>
+                    </form>
+                        <?php if (@$professor_class_routine_list) { ?>
+                        <div class="panel panel-default" style="display:none;" >
                                 <div class="panel-heading">
                                     <div class="panel-title">
                                         <h4>Class Routine List</h4>
@@ -44,11 +165,9 @@
                                         <thead>
                                             <tr>
                                                 <td>No</td>
-                                                <th>Department</th>
                                                 <th>Branch</th>
-                                                <th>Semester</th>
-                                                <th>Class</th>
-                                                <th>Subject</th>
+                                                <th>Course</th>
+                                                <th>Admission Plan</th>                                                
                                                 <th>Time</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
@@ -62,11 +181,9 @@
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $counter++; ?></td>
-                                                    <td><?php echo $routine->d_name; ?></td>
+                                                    <td><?php echo $routine->branch_name; ?></td>
                                                     <td><?php echo $routine->c_name; ?></td>
-                                                    <td><?php echo $routine->s_name; ?></td>
-                                                    <td><?php echo $routine->class_name; ?></td>
-                                                    <td><?php echo $routine->subject_name; ?></td>                                                    
+                                                    <td><?php echo $routine->admission_duration; ?></td>                                                                                                     
                                                     <td><?php 
                                                         echo date('h:i A', strtotime($routine->Start)) . ' - ' .
                                                         date('h:i A', strtotime($routine->End));
@@ -101,7 +218,7 @@
                                 </div>
                             </div>
                         <?php } else { ?>
-                            <div class="panel panel-default">
+                        <div class="panel panel-default" style="display: none;">
                                 <div class="panel-heading">
                                     <div class="panel-title">Class Routine List</div>
                                 </div>
@@ -204,7 +321,6 @@
 <!-- End contentwrapper -->
 </div>
 <!-- End #content -->
-</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -239,4 +355,126 @@
 
         });
     });
+    /**
+     * Start Attendance filter
+     * @param {string} param1
+     * @param {int} param2
+     */
+    $("#filter-course").on('change',function(){
+        var course_id = $(this).val();        
+        get_admission_plan_filter(course_id);        
+    });
+    function get_admission_plan_filter(course_id)
+    {
+     $('#filter-admission_plan').find('option').remove().end();
+        $('#filter-admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#filter-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
+    $("#filter-admission_plan").on('change',function(){
+        var admission_plan = $(this).val();
+        var course = $("#filter-course").val(); 
+        var branch = $("#filter-branch").val(); 
+        get_subject_list_filter(branch,course,admission_plan);        
+    });
+     function get_subject_list_filter(branch,course,admission_plan)
+    {       
+        $('#filter-subject').find('option').remove().end();
+        $('#filter-subject').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>subject/subject_list_admission_plan/'+ branch + '/' + course + '/'+admission_plan,
+            type: 'GET',
+            success: function (content) {
+                var subject = jQuery.parseJSON(content);                
+                console.log(subject);
+                $.each(subject, function (key, value) {
+                    $('#filter-subject').append('<option value=' + value.sm_id + '>' + value.subject_name + '</option>');
+                });
+            }
+        })
+    }
+    
+    $("#filter-subject").on('change',function(){
+        var admission_plan = $("#filter-admission_plan").val();
+        var course = $("#filter-course").val(); 
+        var subject = $(this).val(); 
+        var branch = $("#filter-branch").val();
+        var class_name = $("#filter-class").val();
+        get_date_list(branch,course,admission_plan,subject,class_name);
+    });
+    
+    function get_date_list(branch,course,admission_plan,subject,class_name)
+    {
+        
+        $('#filter-date').find('option').remove().end();
+        $('#filter-date').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>attendance/get_date_list/'+ branch + '/' + course + '/'+admission_plan+ '/'+subject+'/'+class_name,
+            type: 'GET',
+            success: function (content) {
+                var dates = jQuery.parseJSON(content);                
+                console.log(dates);
+                $.each(dates, function (key, value) {
+                    $('#filter-date').append('<option value=' + value.date_taken + '>' + value.date_taken + '</option>');
+                });
+            }
+        })
+    }
+    
+  $('#course').on('change', function () {
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
+    
+    $("#admission_plan").on('change',function(){
+        var admission_plan = $(this).val();
+        var course = $("#course").val(); 
+        var branch = $("#branch").val(); 
+        get_subject_list(branch,course,admission_plan);        
+    });
+    
+    function get_subject_list(branch,course,admission_plan)
+    {       
+        $('#subject').find('option').remove().end();
+        $('#subject').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>subject/subject_list_admission_plan/'+ branch + '/' + course + '/'+admission_plan,
+            type: 'GET',
+            success: function (content) {
+                var subject = jQuery.parseJSON(content);                
+                console.log(subject);
+                $.each(subject, function (key, value) {
+                    $('#subject').append('<option value=' + value.sm_id + '>' + value.subject_name + '</option>');
+                });
+            }
+        })
+    }
 </script>

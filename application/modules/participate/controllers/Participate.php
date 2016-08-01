@@ -22,6 +22,10 @@ class Participate extends MY_Controller {
         $this->load->model('participate/Student_upload_model');
         $this->load->model('participate/Survey_model');
         $this->load->model('participate/Participate_student_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
           
         
     }

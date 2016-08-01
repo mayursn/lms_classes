@@ -1417,6 +1417,8 @@ iframe.professor_routine_box{margin-bottom: 0;}
     height: 480;
     max-height: 100%;
 }
+
+#mCSB_3_container, .mCSB_container{width: 100% !important;}
 /*#highcharts-2.highcharts-container{max-height: 600px !important; height: 600px !important; overflow:hidden;} */
 /*#highcharts-0.highcharts-container svg{min-height: 380px !important; height: 380px !important; max-height: 100% !important;}    */
 /*********************** media *****************************/

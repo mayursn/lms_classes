@@ -1,10 +1,13 @@
 <?php
-$this->load->model('department/Degree_model');
-$degree = $this->Degree_model->get_all();
-$this->load->Model('branch/Course_model');
-$this->load->Model('semester/Semester_model');
-$data['course'] = $this->Course_model->order_by_column('c_name');
-$data['semester'] = $this->Semester_model->order_by_column('s_name');        
+
+
+$this->load->Model('branch/Branch_location_model');
+$branch = $this->Branch_location_model->order_by_column('branch_name');
+$this->load->Model('admission_plan/Admission_plan_model');
+$this->load->Model('courses/Course_model');
+$course = $this->Course_model->order_by_column('c_name');
+
+
 ?>
 <div class=row>                      
     <div class=col-lg-12>
@@ -29,15 +32,15 @@ $data['semester'] = $this->Semester_model->order_by_column('s_name');
                             <lable class="error" id="error_lable_exist" style="color:#f85d2c"></lable>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("branch"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <select name="degree" class="form-control" id="degree">
-                                    <option value="">Select Department</option>
+                                <select name="branch" class="form-control" id="branch">
+                                    <option value="">Select Branch</option>
                                     <?php
                                   
-                                    foreach ($degree as $dgr) {
+                                    foreach ($branch as $row_branch) {
                                         ?>
-                                        <option value="<?= $dgr->d_id ?>"><?= $dgr->d_name ?></option>
+                                        <option value="<?php echo $row_branch->branch_id ?>"><?php echo $row_branch->branch_name.' - '.$row_branch->branch_location; ?></option>
                                         <?php
                                     }
                                     ?>
@@ -46,31 +49,26 @@ $data['semester'] = $this->Semester_model->order_by_column('s_name');
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?><span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Course"); ?><span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select name="course" class="form-control" id="course">
-                                    <option value="">Select Branch</option>
+                                    <option value="">Select Course</option>
+                                    <?php foreach ($course as $row_course): ?>
+                                    <option value="<?php echo $row_course->course_id; ?>"><?php echo $row_course->c_name; ?></option>
+                                    <?php endforeach; ?>
 
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Semester"); ?><span style="color:red">*</span></label>
-                            <div class="col-sm-8">
-                                <select name="semester" class="form-control" id="semester">
-                                    <option value="">Select Semester</option>
-                                    <?php
-                                    $datasem = $this->db->get_where('semester', array('s_status' => 1))->result();
-                                    foreach ($datasem as $rowsem) {
-                                        ?>
-                                        <option value="<?= $rowsem->s_id ?>"><?= $rowsem->s_name ?></option>
-                                        <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
+                        <label class="col-sm-4 control-label"><?php echo ucwords("Admission Plan"); ?><span style="color:red">*</span></label>
+                        <div class="col-sm-8">
+                            <select name="admission_plan" class="form-control" id="admission_plan">
+                                <option value="">Select</option>
+                            </select>
                         </div>
+                    </div>
 
 
                         <div class="form-group">
@@ -121,10 +119,9 @@ $data['semester'] = $this->Semester_model->order_by_column('s_name');
 
         $("#frmsyllabus").validate({
             rules: {
-                degree: "required",
+                branch: "required",
                 course: "required",
-                semester: "required",
-                submissiondate: "required",
+                admission_plan: "required",               
                 syllabusfile: {
                     required: true,
                     extension: 'pdf|doc|docx|ppt|pptx',
@@ -135,9 +132,9 @@ $data['semester'] = $this->Semester_model->order_by_column('s_name');
                         },
             },
             messages: {
-                degree: "Select department",
-                course: "Select Branch",
-                semester: "Select Semester",
+                branch: "Select Branch",
+                course: "Select Course",
+                admission_plan: "Select Admission plan",
                 syllabusfile: {
                     required: "Upload file",
                     extension: 'Upload valid file',
@@ -156,62 +153,30 @@ $data['semester'] = $this->Semester_model->order_by_column('s_name');
 <script type="text/javascript">  
     $(document).ready(function(){
        
-        $('#degree').on('change', function () {
-            var department_id = $(this).val();
-            department_branch(department_id);
-        });
-        $('#course').on('change', function () {
-            var branch_id = $(this).val();
-            var department = $('#degree').val();
-            batch_form_department_branch(department, branch_id);
-            semester_from_branch(branch_id);
-        });
+       
         
-        function department_branch(department_id) {
-            $('#course').find('option').remove().end();
-            $('#course').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + department_id,
-                type: 'GET',
-                success: function (content) {
-                    var branch = jQuery.parseJSON(content);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-                }
-            });
-        }
+    $('#course').on('change', function () {
+        var course_id = $(this).val();        
+        get_admission_plan(course_id);        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#admission_plan').find('option').remove().end();
+        $('#admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
 
-        function batch_form_department_branch(department, branch) {
-            $('#batch').find('option').remove().end();
-            $('#batch').append('<option value>Select</option>');
-            $.ajax({
-                type: "GET",
-                url: "<?php echo base_url(); ?>batch/department_branch_batch/" + department + '/' + branch,
-                success: function (response) {
-                    var branch = jQuery.parseJSON(response);
-                    $.each(branch, function (key, value) {
-                        $('#batch').append('<option value=' + value.b_id + '>' + value.b_name + '</option>');
-                    });
-                }
-            });
-        }
-
-        function semester_from_branch(branch) {
-            $('#semester').find('option').remove().end();
-            $('#semester').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch,
-                type: 'GET',
-                success: function (content) {
-                    var semester = jQuery.parseJSON(content);
-                    $.each(semester, function (key, value) {
-                        $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                    });
-                }
-            });
-        } 
     });
    
 

@@ -21,13 +21,20 @@ class Assignment extends MY_Controller {
         $this->load->model('student/Student_model');
         $this->load->model('academic_year/Academic_year_model');
         $this->load->model('subject/Subject_manager_model');
-        
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**
      * index page
      */
     function index() {
+        if($this->session->userdata('std_id'))
+        {
+            redirect(base_url().'assignment/submission');
+        }
         $this->data['title'] = 'Assignment';
         $this->data['page'] = 'assignment';
         $active = $this->Academic_year_model->get_many_by(array("current_year_status" => 'active'));
@@ -40,10 +47,10 @@ class Assignment extends MY_Controller {
         $this->data['course'] = $this->Course_model->order_by_column('c_name');
         $this->data['semester'] = $this->Semester_model->order_by_column('s_name');
         $this->data['batch'] = $this->Batch_model->order_by_column('b_name');
-        $this->data['degree'] = $this->Degree_model->get_all();
+        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
         $this->data['page'] = 'assignment';
         $this->data['late_submitted'] = $this->Assignment_submission_model->get_late_submitted_assignment();
-        $this->data['not_submitted'] = $this->Crud_model->get_not_submitted_assignment();
+        $this->data['not_submitted'] = $this->Assignment_submission_model->get_not_submitted_assignment();
         $this->__template('assignment/index', $this->data);
     }
 
@@ -344,6 +351,10 @@ class Assignment extends MY_Controller {
      * student submit assignment
      */
     function submission() {
+        if(!$this->session->userdata('std_id'))
+        {
+            redirect(base_url().'assignment');
+        }
         $this->load->model('academic_year/Academic_year_model');
         $std_id = $this->session->userdata('std_id');
         $std = $this->Student_model->get($std_id);

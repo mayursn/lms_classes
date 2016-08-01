@@ -1,3 +1,4 @@
+<script src="//cdn.ckeditor.com/4.5.9/full/ckeditor.js"></script>
 <script src="<?php echo base_url(); ?>plugins/ckeditor/ckeditor.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>plugins/ckeditor/toolbarconfigurator/lib/codemirror/neo.css">
 <style type="text/css">
@@ -49,7 +50,7 @@
                                             </div>  
                                             <div class="content_discu">
                                                 <?php if (!empty($comment->topic_file)) { ?>
-                                                    <a href="<?php echo base_url() . 'uploads/forum_file/' . $comment->topic_file; ?>" download=""><img src="<?php echo base_url(); ?>assets/images/pdf-icon.jpg" height="32" width="32" /></a>
+                                                    <a href="<?php echo base_url() . 'uploads/forum_file/' . $comment->topic_file; ?>" download=""><img src="<?php echo base_url(); ?>uploads/file-download.png" height="32" width="32" /></a>
                                                 <?php } ?>
                                                 <p>
 
@@ -60,8 +61,8 @@
                                                     echo "<br>";
                                                     ?>
 
-                                                    <?php if ($this->session->userdata('login_type') == $comment->user_role && $this->session->userdata('login_user_id') == $comment->user_role_id) { ?>
-                                                        <a style="color:red" href="#" onclick="confirm_modal('<?php echo base_url(); ?>site/delete_comment/<?php echo $comment->forum_comment_id; ?>/<?php echo $param; ?>');">Delete</a>
+                                                    <?php if ($this->session->userdata('role_name') == $comment->user_role && $this->session->userdata('user_id') == $comment->user_role_id) { ?>
+                                                        <a style="color:red" href="<?php echo base_url(); ?>site/delete_comment/<?php echo $comment->forum_comment_id; ?>/<?php echo $param; ?>" onclick="return myFunction();">Delete</a>
                                                     <?php } ?>
 
                                                 </p>
@@ -101,6 +102,7 @@
                                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                         <div class="input-holder"> 
                                                                             <textarea name="discussion" id="editor1"   placeholder="Join the discussion"></textarea>
+                                                                            <label for="editor1" generated="true" class="error"></label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -157,7 +159,19 @@
     // instance, using default configuration.
     CKEDITOR.replace('editor1');
 </script>
-<script type="text/javascript" src="<?php echo base_url() . 'assets/js/jquery.validate.min.js' ?>"></script>
+
+<script>
+function myFunction() {    
+    var r = confirm("Are you sure want to delete this Comment?");
+    if (r == true) {
+      return true;
+    } else {
+        
+        return false;
+    }
+    
+}
+</script>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -165,13 +179,13 @@
             rules: {
                 discussion: "required",
                 topicfile: {
-                    extension: 'gif|jpg|png|jpeg|pdf|xlsx|xls|doc|docx|ppt|pptx|txt'
+                    accept: 'gif|jpg|png|jpeg|pdf|xlsx|xls|doc|docx|ppt|pptx|txt'
                 },
             },
             messages: {
                 discussion: "Enter Comment",
                 topicfile: {
-                    extension: "Upload valid file",
+                    accept: "Select valid file",
                 },
             }
         });

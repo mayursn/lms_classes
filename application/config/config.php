@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //date_default_timezone_set('Etc/UTC');
 ini_set('max_execution_time', 500);
 date_default_timezone_set('Asia/Kolkata');
-$config['base_url'] = 'http://192.168.1.36/lms_hmvc_role/';
+$config['base_url'] = 'http://192.168.1.36/lms_classes/';
 
 /*
 |--------------------------------------------------------------------------

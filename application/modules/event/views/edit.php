@@ -59,7 +59,7 @@ $edit_data = $this->db->get_where('event_manager', array('event_id' => $param2))
                                 <div class="input-group bootstrap-timepicker">
                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                     <input type="text" id="event_time" class="form-control" name="event_time" 
-                                           value="<?php echo date('H:i', strtotime($row['event_date'])); ?>" readonly="" />
+                                           value="<?php echo date('h:i A', strtotime($row['event_date'])); ?>" readonly="" />
                                 </div>
 
                             </div>
@@ -117,23 +117,22 @@ $edit_data = $this->db->get_where('event_manager', array('event_id' => $param2))
                     minuteStep: 30
                 });
                 $("#edit-datepicker-date").datepicker({
-                    format: js_date_format, autoclose: true,
+                    format: js_date_format, 
+                    autoclose: true,
                     changeMonth: true,
                     changeYear: true,
-                    minDate: new Date(),
-                    onClose: function (selectedDate) {
-                        $("#edit-datepicker-end-date").datepicker("option", "minDate", selectedDate);
-                    }
+                    startDate: new Date()
+                }).on('changeDate', function (selected) {
+                    var minDate = new Date(selected.date.valueOf());
+                    $('#edit-datepicker-end-date').datepicker('setStartDate', minDate);
                 });
                 $("#edit-datepicker-end-date").datepicker({
-                    format: js_date_format, autoclose: true,
+                    format: js_date_format,
+                    autoclose: true,
                     changeMonth: true,
                     changeYear: true,
-                    minDate: new Date(),
-                    onClose: function (selectedDate) {
-                        //$(".datepicker-normal").datepicker("option", "maxDate", new Date());
-                    }
-                })
+                    startDate: new Date()
+                });
                 $("#editevent").validate({
                     rules: {
                         event_name: "required",

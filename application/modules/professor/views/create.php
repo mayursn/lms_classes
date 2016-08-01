@@ -1,6 +1,8 @@
 <?php
-$this->load->model('department/Degree_model');
-$department = $this->Degree_model->order_by_column('d_name');
+$this->load->model('branch/Branch_location_model');
+$this->load->model('courses/Course_model');
+$branch = $this->Branch_location_model->order_by_column('branch_name');
+$course = $this->Course_model->order_by_column('c_name');
 ?>
 <div class="row">
     <div class=col-lg-12>
@@ -69,21 +71,24 @@ $department = $this->Degree_model->order_by_column('d_name');
                     </div>	
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?><span style="color:red">*</span></label>
+                    <label class="col-sm-4 control-label"><?php echo ucwords("branch"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
-                        <select id="degree" name="degree" class="form-control" >
+                        <select id="branch" name="branch" class="form-control" >
                             <option value="">Select</option>
-                            <?php foreach ($department as $degree) { ?>
-                                <option value="<?php echo $degree->d_id; ?>"><?php echo $degree->d_name; ?></option>
+                            <?php foreach ($branch as $row) { ?>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
                             <?php } ?>
                         </select>
                     </div>	
                 </div>                        
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><?php echo ucwords("branch"); ?><span style="color:red">*</span></label>
+                    <label class="col-sm-4 control-label"><?php echo ucwords("course"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
-                        <select id="branch" name="branch" class="form-control" >
+                        <select id="course" name="course" class="form-control" >
                             <option value="">Select</option>                                   
+                            <?php foreach ($course as $crs): ?>
+                            <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
+                            <?php endforeach; ?>                            
                         </select>
                     </div>	
                 </div>

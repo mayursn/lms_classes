@@ -155,8 +155,7 @@ $delete = delete_permission($permission, 'Assignment');
                                                         }
                                                     }
                                                     ?>
-                                                </td>
-                                                <!-- id="inlinedate" contenteditable="true" onBlur="saveToDatabase(this,'assign_dos','<?php echo $row->assign_id; ?>')" onClick="showEdit(this);"-->
+                                                </td>                                          
                                                 <td  ><?php echo wordwrap($row->assign_desc, 30, "<br>\n"); ?></td>
                                                 <td id="downloadedfile"><a href="<?php echo base_url() . 'uploads/project_file/' . $row->assign_filename; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>	
                                                 <td ><?php echo date_formats($row->assign_dos); ?></td>	
@@ -173,8 +172,8 @@ $delete = delete_permission($permission, 'Assignment');
                                             if($update) { ?>
                                                     <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/assignment_edit/<?php echo $row->assign_id; ?>');" data-toggle="modal"><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
                                                       <?php
-                                                     $current = date("Y-m-d H:i:s");
-                                                      $dos = date("Y-m-d H:i:s",strtotime($row->assign_dos));
+                                                     $current = date("Y-m-d");
+                                                      $dos = date("Y-m-d",strtotime($row->assign_dos));
                                                       if($dos < $current)
                                                       {
                                                     ?>
@@ -271,7 +270,7 @@ $delete = delete_permission($permission, 'Assignment');
                                             <tr>
                                                 <td><?php echo $count++; ?></td>
                                                 <td><?php echo $rowsub->assign_title; ?></td>
-                                                <td><?php echo $rowsub->name; ?></td>
+                                                <td><?php echo $rowsub->std_first_name.' '.$rowsub->std_last_name; ?></td>
                                                 <td><?php
                                                     foreach ($degree as $dgr):
                                                         if ($dgr->d_id == $rowsub->assign_degree):
@@ -345,7 +344,7 @@ $delete = delete_permission($permission, 'Assignment');
                                             <tr>
                                                 <td><?php echo $countl++; ?></td>
                                                 <td><?php echo $rowlate->assign_title; ?></td>
-                                                <td><?php echo $rowlate->name; ?></td>
+                                                <td><?php echo $rowlate->std_first_name.' '.$rowlate->std_last_name; ?></td>
                                                 <td><?php echo $rowlate->d_name;  ?></td>
                                                 <td>
                                                     <?php   echo $rowlate->c_name;

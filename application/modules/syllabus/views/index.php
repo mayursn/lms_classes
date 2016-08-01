@@ -4,6 +4,11 @@ $create = create_permission($permission, 'Syllabus');
 $read = read_permission($permission, 'Syllabus');
 $update = update_permisssion($permission, 'Syllabus');
 $delete = delete_permission($permission, 'Syllabus');
+ $this->load->model('branch/Branch_location_model');
+ $this->load->model('admission_plan/Admission_plan_model');
+$this->load->model('courses/Course_model');
+$branches = $this->Branch_location_model->order_by_column('branch_name');
+$courses = $this->Course_model->order_by_column('c_name');
 ?>
 <div class=row>                      
 
@@ -14,32 +19,35 @@ $delete = delete_permission($permission, 'Syllabus');
                 <?php if($create){ ?>
                 <a class="links"  onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/syllabus_create/');" href="#" id="navfixed" data-toggle="tab"><i class="fa fa-plus"></i> Syllabus</a>
                 <?php } ?>
-                 <?php if($read && $create || $update || $delete){ ?>
+                <?php if( $create || $update || $delete){ ?>
                <div class="row filter-row">
                 <form action="#" method="post" id="searchform">
                     <div class="form-group col-sm-3 validating">
-                        <label>Department</label>
-                        <select id="courses" name="degree" class="form-control">
+                        <label>Branch</label>
+                        
+                        <select id="search-branch" name="branch" class="form-control">
                             <option value="">Select</option>
-                            <?php foreach ($degree as $row) { ?>
-                                <option value="<?php echo $row->d_id; ?>"><?php echo $row->d_name; ?></option>
+                            <?php foreach ($branches as $row) { ?>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                             <?php } ?>
                         </select>
                     </div>
                     <div class="form-group col-sm-3 validating">
-                        <label>Branch</label>
-                        <select id="branches" name="course" class="form-control">
+                        <label>Course</label>
+                        <select id="search-course" name="course" class="form-control">
                             <option value="">Select</option>
-
+                            <?php foreach($courses as $course_row): ?>
+                            <option value="<?php echo $course_row->course_id; ?>"><?php echo $course_row->c_name; ?></option>                                
+                            <?php endforeach; ?>
                         </select>
                     </div>                   
                     <div class="form-group col-sm-3 validating">
-                        <label> Semester</label>
-                        <select id="semesters" name="semester" class="form-control">
+                        <label> Admission Plan</label>
+                        <select id="search-admission_plan" name="admission_plan" class="form-control">
                             <option value="">Select</option>
-                            <?php foreach ($semester as $row) { ?>
-                                <option value="<?php echo $row->s_id; ?>"
-                                        ><?php echo $row->s_name; ?></option>
+                            <?php foreach ($admission_plan as $plan) { ?>
+                                <option value="<?php echo $row->admission_plan_id; ?>"
+                                        ><?php echo $row->admission_duration; ?></option>
                                     <?php } ?>
                         </select>
                     </div>
@@ -49,18 +57,19 @@ $delete = delete_permission($permission, 'Syllabus');
                     </div>
                 </form>
                </div>
-                 <?php } ?> 
+                <?php } ?>
+                <?php if($read || $create || $update || $delete){ ?>
                 <div id="getresponse">
-                    <?php if($read || $create || $update || $delete){ ?>
+                    
                     <table class="table table-striped table-bordered table-responsive" cellspacing=0 width=100% id="datatable-list">
                         <thead>
                             <tr>
                                 <th>No</th>												
-                                <th><?php echo ucwords("Syllabus Title"); ?></th>
-                                <th><?php echo ucwords("department"); ?></th>
+                                <th><?php echo ucwords("Syllabus Title"); ?></th>                                
                                 <th><?php echo ucwords("Branch"); ?></th>												                                                
-                                <th><?php echo ucwords("Semester"); ?></th>
-                                <th><?php echo ucwords("Description"); ?></th>
+                                <th><?php echo ucwords("Course"); ?></th>                                
+                                <th><?php echo ucwords("Admission Plan"); ?></th>
+                                <th><?php echo ucwords("Description"); ?></th>            
                                 <th><?php echo ucwords("File"); ?></th>            
                                   <?php if($update || $delete){ ?>
                                 <th><?php echo ucwords("Action"); ?></th>											
@@ -70,6 +79,7 @@ $delete = delete_permission($permission, 'Syllabus');
                         </thead>
                         <tbody>
                             <?php
+                           
                             $count = 1;
                             foreach (@$syllabus as $row):
                                 ?>
@@ -77,16 +87,9 @@ $delete = delete_permission($permission, 'Syllabus');
                                     <td><?php echo $count++; ?></td>	
 
                                     <td><?php echo $row->syllabus_title; ?></td>	
-                                    <td><?php
-                                        foreach ($degree as $dgr):
-                                            if ($dgr->d_id == $row->syllabus_degree):
-
-                                                echo $dgr->d_name;
-                                            endif;
-
-
-                                        endforeach;
-                                        ?></td>
+                                    <td> <?php $branch =  $this->Branch_location_model->get($row->branch_id); 
+                                    echo $branch->branch_name;
+                                    ?></td>
                                     <td>
                                         <?php
                                         foreach ($course as $crs) {
@@ -97,15 +100,9 @@ $delete = delete_permission($permission, 'Syllabus');
                                         ?>
                                     </td>
 
-                                    <td>
-                                        <?php
-                                        foreach ($semester as $sem) {
-                                            if ($sem->s_id == $row->syllabus_sem) {
-                                                echo $sem->s_name;
-                                            }
-                                        }
-                                        ?>													
-                                    </td>	
+                                    <td> <?php $plan =  $this->Admission_plan_model->get($row->admission_plan_id); 
+                                    echo $plan->admission_duration;
+                                    ?></td>	
                                     <td><?php echo wordwrap($row->syllabus_desc, 30, "<br>\n"); ?></td>
                                     <td id="downloadedfile"><a href="<?php echo base_url() . 'uploads/syllabus/' . $row->syllabus_filename; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>	                                                  
                                     <?php if($update || $delete){ ?>
@@ -150,14 +147,14 @@ $delete = delete_permission($permission, 'Syllabus');
 
 
         $("#searchform #btnsubmit").click(function () {
-            var degree = $("#courses").val();
-            var course = $("#branches").val();
-            var semester = $("#semesters").val();
+            var branch = $("#search-branch").val();
+            var course = $("#search-course").val();
+            var admission_plan = $("#search-admission_plan").val();
 
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>syllabus/getsyllabus/",
-                data: {'degree': degree, 'course': course, "semester": semester},
+                data: {'branch': branch, 'course': course, "admission_plan": admission_plan},
                 success: function (response)
                 {
                     $("#getresponse").html(response);
@@ -168,25 +165,28 @@ $delete = delete_permission($permission, 'Syllabus');
             return false;
         });
 
- $('#courses').on('change', function () {
-            var department_id = $(this).val();
-            department_branch(department_id);
+  $('#search-course').on('change', function () {       
+        var course_id = $(this).val();
+        
+        get_admission_plan(course_id);
+        
+    });
+    function get_admission_plan(course_id)
+    {
+     $('#search-admission_plan').find('option').remove().end();
+        $('#search-admission_plan').append('<option value="">Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#search-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
         });
-          function department_branch(department_id) {
-            $('#branches').find('option').remove().end();
-            $('#branches').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + department_id,
-                type: 'GET',
-                success: function (content) {
-                    var branch = jQuery.parseJSON(content);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#branches').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-                }
-            });
-        }
+    }
 
 
     });

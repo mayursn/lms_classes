@@ -28,8 +28,7 @@
                                 <option data-dateformatCode="d F, y" value="d F, y"> d F, y  ( <?php echo date('d F, y');  ?>)</option>
                                 <option data-dateformatCode="m/d/Y" value="m/d/Y"> m/d/Y  ( <?php echo date('m/d/Y');  ?>)</option>
                                 <option data-dateformatCode="d/m/Y" value="d/m/Y"> d/m/Y  ( <?php echo date('d/m/Y');  ?>)</option>
-                                <option data-dateformatCode="Y/m/d" value="Y/m/d"> Y/m/d  ( <?php echo date('Y/m/d');  ?>)</option>
-                                <option data-dateformatCode="m-d-Y" value="m-d-Y"> m-d-Y  ( <?php echo date('m-d-Y');  ?>)</option>
+                                <option data-dateformatCode="Y/m/d" value="Y/m/d"> Y/m/d  ( <?php echo date('Y/m/d');  ?>)</option>                                
                                 <option data-dateformatCode="d-m-Y" value="d-m-Y"> d-m-Y  ( <?php echo date('d-m-Y');  ?>)</option>
                                 <option data-dateformatCode="Y-m-d" value="Y-m-d"> Y-m-d  ( <?php echo date('Y-m-d');  ?>)</option>                                
                                
@@ -37,6 +36,7 @@
                         </div>
                     </div>
                  </div>
+                <!--<option data-dateformatCode="m-d-Y" value="m-d-Y"> m-d-Y  ( <?php echo date('m-d-Y');  ?>)</option>-->
                 <div class="form-group">
                     <label  class="col-lg-3 col-md-3 col-sm-6 col-xs-12 control-label"><?php echo ucwords("Phone"); ?><span style="color:red">*</span></label>
 

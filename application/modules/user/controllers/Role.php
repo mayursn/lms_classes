@@ -29,8 +29,17 @@ class Role extends MY_Controller {
      */
     function create() {
         if ($_POST) {
+             if($this->input->post('module')=='')
+             {
+                $modules='';
+             }
+             else
+             {
+                  $modules= implode(',',$this->input->post('module'));
+             }
             $this->Role_model->insert(array(
                 'role_name' => $_POST['role_name'],
+                'assigned_module'=>$modules,
                 'is_active' => $_POST['status']
             ));
             $this->flash_notification('Role is successfully added.');
@@ -45,8 +54,13 @@ class Role extends MY_Controller {
      */
     function delete($id = '') {
         if ($id) {
+            if($id!='1' || $id!='2' || $id!='3'){
             $this->Role_model->delete($id);
             $this->flash_notification('Role is successfully deleted.');
+            }
+            else{
+            $this->flash_notification('Can not delete this role.');    
+            }
         }
 
         redirect(base_url('user/role'));
@@ -58,8 +72,17 @@ class Role extends MY_Controller {
      */
     function update($id) {
         if ($_POST) {
+            if($this->input->post('module')=='')
+             {
+                $modules='';
+             }
+             else
+             {
+                  $modules= implode(',',$this->input->post('module'));
+             }
             $this->Role_model->update($id, array(
                 'role_name' => $_POST['role_name'],
+                'assigned_module'=>$modules,
                 'is_active' => $_POST['status']
             ));
             $this->flash_notification('Role is successfully updated.');
@@ -81,7 +104,26 @@ class Role extends MY_Controller {
         $this->data['user_permission'] = $this->Module_role_permission_model->get_many_by(array(
             'role_id'   => $id
         ));
-        $this->data['modules'] = $this->Modules_model->order_by_column('module_name');
+        if($this->data['role_details']->assigned_module!='')
+        {
+             $modules=explode(',',$this->data['role_details']->assigned_module);
+     
+                $query="select * from modules where ";
+                foreach($modules as $m)
+                {
+                    $query .= "is_active='1' AND module_id= ".$m." or ";
+                }
+                 $query = rtrim($query, ' or');
+                 
+                 $query .= " ORDER BY module_name ASC";
+
+                 $this->data['modules'] =$this->db->query($query)->result();
+        }
+        else
+        {
+            $this->data['modules'] ="";
+        }
+       // $this->data['modules'] = $this->Modules_model->order_by_column('module_name');
         $this->__template('user/role/permission', $this->data);
     }
 

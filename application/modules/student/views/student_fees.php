@@ -47,7 +47,7 @@
                                         <label class="col-sm-3 control-label">Date</label>
                                         <div class="col-sm-9">
                                             <div>
-                                                <?php $date = date('d-m-Y'); ?>
+                                                <?php $date = date('m-d-Y'); ?>
                                                 <input value="<?php echo date_formats($date); ?>" type="text" id="datepicker-normal" name="date" class="form-control"/>
                                             </div>
                                         </div>
@@ -64,28 +64,13 @@
                                 <div class="panel-body">
 
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Semester</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" id="semester" name="semester">
-                                                <option value="">Select</option>
-                                                <?php
-                                                foreach ($semester as $row) {
-                                                    if ($student_detail->semester_id < $row->s_id) {
-                                                        break;
-                                                    }
-                                                    ?>
-                                                    <option value="<?php echo $row->s_id; ?>"><?php echo $row->s_name; ?></option>
-                                                <?php }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label class="col-sm-3 control-label">Type of Fees</label>
                                         <div class="col-sm-9">
-                                            <select id="fees_structure" class="form-control" name="fees_structure">
-
+                                            <select id="fees_structure" class="form-control" name="fees_structure">                                                
+                                                <option value="">Select</option>
+                                                <?php foreach($fees_structure as $fees): ?>                                                
+                                                <option value="<?php echo $fees->fees_structure_id; ?>"><?php echo $fees->title; ?></option>                                                
+                                                <?php endforeach; ?>                                                
                                             </select>
                                         </div>
                                     </div>

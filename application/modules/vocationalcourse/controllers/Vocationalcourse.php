@@ -13,6 +13,10 @@ class Vocationalcourse extends MY_Controller {
         parent::__construct();
         $this->load->model('vocationalcourse/Vocational_course_model');
         $this->load->model('vocationalcourse/Vocational_course_fee_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {

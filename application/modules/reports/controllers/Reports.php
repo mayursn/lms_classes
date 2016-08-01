@@ -12,6 +12,10 @@ class Reports extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('reports/Reports_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     /**
@@ -28,7 +32,7 @@ class Reports extends MY_Controller {
         }
         
         // student count by region wise
-        $this->data['region_students'] = $this->Reports_model->student_cout_with_regions();
+        $this->data['region_students'] = $this->Reports_model->student_cout_with_regions();    
         
         // department wise student count
         $this->data['department_wise_student'] = $this->Reports_model->department_wise_student();

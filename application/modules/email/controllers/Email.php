@@ -13,6 +13,10 @@ class Email extends MY_Controller {
         parent::__construct();
         $this->load->helper('email/system_email');
         $this->load->model('email/Email_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {
@@ -54,7 +58,10 @@ class Email extends MY_Controller {
         }
         $this->data['title'] = 'Compose email';
         $this->data['page'] = 'compose';
-        $this->data['degree'] = $this->Degree_model->order_by_column('d_name');
+        $this->load->model('branch/Branch_location_model');
+        $this->load->model('courses/Course_model');
+        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+        $this->data['course'] = $this->Course_model->order_by_column('c_name');
         $this->data['user_type'] = $this->Role_model->order_by_column('role_name');
         $this->__template('email/compose', $this->data);
     }
@@ -124,8 +131,8 @@ class Email extends MY_Controller {
             'protocol' => 'smtp',
             'smtp_host' => 'ssl://smtp.googlemail.com',
             'smtp_port' => 465,
-            'smtp_user' => 'mayur.ghadiya@searchnative.in',
-            'smtp_pass' => 'the mayurz97375',
+            'smtp_user' => 'mayur.panchal@searchnative.in',
+            'smtp_pass' => 'Mayur@@123',
             'mailtype' => 'html',
             'charset' => 'iso-8859-1'
         );
@@ -149,7 +156,7 @@ class Email extends MY_Controller {
      */
     public function sendEmail($email, $subject, $message, $attachments) {
         //$this->email->set_newline("\r\n");
-        $this->email->from('mayur.ghadiya@searchnative.in', 'Search Native India');
+        $this->email->from('mayur.panchal@searchnative.in', 'Search Native India');
         $this->email->to($email);
         $this->email->subject($subject);
         $this->email->message($message);
@@ -212,6 +219,25 @@ class Email extends MY_Controller {
         );
 
         return $config;
+    }
+    
+    /**
+     * 
+     * @param int $id
+     */
+    function sentdelete($id= '')
+    {
+       $this->Email_model->delete($id);
+       $this->flash_notification("Email Deleted successfully");
+       redirect('email/sent');
+    }
+    
+    
+    function delete($id='')
+    {
+        $this->Email_model->delete($id);
+       $this->flash_notification("Email Deleted successfully");
+       redirect('email/inbox');
     }
 
 }

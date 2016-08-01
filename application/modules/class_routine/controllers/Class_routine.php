@@ -15,6 +15,10 @@ class Class_routine extends MY_Controller {
         $this->load->model("department/Degree_model");
          $this->load->model("Crud_model");
         date_default_timezone_set('Etc/UTC');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
 
     }
 

@@ -12,10 +12,10 @@ $delete = delete_permission($permission, 'Syllabus');
     <thead>
         <tr>
             <th>No</th>												
-            <th><div><?php echo ucwords("Syllabus Title"); ?></div></th>
-            <th><div><?php echo ucwords("department"); ?></div></th>
+            <th><div><?php echo ucwords("Syllabus Title"); ?></div></th>            
             <th><div><?php echo ucwords("Branch"); ?></div></th>												                                                
-            <th><div><?php echo ucwords("Semester"); ?></div></th>
+            <th><div><?php echo ucwords("Course"); ?></div></th>
+            <th><div><?php echo ucwords("Admission Plan"); ?></div></th>
             <th><div><?php echo ucwords("Description"); ?></div></th>
             <th><div><?php echo ucwords("File"); ?></div></th>         
             <?php if($update || $delete){ ?>
@@ -33,10 +33,10 @@ $delete = delete_permission($permission, 'Syllabus');
 
                 <td><?php echo $row->syllabus_title; ?></td>	
                 <td><?php
-                    foreach ($degree as $dgr):
-                        if ($dgr->d_id == $row->syllabus_degree):
+                    foreach ($branch as $dgr):
+                        if ($dgr->branch_id == $row->branch_id):
 
-                            echo $dgr->d_name;
+                            echo $dgr->branch_name;
                         endif;
 
 
@@ -54,9 +54,9 @@ $delete = delete_permission($permission, 'Syllabus');
 
                 <td>
                     <?php
-                    foreach ($semester as $sem) {
-                        if ($sem->s_id == $row->syllabus_sem) {
-                            echo $sem->s_name;
+                    foreach ($admission_plan as $plan) {
+                        if ($plan->admission_plan_id == $row->admission_plan_id) {
+                            echo $plan->admission_duration;
                         }
                     }
                     ?>													

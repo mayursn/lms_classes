@@ -19,6 +19,10 @@ class Examgrade extends MY_Controller {
         $this->load->model('classes/Class_model');
         $this->load->model('student/Student_model');
         $this->load->model('exam/Exam_seat_no_model');
+        if(!$this->session->userdata('user_id'))
+        {
+            redirect(base_url().'user/login');
+        }
     }
 
     function index() {

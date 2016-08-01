@@ -64,7 +64,8 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><?php echo ucwords("status"); ?></label>
                         <div class="col-sm-8">
-                            <select name="holiday_status"  class="form-control">                                <option value="1">Active</option>
+                            <select name="status"  class="form-control">                               
+                                <option value="1">Active</option>
                                 <option value="0">Inactive</option>	
                             </select>
                             <lable class="error" id="error_lable_exist" style="color:red"></lable>
@@ -98,22 +99,31 @@
             startDate: new Date(),
             todayHighlight: true,
             autoclose: true
-        });
-
-        $('#datepicker-date').on('change', function () {
-            date = new Date($(this).val());
-            start_date = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-            console.log(start_date);
-
-            setTimeout(function () {
-                $("#datepicker-end-date").datepicker({
+        }).on('changeDate', function (selected) {
+        var minDate = new Date(selected.date.valueOf());
+        $('#datepicker-end-date').datepicker('setStartDate', minDate);
+    });
+     $("#datepicker-end-date").datepicker({
                     format: js_date_format,
                     autoclose: true,
-                    todayHighlight: true,
-                    startDate: start_date
+                    todayHighlight: true
                 });
-            }, 700);
-        });
+    
+
+//        $('#datepicker-date').on('change', function () {
+//            date = new Date($(this).val());
+//            start_date = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+//            console.log(start_date);
+//
+//            setTimeout(function () {
+//                $("#datepicker-end-date").datepicker({
+//                    format: js_date_format,
+//                    autoclose: true,
+//                    todayHighlight: true,
+//                    startDate: start_date
+//                });
+//            }, 700);
+//        });
 
         $("#eventform").validate({
             rules: {

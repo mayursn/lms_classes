@@ -43,7 +43,7 @@ class Participate_manager_model extends MY_Model {
     
     public function get_students()
     {
-        $this->db->select('std_id,name');
+        $this->db->select('std_id,name,std_first_name,std_last_name');
         $this->db->distinct('s.student_id');
         $this->db->join('student std','std.std_id = s.student_id');
         return $this->db->get('survey s')->result();
