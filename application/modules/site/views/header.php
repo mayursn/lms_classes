@@ -44,7 +44,7 @@
                                                 $user =  $this->User_model->get($user_id);   
 
                                                     $name = $user->first_name.' '.$user->last_name;
-                                                    $dashboard_url = base_url('user/dashboard/');
+                                                    $dashboard_url = base_url('user/dashboard/');                                                    
                                                     $profile_url = base_url('profile');
                                                     $image = base_url('uploads/system_image/'.$user->profile_pic);
                                            

@@ -11,15 +11,7 @@ $delete = delete_permission($permission, 'Courseware');
     <div class=col-lg-12>
         <!-- col-lg-12 start here -->
         <div class="panel-default toggle panelMove panelClose panelRefresh">
-            <!-- Start .panel -->
-            <!--            <div class=panel-heading>
-                            <h4 class=panel-title><?php echo $title; ?></h4>
-                            <div class="panel-controls panel-controls-right">
-                                <a class="panel-refresh" href="#"><i class="fa fa-refresh s12"></i></a>
-                                <a class="toggle panel-minimize" href="#"><i class="fa fa-plus s12"></i></a>
-                                <a class="panel-close" href="#"><i class="fa fa-times s12"></i></a>
-                            </div>
-                        </div>-->
+
             <div class=panel-body>
                  <?php if ($create) { ?>
                 <a href="#" class="links" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/courseware_create/');" data-original-title="" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus"></i> Courseware</a>
@@ -34,8 +26,8 @@ $delete = delete_permission($permission, 'Courseware');
                             <th>Chapter</th>                            
                             <th>Branch</th>                            
                             <th>Description</th>
-                            <th>Status</th>
                             <th>Attachment</th>
+                            <th>Status</th>
                               <?php if ($update || $delete) { ?>
                             <th>Action</th>
                               <?php } ?>

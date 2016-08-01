@@ -29,7 +29,7 @@ $delete_comment = delete_permission($permission, 'Forum_Comments');
                             <th>User Role</th>
                             <th>Started By</th>
                             <th>Status</th>
-                            <th>Date</th>
+                            <th>Date</th>                        
                             <th>File</th>                            
                             <?php if($create_comment || $read_comment || $update_comment || $delete_comment){ ?>
                             <th>View Comments</th>                            

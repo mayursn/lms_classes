@@ -65,7 +65,7 @@ class Student extends MY_Controller {
         $this->__template('student/dashboard', $this->data);
     }
     
-/**
+    /**
      * Create student user
      * @param array $student
      * @return int
@@ -316,7 +316,6 @@ class Student extends MY_Controller {
         
     }
 
-     
     /**
      * Compare and update password
      * @param string $user_id
@@ -334,8 +333,6 @@ class Student extends MY_Controller {
             ));
         }
     }
-
-    
 
      /**
      * Load filtered students
@@ -669,7 +666,7 @@ function student_exam_marks()
         $std_id =$this->session->userdata('std_id');
         $this->data['student'] = $this->Student_model->get($std_id);
         $student = $this->data['student'];
-        $course_id = $student->course_id;
+        $course_id = $student->course_id;        
         $semester_id = $student->semester_id;
         
         $this->data['subjects'] = $this->Student_model->student_subject_list(

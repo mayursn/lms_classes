@@ -142,7 +142,11 @@
                                         <li>
                                             <a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard" aria-hidden="true"></i>Home</a>
                                         </li>
+<<<<<<< HEAD
+                                        <li><a href="<?php echo base_url(); ?>manage_profile">
+=======
                                         <li><a href="<?php echo base_url(); ?>profile">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                 <i class="fa fa-user" aria-hidden="true"></i>Edit profile</a>
                                         </li>
                                         <li><a href="<?php echo base_url(); ?>user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -257,7 +261,11 @@
                                             </a>
                                         </li>                                        
                                         <li>
+<<<<<<< HEAD
+                                            <a <?php echo active_single_menu('holiday', $page); ?> href="<?php echo base_url(); ?>student/holiday">
+=======
                                             <a <?php echo active_single_menu('holiday', $page); ?> href="<?php echo base_url(); ?>/holiday">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                 <i class="s16 fa fa-calendar"></i>
                                                 <span class=txt>Holiday </span>
                                             </a>
@@ -269,12 +277,22 @@
                                             </a>
                                         </li>
                                         <li>
+<<<<<<< HEAD
+                                            <a <?php echo active_single_menu('vocational_course', $page); ?> href="<?php echo base_url(); ?>student/vocationalcourse">
+=======
                                             <a <?php echo active_single_menu('vocational_course', $page); ?> href="<?php echo base_url(); ?>vocationalcourse">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                 <i class="s16 fa fa-spinner"></i>
                                                 <span class=txt>Vocational Course</span>
                                             </a>
                                         </li>
                                         <li>
+<<<<<<< HEAD
+                                            <a <?php echo active_single_menu('gallery', $page); ?> href="<?php echo base_url(); ?>student/gallery"><i class="s16 fa fa-picture-o"></i>
+                                                <span class=txt>Gallery </span>
+                                            </a>
+                                        </li>  
+=======
                                             <a <?php echo active_single_menu('gallery', $page); ?> href="<?php echo base_url(); ?>media/photo_gallery"><i class="s16 fa fa-picture-o"></i>
                                                 <span class=txt>Gallery </span>
                                             </a>
@@ -304,6 +322,7 @@
                                         </ul>
                                     </li>
      
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                         <?php
                                         $news_conent = $this->db->get_where('cms_manager', array('c_status' => 1))->result_array();
                                         foreach ($news_conent as $row) {

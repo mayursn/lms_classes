@@ -36,7 +36,7 @@ if($this->session->userdata('role_name')!='Student')
                             <th><?php echo ucwords("course end date"); ?></th>
                             <th><?php echo ucwords("course fee"); ?></th>
                             <th><?php echo ucwords("professor name"); ?></th>
-                            <th>Status</th>
+                            <th>Status</th>                            
                             <?php if ($update || $delete) { ?>
                                     <th>Actions</th>
                                 <?php } ?> 

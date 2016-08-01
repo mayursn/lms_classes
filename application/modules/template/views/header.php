@@ -134,7 +134,11 @@
                             $user_id = $this->session->userdata('user_id');
                             $user = $this->User_model->get($user_id);
                             ?>
+<<<<<<< HEAD
+                            <a href=# class="dropdown-toggle avatar" data-toggle=dropdown><img src=<?php echo base_url() . 'system_image/' . $user->profile_pic; ?> alt="" class="image"> 
+=======
                             <a href=# class="dropdown-toggle avatar" data-toggle=dropdown><img src=<?php echo base_url() . 'uploads/system_image/' . $user->profile_pic; ?> alt="" class="image"> 
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                 <span class=txt><?php echo $user->first_name . ' ' . $user->last_name; ?></span> <b class=caret></b>
                             </a>
                             <ul class="dropdown-menu right">
@@ -143,7 +147,11 @@
                                         <li>
                                             <a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard" aria-hidden="true"></i>Home</a>
                                         </li>
+<<<<<<< HEAD
+                                        <li><a href="<?php echo base_url(); ?>manage_profile">
+=======
                                         <li><a href="<?php echo base_url(); ?>profile">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                 <i class="fa fa-user" aria-hidden="true"></i>Edit profile</a>
                                         </li>
                                         <li><a href="<?php echo base_url(); ?>user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -537,19 +545,31 @@
                                                 <span class="txt">Email </span></a>
                                             <ul <?php echo navigation_show_hide_ul($page, $pages); ?>>
                                                 <li>
+<<<<<<< HEAD
+                                                    <a id="link-compose" href="<?php echo base_url(); ?>email_compose">
+=======
                                                     <a id="link-compose" href="<?php echo base_url(); ?>email/compose">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                         <i class="s16 fa fa-envelope"></i>
                                                         <span class="txt">Compose EMail</span>
                                                     </a>
                                                 </li>
                                                 <li>
+<<<<<<< HEAD
+                                                    <a id="link-inbox" href="<?php echo base_url(); ?>email_inbox">
+=======
                                                     <a id="link-inbox" href="<?php echo base_url(); ?>email/inbox">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                         <i class="s16 fa fa-inbox"></i>
                                                         <span class="txt">Inbox</span>
                                                     </a>
                                                 </li>
                                                 <li>
+<<<<<<< HEAD
+                                                    <a id="link-sent" href="<?php echo base_url(); ?>email_sent">
+=======
                                                     <a id="link-sent" href="<?php echo base_url(); ?>email/sent">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                         <i class="s16 fa fa-send"></i>
                                                         <span class="txt">Sent Email</span>
                                                     </a>
@@ -570,7 +590,11 @@
                                             <ul <?php echo navigation_show_hide_ul($page, $pages); ?>>
                                                 <?php if (check_permission($permission, 'Import')) { ?>
                                                     <li>
+<<<<<<< HEAD
+                                                        <a id="link-import" href="<?php echo base_url(); ?>import">
+=======
                                                         <a id="link-import" href="<?php echo base_url(); ?>import_export/import">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                             <i class="s16 fa fa-upload"></i>
                                                             <span class="txt">Import</span>
                                                         </a>
@@ -578,7 +602,11 @@
                                                 <?php } ?>
                                                 <?php if (check_permission($permission, 'Export')) { ?>
                                                     <li>
+<<<<<<< HEAD
+                                                        <a id="link-export" href="<?php echo base_url(); ?>export">
+=======
                                                         <a id="link-export" href="<?php echo base_url(); ?>import_export/export">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                             <i class="s16 fa fa-download"></i>
                                                             <span class="txt">Export</span>
                                                         </a>
@@ -677,7 +705,11 @@
                                                 <?php } ?>
                                                 <?php if (check_permission($permission, 'Exam_Schedual')) { ?>
                                                     <li>
+<<<<<<< HEAD
+                                                        <a id="link-exam_schedule" href="<?php echo base_url(); ?>examschedule">
+=======
                                                         <a id="link-exam_schedule" href="<?php echo base_url(); ?>examschedual">
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                                                             <i class="s16 fa fa-history"></i>
                                                             <span class="txt">Exam Schedule</span>
                                                         </a>
@@ -785,6 +817,8 @@
                                             </ul>
                                         </li> 
                                     <?php } ?>
+<<<<<<< HEAD
+=======
                                         
                                     <?php
                                     $pages = [
@@ -811,6 +845,7 @@
                                         </ul>
                                     </li>
      
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
 
                                     <?php
                                     $pages = [
@@ -841,7 +876,10 @@
                                             </ul>
                                         </li>
                                     <?php } ?>
+<<<<<<< HEAD
+=======
                                         
+>>>>>>> a54931c7c290e228035a431bb36cb115c8e192c3
                             </div>
                         </div>
                         <!-- End sidenav -->
