@@ -137,10 +137,9 @@
         });
         $("#exam_time_table_form").validate({
             rules: {
-                degree: "required",
+                branch: "required",
                 course: "required",
-                batch: "required",
-                semester: "required",
+                admission_plan: "required",                
                 exam: "required",
                 subject: "required",
                 exam_date: "required",
@@ -148,10 +147,9 @@
                 end_time: "required"
             },
             messages: {
-                degree: "Please select department",
-                course: "Please select branch",
-                batch: "Please select batch",
-                semester: "Please select semester",
+                branch: "Please select branch",
+                course: "Please select course",
+                admission_plan: "Please select admission plan",             
                 exam: "Please select exam",
                 subject: "Please select subject",
                 exam_date: "Please enter date",

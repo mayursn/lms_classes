@@ -31,7 +31,7 @@ $course = $this->Course_model->order_by_column('c_name');
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><?php echo ucwords("mobile"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
-                        <input id="mobile" class="form-control" type="text" name="mobile" />
+                        <input id="mobile" class="form-control" type="text" name="mobile" max="11" />
                     </div>	
                 </div>
                 <div class="form-group">
@@ -152,9 +152,9 @@ $course = $this->Course_model->order_by_column('c_name');
                 zip_code: "required",
                 dob: "required",
                 occupation: "required",
-                designation: "required",
-                degree: "required",
+                designation: "required",                
                 branch: "required",
+                course: "required",
                 userfile: {
                     extension: 'gif|jpg|png|jpeg',
                 },
@@ -172,9 +172,9 @@ $course = $this->Course_model->order_by_column('c_name');
                 zip_code: "Enter zipcode",
                 dob: "Select date of birth",
                 occupation: "Enter occupation",
-                designation: "Enter designation",
-                degree: "Select department",
+                designation: "Enter designation",                
                 branch: "Select branch",
+                course: "Select course",
                 userfile: {
                     extension: 'Only gif,jpg,png file is allowed!',
                 },

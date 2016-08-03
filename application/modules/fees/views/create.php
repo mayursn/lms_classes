@@ -126,10 +126,10 @@ $class = $this->Class_model->order_by_column('class_name');
     $(document).ready(function () {
         $("#feesstructure").validate({
             rules: {
-                degree: "required",
+                branch: "required",
                 course: "required",
-                semester: "required",
-                batch: "required",
+                admission_plan: "required",
+                class: "required",
                 fees: {
                     required: true,
                     currency: ['$', false]
@@ -141,10 +141,10 @@ $class = $this->Class_model->order_by_column('class_name');
                 penalty: "required"
             },
             messages: {
-                degree: "Please select department",
-                course: "Please select branch",
-                semester: "Please select semester",
-                batch: "Please select batch",
+                branch: "Please select branch",
+                course: "Please select course",
+                admission_plan: "Please select admission plan",
+                class: "Please select class",
                 fees: {
                     required: "Please Enter  Fee",
                     currency: "Please Enter Valid Amount"

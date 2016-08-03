@@ -147,10 +147,10 @@ $admission_plan = $this->Admission_plan_model->order_by_column('admission_durati
         $("#editfeesstructure").validate({
             rules: {
                 edit_title: "required",
-                degree: "required",
+                branch: "required",
                 course: "required",
-                edit_batch: "required",
-                semester: "required",
+                class: "required",
+                admission_plan: "required",
                 edit_fees: "required",
                 start_date: "required",
                 end_date: "required",
@@ -159,10 +159,10 @@ $admission_plan = $this->Admission_plan_model->order_by_column('admission_durati
             },
             messages: {
                 edit_title: "Please enter title",
-                degree: "Please select department",
-                course: "Please select branch",
-                edit_batch: "Please select batch",
-                semester: "Please select semester",
+                branch: "Please select branch",
+                course: "Please select course",
+                admission_plan: "Please select admission plan",
+                class: "Please select class",
                 edit_fees: "Please enter fee",
                 start_date: "Please enter start date",
                 end_date: "Please enter end date",

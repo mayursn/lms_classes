@@ -20,8 +20,7 @@
                     <label class="col-sm-2 control-label"><?php echo ucwords("user type"); ?></label>
                     <div class="col-sm-5">
                         <select class="form-control" id="user_type" name="user_type" required="">
-                            <option value="">Select</option>    
-                            <option value="all">All</option>
+                            <option value="">Select</option>                            
                             <?php foreach ($user_type as $role) { ?>}
                                 <option value="<?php echo $role->role_id; ?>"><?php echo $role->role_name; ?></option>
                             <?php } ?>

@@ -185,10 +185,9 @@ $subjects = $this->Subject_manager_model->subject_list_admission_plan($branch_id
                         }, "End time must be greater than start time");
         $("#edit-exam-time-table").validate({
             rules: {
-                degree: "required",
+                branch: "required",
                 course: "required",
-                batch: "required",
-                semester: "required",
+                admission_plan: "required",                
                 exam: "required",
                 subject: "required",
                 exam_date: "required",
@@ -199,10 +198,9 @@ $subjects = $this->Subject_manager_model->subject_list_admission_plan($branch_id
                         }
             },
             messages: {
-                degree: "Please select department",
-                course: "Please select branch",
-                batch: "Please select batch",
-                semester: "Please select semester",
+                branch: "Please select branch",
+                course: "Please select course",
+                admission_plan: "Please select admission plan",                
                 exam: "Please select exam",
                 subject: "Please select subject",
                 exam_date: "Please enter date",

@@ -165,7 +165,10 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
         });
         $("#makepayment").validate({
             rules: {
+                branch:"required",
                 course: "required",
+                admission_plan: "required",
+                class: "required",
                 student: "required",
                 fees: {
                     required: true,
@@ -178,7 +181,10 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                 ac_holder_name: "required"
             },
             messages: {
-                course: "Please select department Name",
+                branch:"Please select branch",
+                course: "Please select course",
+                admission_plan: "Please select admission plan",
+                class: "Please select class",
                 student: "Please select student",
                 fees: {
                     required: "Please enter fee amount"

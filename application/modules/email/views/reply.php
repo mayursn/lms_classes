@@ -13,13 +13,12 @@
         <div class="panel-default">
         <div class="panel-body">                              
             <form class="form-horizontal" role="form" action="<?php echo base_url(); ?>email/compose" method="post" 
-                  enctype="multipart/form-data">               
-                
+                  enctype="multipart/form-data">                               
                 <div class="form-group email_box">
                     <label class="col-sm-2 control-label"><?php echo ucwords("user"); ?></label>
                     <div class="col-sm-5">
                         <input type="hidden" readonly="" name="email[]" class="form-control hide" value="<?php echo $sender->user_id; ?>"/>
-                        <input type="text" class="form-control" value="<?php echo $sender->first_name . ' ' . ' (' . $sender->last_name . $sender->email .')'; ?>"/>
+                        <input type="text" class="form-control" value="<?php echo $sender->first_name . ' ' . $sender->last_name .' ('. $sender->email .')'; ?>"/>
                     </div>
                 </div>                
 
@@ -54,7 +53,6 @@
                 <div class="form-group form-actions">
                     <div class="col-sm-12 col-md-offset-2">
                         <button type="submit" class="btn btn-primary"><i class="fa fa-envelope append-icon"></i> <?php echo ucwords("Send"); ?></button>
-
                     </div>
                 </div>
             </form>

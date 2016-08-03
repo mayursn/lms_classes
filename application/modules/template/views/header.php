@@ -570,7 +570,7 @@
 
                                     <?php
                                     $pages = [
-                                        'exam', 'exam_schedule', 'grade', 'marks', 'exam_report','internal','exam_time_table'
+                                        'exam', 'exam_schedule', 'grade', 'marks', 'exam_report','internal','exam_time_table','toppers'
                                     ];
                                     ?>
                                     <?php if (check_permission($permission, 'Exam') || check_permission($permission, 'Exam_Schedual') || check_permission($permission, 'Exam_Marks') || check_permission($permission, 'Exam_Grade')) { ?>
@@ -600,7 +600,7 @@
                                                         <a id="link-exam_time_table" href="<?php echo base_url(); ?>exam-schedule">
 
                                                             <i class="s16 fa fa-history"></i>
-                                                            <span class="txt">Exam Schedule <?php echo $page; ?></span>
+                                                            <span class="txt">Exam Schedule</span>
                                                         </a>
                                                     </li> 
                                                 <?php } ?>
@@ -609,6 +609,12 @@
                                                         <a id="link-marks" href="<?php echo base_url(); ?>marks">
                                                             <i class="s16 fa fa-star-o"></i>
                                                             <span class="txt">Exam Marks</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a id="link-toppers" href="<?php echo base_url(); ?>classes/toppers">
+                                                            <i class="s16 fa fa-star-o"></i>
+                                                            <span class="txt">Class Toppers</span>
                                                         </a>
                                                     </li>
                                                 <?php } ?>
@@ -802,8 +808,8 @@
                                                     </label>
                                                 </li>
                                                  <?php } ?>
-                                                <?php if (check_permission($permission, 'Branch')) { ?>
-                                                <li>
+                                                <?php if (check_permission($permission, 'Course')) { ?>
+                                                <li style="display:none;">
                                                     <label>
                                                         <input type="checkbox" value="course" name="course"
                                                                <?php if (isset($from['course'])) echo 'checked'; ?>>

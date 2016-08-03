@@ -84,6 +84,7 @@ class Profile extends MY_Controller {
                     'zip'=>$this->input->post('zip'));
             $this->Profile_model->professor_update($this->session->userdata('user_id'),$dataprofessor);
         }
+        $this->flash_notification("profile updated successfully.");
          redirect(base_url('profile'));
     }
     function student_change_profile()

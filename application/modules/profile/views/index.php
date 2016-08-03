@@ -78,6 +78,7 @@
             <ul id=profileTab class="nav nav-tabs">
                 <li class="active"><a href="#change-password" data-toggle=tab>Change Password</a></li>
                <?php 
+               
                if($this->session->userdata('role_name')!="Student")
                {
                ?> <li><a href="#editprofile" data-toggle=tab>Edit Profile</a></li>
@@ -93,8 +94,8 @@ if($this->session->userdata('role_name')=='Student')
             </ul>
             <div id="mytab" class=tab-content style="overflow-y: scroll;height:400px">
                 <div class="tab-pane fade active in" id="change-password">
-                    <?php
-                    $message = $this->session->flashdata('message');
+                    <?php                    
+                    $message = $this->session->flashdata('flash_message');
                     if ($message != '') {
                         ?>
                         <div class="alert alert-success">
@@ -180,7 +181,7 @@ if($this->session->userdata('role_name')=='Student')
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Mobile Phone<span style="color:red">*</span></label>
                             <div class="col-lg-9">
-                                <input class="form-control" name="mobile" id="mobile" value="<?php echo $profile[0]->mobile; ?>"/>
+                                <input type="number" maxlength="11" class="form-control" name="mobile" id="mobile" value="<?php echo $profile[0]->mobile; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -192,7 +193,7 @@ if($this->session->userdata('role_name')=='Student')
                          <div class="form-group">
                             <label class="col-sm-3 control-label">Zip Code<span style="color:red">*</span></label>
                             <div class="col-lg-9">
-                                <input class="form-control" name="zip" id="zip" value="<?php echo $profile[0]->zip_code; ?>"/>
+                                <input type="number" maxlength="6" class="form-control" name="zip" id="zip" value="<?php echo $profile[0]->zip_code; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -326,18 +327,30 @@ if($this->session->userdata('role_name')=='Student')
                 lname: "required",
                 email: "required",
                 gender: "required",
-                mobile: "required",
+                'mobile': {
+                        required:true,
+                        phoneUS: true,
+                },
                 city: "required",
-                zip: "required",
+                'zip': {
+                    required:true,
+                    mixlength:6
+                },
             },
             messages: {
                 fname: "Enter first name",
                 lname: "Enter last name",
                 email: "Enter email",
                 gender: "Select gender",
-                mobile: "Enter mobile no",
+                'mobile': {
+                        required:"Enter mobile no",
+                        phoneUS: "Enter valid mobile no",                       
+                },
                 city: "Enter city",
-                zip: "Enter zip",
+                'zip':{
+                    required:"Enter zip code",
+                    mixlength:'Enter valid zip code'
+                },
             }
         });
          $("#frmstudentprofile").validate({

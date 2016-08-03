@@ -17,6 +17,7 @@ $user = $this->User_model->with('role')->get($param2);
                         <span style="color:red">* <?php echo "is " . ucwords("mandatory field"); ?></span> 
                     </div>                                    
                     <?php echo form_open(base_url() . 'user/user/update/' . $user->user_id, array('class' => 'form-horizontal form-groups-bordered validate', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'user-create-form', 'target' => '_top')); ?>
+                    <input type="hidden" name="txtuserid" id="txtuserid" value="<?php echo $user->user_id;?>">
                     <div class="padded">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">First Name</label>
@@ -43,7 +44,7 @@ $user = $this->User_model->with('role')->get($param2);
                             <label class="col-sm-4 control-label">Email</label>
                             <div class="col-sm-8">
                                 <input type="email" class="form-control" name="email" 
-                                       autocomplete="off" id="email" value="<?php echo $user->email ?>" readonly=""/>
+                                       autocomplete="off" id="email" value="<?php echo $user->email ?>" />
                             </div>	
                         </div>
                         <div class="form-group">
@@ -123,7 +124,7 @@ $user = $this->User_model->with('role')->get($param2);
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-8">
-                                <button type="submit" class="btn btn-info vd_bg-green" ><?php echo ucwords("Update"); ?></button>
+                                <button type="submit" class="btn btn-info vd_bg-green" ><?php echo ucwords("add"); ?></button>
                             </div>
                         </div>
                         </form>               
@@ -145,12 +146,43 @@ $user = $this->User_model->with('role')->get($param2);
 
         $("#user-create-form").validate({
             rules: {
-                role_name: "required",
-                status: "required",
+                first_name: "required",
+                last_name: "required",
+                email: {
+                            required: true,
+                            email: true,
+                            remote: {
+                                url: "<?php echo base_url(); ?>user/check_user_email/edit",
+                                type: "post",
+                                data: {
+                                     email: function () {
+                                        return $("#email").val();
+                                    },
+                                    userid: function () {
+                                          return $("#txtuserid").val();
+                                    },
+                                }
+                            }
+                        },
+                mobile: "required",
+                phone: "required",
+                city: "required",
+                zip_code: "required",
+                role: "required",
             },
             messages: {
-                role_name: "Enter role name",
-                status: "Select status",
+                 first_name: "Enter first name",
+                last_name: "Enter last name",
+                email: {
+                    required: "Enter email id",
+                    email: "Enter valid email id",
+                    remote: "Email id already exists",
+                },
+                mobile: "Enter mobile no",
+                phone: "Enter phone",
+                city: "Enter city",
+                zip_code: "Enter zip code",
+                role: "Select role",
             }
         });
     });

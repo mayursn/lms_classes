@@ -156,10 +156,10 @@ $delete = delete_permission($permission, 'Payment');
                     fee_structure: "required"
                 },
                 messages: {
-                    branch: "Select department",
-                    course: "Select branch",
-                    admission_plan: "Select batch",
-                    class: "Select semester",
+                    branch: "Select branch",
+                    course: "Select course",
+                    admission_plan: "Select admission plan",
+                    class: "Select class",
                     fee_structure: "Selest fee structure"
                 }
             });

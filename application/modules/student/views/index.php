@@ -70,7 +70,7 @@ $delete = delete_permission($permission, 'Student');
 
                    
  <?php if ($create || $read || $update || $delete) { ?>
-<table id="datatable-list2" class="table table-striped table-bordered table-responsive text-center" cellspacing=0 width=100%>
+<table id="datatable-list" class="table table-striped table-bordered table-responsive text-center" cellspacing=0 width=100% >
     <thead>
         <tr>
             <th>No</th>	

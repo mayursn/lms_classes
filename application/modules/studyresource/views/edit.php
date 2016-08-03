@@ -18,11 +18,11 @@ $row = $this->Study_resources_model->get($param2);
                         </div>   
                         <?php echo form_open(base_url() . 'studyresource/update/' . $row->study_id, array('class' => 'form-horizontal form-groups-bordered validate', 'id' => 'frmeditstudyresource', 'target' => '_top', 'enctype' => 'multipart/form-data')); ?>
                       <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?> <span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("branch"); ?> <span style="color:red">*</span></label>
                             <div class="col-sm-8">
 
                                 <select name="branch" id="branch_id" class="form-control">
-                                    <option value="">Select department</option>                                    
+                                    <option value="">Select Branch</option>                                    
                                     <?php
                                     $branch = $this->db->get('branch_location')->result();
                                     foreach ($branch as $rowdegree) {
@@ -39,7 +39,7 @@ $row = $this->Study_resources_model->get($param2);
                             <div class="col-sm-8">
                                 <select name="course" id="edit-course" class="form-control">
 
-                                    <option value="">Select Branch</option>
+                                    <option value="">Select Course</option>
                                     
                                     <?php
                                     $course = $this->db->get_where('course')->result();
@@ -153,9 +153,9 @@ $row = $this->Study_resources_model->get($param2);
 
         $("#frmeditstudyresource").validate({
             rules: {
-                degree: "required",
+                branch: "required",
                 course: "required",
-                batch: "required",
+                admission_plan: "required",
                 semester: "required",
                 dateofsubmission1: "required",
                 title:
@@ -167,9 +167,9 @@ $row = $this->Study_resources_model->get($param2);
                 },
             },
             messages: {
-                degree: "Select department",
-                course: "Select branch",
-                batch: "Select batch",
+                branch: "Select branch",
+                course: "Select course",
+                admission_plan: "Select Admission plan",
                 semester: "Select semester",
                 dateofsubmission1: "Select date",
                 title:

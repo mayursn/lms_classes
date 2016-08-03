@@ -82,7 +82,7 @@ $delete = delete_permission($permission, 'Exam');
                                     if($row->exam_mode=="mcq")
                                     {
                                         ?>
-                                    <a href="<?php echo base_url(); ?>quiz/edit/<?php echo $row->quiz_id; ?>"><span class="label label-primary mr6 mb6">
+                                    <a href="#"><span class="label label-primary mr6 mb6">
                                             <i class="fa fa-pencil"></i>MCQ</span></a>
                                     <?php
                                     }
@@ -131,16 +131,16 @@ $delete = delete_permission($permission, 'Exam');
         $('#search-due_amount-data').on('click', function () {
             $("#due_amount-search").validate({
                 rules: {
-                    degree: "required",
+                    branch: "required",
                     course: "required",
-                    batch: "required",
-                    semester: "required"
+                    admission_plan: "required",
+                   
                 },
                 messages: {
-                    degree: "Select department",
-                    course: "Select branch",
-                    batch: "Select batch",
-                    semester: "Select semester"
+                    branch: "Select branch",
+                    course: "Select course",
+                    admission_plan: "Select admission plan",
+                   
                 }
             });
 

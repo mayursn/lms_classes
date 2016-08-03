@@ -14,11 +14,11 @@
 
                     <div class="padded">											
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("department"); ?> <span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label"><?php echo ucwords("Branch"); ?> <span style="color:red">*</span></label>
                             <div class="col-sm-8">
 
                                 <select name="branch" id="branch_id" class="form-control">
-                                    <option value="">Select department</option>                                    
+                                    <option value="">Select Branch</option>                                    
                                     <?php
                                     $branch = $this->db->get('branch_location')->result();
                                     foreach ($branch as $rowdegree) {
@@ -35,7 +35,7 @@
                             <div class="col-sm-8">
                                 <select name="course" id="course" class="form-control">
 
-                                    <option value="">Select Branch</option>
+                                    <option value="">Select Course</option>
                                     
                                     <?php
                                     $course = $this->db->get_where('course')->result();
@@ -148,9 +148,9 @@
 
         $("#frmstudyresource").validate({
             rules: {
-                degree: "required",
+                branch: "required",
                 course: "required",
-                batch: "required",
+                admission_plan: "required",
                 semester: "required",
                 dateofsubmission: "required",
                 pageurl:
@@ -169,9 +169,9 @@
                 },
             },
             messages: {
-                degree: "Please select Course",
-                course: "Please select Branch",
-                batch: "Please select batch",
+                branch: "Please select branch",
+                course: "Please select course",
+                admission_plan: "Please select Admission plan",
                 semester: "Please select semester",
                 pageurl:
                         {

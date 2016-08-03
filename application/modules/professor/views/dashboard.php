@@ -470,12 +470,7 @@
 </script>
 <!-- Start .row -->
 <div class=row>     
-    <!-- Professor Routine box -->
-    <div class="col-lg-12 col-md-12 col-xs-12">
-        <iframe class="professor_routine_box" frameborder="0" src="<?php echo base_url(); ?>professor/professor_class_routine" width="100%" height="630px">        
-        </iframe>
-    </div>
-
+    
     <!-- Event Calendar -->
     <div class="col-lg-12 col-md-12 col-xs-12">
         <div class="panel panel-default toggle">

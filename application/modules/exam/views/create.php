@@ -177,11 +177,11 @@ $exam_type = $this->Exam_manager_model->get_all_exam_type();
     <!-- col-lg-12 end here -->
 </div>
 <script>
+    var js_date_format = '<?php echo js_dateformat(); ?>';
     $(document).ready(function () {
         
         $('#course').on('change', function () {
-        var course_id = $(this).val();
-        
+        var course_id = $(this).val();        
         get_admission_plan(course_id);        
     });
     function get_admission_plan(course_id)
@@ -202,7 +202,8 @@ $exam_type = $this->Exam_manager_model->get_all_exam_type();
         });
     }
         
-        var js_date_format = '<?php echo js_dateformat(); ?>';
+        
+        
         var date = '';
         var start_date = '';
         $('#edit_start_date').datepicker({

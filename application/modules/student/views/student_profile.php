@@ -84,7 +84,7 @@
                     <select class="form-control" id="exam" name="exam">
                           <option value="">Select</option>
                           <?php foreach ($exam_listing as $row) { ?>
-                            <option value="<?php echo $row->em_id; ?>"><?php echo $row->s_name . ' -- ' . $row->em_name; ?></option>
+                            <option value="<?php echo $row->em_id; ?>"><?php echo $row->em_name; ?></option>
                                 <?php } ?>
                     </select>
                 </div>

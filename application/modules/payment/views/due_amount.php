@@ -122,17 +122,17 @@
         $('#search-due_amount-data').on('click', function () {
             $("#due_amount-search").validate({
                 rules: {
-                    degree: "required",
+                    branch: "required",
                     course: "required",
-                    batch: "required",
-                    semester: "required",
+                    admission_plan: "required",
+                    class: "required",
                     fee_structure: "required"
                 },
                 messages: {
-                    degree: "Select department",
-                    course: "Select branch",
-                    batch: "Select batch",
-                    semester: "Select semester",
+                    branch: "Select branch",
+                    course: "Select course",
+                    admission_plan: "Select admission plan",
+                    class: "Select class",
                     fee_structure: "Selest fee structure"
                 }
             });

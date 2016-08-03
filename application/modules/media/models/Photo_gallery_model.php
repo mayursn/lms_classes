@@ -29,7 +29,7 @@ class Photo_gallery_model extends MY_Model {
             $gallery['gal_status'] = 0;
         }
         
-        $gallery['updated_date'] = date('Y-m-d H:i:s');
+        $gallery['update_date'] = date('Y-m-d H:i:s');
         return $gallery;
     }
     function get_all_folder_photo($id) {

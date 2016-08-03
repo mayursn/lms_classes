@@ -74,5 +74,3 @@ $delete = delete_permission($permission, 'Holiday');
 <!-- End .row -->
 </div>
 <!-- End contentwrapper -->
-</div>
-<!-- End #content -->

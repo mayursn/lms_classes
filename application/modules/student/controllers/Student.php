@@ -54,7 +54,7 @@ class Student extends MY_Controller {
             $this->load->model('student/Student_model');
             $this->load->model('todo/Todo_list_model');
             $this->data['studyresource'] = $this->Study_resources_model->order_by_column('created_date');
-             $student_detail = $this->db->select('std_id, semester_id, std_degree, course_id, class_id, std_batch,admission_plan_id,branch_id')
+            $student_detail = $this->db->select('std_id, semester_id, std_degree, course_id, class_id, std_batch,admission_plan_id,branch_id')
                 ->from('student')
                 ->where('std_id', $this->session->userdata('std_id'))
                 ->get()
@@ -131,14 +131,19 @@ class Student extends MY_Controller {
                 'admission_plan_id'=> $_POST['admission_plan'],
                 'class_id'  => $_POST['class'],
                 'std_about' => $_POST['std_about'],
-                'std_mobile'    => $_POST['mobileno']                              
+                'std_mobile'    => $_POST['mobileno']
+             
             ));   
             $student=array('f_name'=>$_POST['f_name'],
                            'l_name'=>$_POST['l_name'],
                            'email_id'=>$_POST['email_id'],
                            'password'=>$_POST['password'],
                         );
-            $this->assign_student_roll($_POST['branch'], $_POST['course'], $student_id);
+            $roll_number = date('Y').$_POST['branch'].$_POST['course'].$student_id;
+            $array = array("std_roll"=>$roll_number);
+            $this->db->where("std_id",$student_id);
+            $this->db->update('student',$array);
+            //$this->assign_student_roll($_POST['branch'], $_POST['course'], $student_id);
             $this->email_student_credential($student);
             $this->flash_notification('Student is successfully inserted.');
         }        
@@ -249,16 +254,16 @@ class Student extends MY_Controller {
      * @param string $student_id
      * @return int
      */
-    function generate_student_roll($branch, $semester, $student_id) {
+    function generate_student_roll($branch, $course, $student_id) {
         $roll_no = 0;
         $student = $this->Student_model->last_record_by_condition(array(
-            'course_id' => $branch,
-            'semester_id' => $semester
+            'branch_id' => $branch,
+            'course_id' => $course
         ));
         if ($student) {
-            $roll_no = date('Y') . $branch . $semester . $student_id;
+            $roll_no = date('Y') . $branch . $course . $student_id;
         } else {           
-             $roll_no = date('Y') . $branch . $semester . $student_id;
+             $roll_no = date('Y') . $branch . $course . $student_id;
         }
 
         return $roll_no;
@@ -270,8 +275,9 @@ class Student extends MY_Controller {
      * @param string $semester
      * @param string $student_id
      */
-    function assign_student_roll($branch, $semester, $student_id) {
-        $student_roll_number = $this->generate_student_roll($branch, $semester, $student_id);
+    function assign_student_roll($branch, $course, $student_id) {
+        $student_roll_number = $this->generate_student_roll($branch, $course, $student_id);
+        echo $student_roll_number;die;
 
         $this->Student_model->update($student_id, array(
             'std_roll' => $student_roll_number
@@ -395,7 +401,7 @@ class Student extends MY_Controller {
          $this->data['profile'] = $this->Student_model->student_details($param1); 
          $this->data['submitassignment'] = $this->Student_model->submitassignment($this->data['profile']->std_id); 
          $this->data['exam_listing'] = $this->Student_model->
-                student_exam_list($this->data['profile']->course_id, $this->data['profile']->semester_id);
+                student_exam_list($this->data['profile']->course_id, $this->data['profile']->admission_plan_id,$this->data['profile']->branch_id);
        
         $this->data['title'] = 'Student Profile';
         $this->data['page'] = 'student';
@@ -423,7 +429,8 @@ class Student extends MY_Controller {
     function __hash($str) {
         return hash('md5', $str . config_item('encryption_key'));
     }
-function student_exam_marks()
+    
+    function student_exam_marks()
     {
         $id=$this->input->post('exam_id');
         $student_id=$this->input->post('student_id');

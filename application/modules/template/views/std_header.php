@@ -411,12 +411,12 @@
                                                     </label>
                                                 </li>
                                                  <?php } ?>
-                                                <?php if (check_permission($permission, 'Branch')) { ?>
-                                                <li>
+                                                <?php if (check_permission($permission, 'Course')) { ?>
+                                                <li style="display:none;">
                                                     <label>
                                                         <input type="checkbox" value="course" name="course"
                                                                <?php if (isset($from['course'])) echo 'checked'; ?>>
-                                                        <span>Branch</span>
+                                                        <span>Course</span>
                                                     </label>
                                                 </li>
                                                 <?php } ?>
@@ -439,7 +439,7 @@
                                                 </li>
                                                 <?php } ?>
                                                 <?php if (check_permission($permission, 'Assignment')) { ?>
-                                                <li>
+                                                <li style="display:none;">
                                                     <label>
                                                         <input type="checkbox" value="assignment" name="assignment"
                                                                <?php if (isset($from['assignment'])) echo 'checked'; ?>>

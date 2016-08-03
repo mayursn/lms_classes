@@ -82,7 +82,7 @@
                 </div>
                 <div id="student-attendance-list" >
                     <div class="col-md-12">          
-                        <h4>Class Routine Details
+                        <h4>Attendance Details
                         
                         </h4>
                         <table class="table table-condensed ex1">
@@ -118,7 +118,7 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <div class="panel-title">
-                                        <h4>Class Routine List</h4>
+                                        <h4>Attendance List</h4>
                                     </div>
                                 </div>
                                 <div class="panel-body">
