@@ -85,7 +85,7 @@ $exam_type = $this->Exam_manager_model->get_all_exam_type();
                         <select class="form-control" name="branch" id="branch">
                             <option value="">Select</option>
                             <?php foreach ($branch as $row) { ?>
-                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                             <?php } ?>
                         </select>
                     </div>

@@ -26,12 +26,12 @@ $this->load->model('admission_plan/Admission_plan_model');
                                     <option value="">Select Branch</option>
                                     <?php $branch =  $this->Branch_location_model->order_by_column('branch_name'); ?>
                                     <?php foreach ($branch as $row) { ?>
-                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group col-sm-3 validating">
-                                <label>Branch</label>
+                                <label>Course</label>
                                 <select id="search-course" name="course" class="form-control">
                                     <option value="">Select Course</option>
                                     <?php  foreach ($course as $row_crs): ?>
@@ -83,7 +83,7 @@ $this->load->model('admission_plan/Admission_plan_model');
                                         <td>
                                             <?php
                                            $branch = $this->Branch_location_model->get($row->branch_id);
-                                           echo $branch->branch_name.' - '.$branch->branch_location;
+                                           echo $branch->branch_name;
                                             ?>
                                         </td>	
                                         <td>

@@ -34,7 +34,7 @@
                             <select class="form-control" id="branch" name="branch">
                                 <option value="">Select</option>
                                 <?php foreach ($branch as $row) { ?>
-                                    <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                    <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                                 <?php } ?>
                             </select>
                         </div>

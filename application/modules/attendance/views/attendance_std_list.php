@@ -22,7 +22,7 @@
                                 <select class="form-control" name="branch" id="filter-branch" required="">
                                     <option value="">Select</option>
                                     <?php foreach ($branch as $row) { ?>
-                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                        <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -88,7 +88,7 @@
                         <table class="table table-condensed ex1">
                             <tr>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Branch</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $branch_name->branch_name.' - '.$branch_name->branch_location; ?></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $branch_name->branch_name; ?></td>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Course</strong></td>
                                 <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $course_name->c_name; ?></td>
                             </tr>
@@ -144,7 +144,7 @@
                                                     <td><?php echo $counter++; ?></td>
                                                     <td><?php echo $routine->std_first_name.' '.$routine->std_last_name; ?></td>
                                                       <td><?php if($routine->is_present=='1'){ echo "P"; }else{ echo "A"; } ?></td>
-                                                    <td><?php echo $routine->branch_name.' - '.$routine->branch_location; ?></td>
+                                                    <td><?php echo $routine->branch_name; ?></td>
                                                     <td><?php echo $routine->c_name; ?></td>
                                                     <td><?php echo $routine->admission_duration; ?></td>                                                                                                                                                                                                         
                                                   

@@ -40,7 +40,7 @@ $course = $this->Course_model->order_by_column('c_name');
                                   
                                     foreach ($branch as $row_branch) {
                                         ?>
-                                        <option value="<?php echo $row_branch->branch_id ?>"><?php echo $row_branch->branch_name.' - '.$row_branch->branch_location; ?></option>
+                                        <option value="<?php echo $row_branch->branch_id ?>"><?php echo $row_branch->branch_name; ?></option>
                                         <?php
                                     }
                                     ?>

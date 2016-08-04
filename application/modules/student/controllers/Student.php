@@ -523,7 +523,7 @@ class Student extends MY_Controller {
         $this->load->model('user/User_model');
 
         $this->data['title'] = 'Student';
-        $this->data['page'] = 'professor_student';
+        $this->data['page'] = 'student';
         $userid=$this->session->userdata('user_id');
         $wherearray=array("user_id" => $userid);
         $professor=$this->Professor_model->get_by($wherearray);        

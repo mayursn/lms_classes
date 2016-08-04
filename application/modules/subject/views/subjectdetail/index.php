@@ -79,7 +79,7 @@ $this->load->model('admission_plan/Admission_plan_model');
                                         }
                                     }
                                     ?></td>
-                                <td><?php echo $row->branch_name.' - '.$row->branch_location; ?></td>												                                                                             
+                                <td><?php echo $row->branch_name; ?></td>												                                                                             
                                 <td><?php $plan = $this->Admission_plan_model->get($row->admission_plan_id); 
                                 echo $plan->admission_duration;
                                 ?></td>

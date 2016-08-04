@@ -91,7 +91,7 @@ $course = $this->db->get('course')->result();
                             <select id="branch" name="branch" class="form-control" required="">
                                 <option value="">Select</option>
                                 <?php foreach ($branch as $degree) { ?>
-                                    <option value="<?php echo $degree->branch_id; ?>" ><?php echo $degree->branch_name.' - '.$degree->branch_location; ?></option>
+                                    <option value="<?php echo $degree->branch_id; ?>" ><?php echo $degree->branch_name; ?></option>
                                         <?php } ?>
                             </select>
                         </div>	

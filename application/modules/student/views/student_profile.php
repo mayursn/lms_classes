@@ -23,7 +23,7 @@
                     <div class=col-md-8>
                         <div class=profile-name>
                             <h4><?php echo $profile->std_first_name . ' ' . $profile->std_last_name; ?></h4>
-                            <p class="job-title mb0"><i class="fa fa-building"></i> <?php echo $profile->branch_location; ?></p>
+                            <p class="job-title mb0"><i class="fa fa-building"></i> <?php echo $profile->address; ?></p>
                             <br/><p><i class="fa fa-envelope"></i> <?php echo $profile->email; ?></p>
                             <br/><p><i class="fa fa-phone"></i><?php echo $profile->std_mobile; ?></p>
                         </div>
@@ -45,7 +45,7 @@
                                     <dt class=text-muted>Mobile
                                     <dd><?php echo $profile->mobile; ?>
                                     <dt class=text-muted>Branch
-                                    <dd><?php echo $profile->branch_name.' - '.$profile->branch_location; ?>
+                                    <dd><?php echo "<b>".$profile->branch_name.'</b> <br/> '.$profile->branch_location; ?>
                                     <dt class=text-muted>Course
                                     <dd><?php echo $profile->c_name; ?>
                                     <dt class=text-muted>Admission Plan

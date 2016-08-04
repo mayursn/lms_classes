@@ -28,7 +28,7 @@ $courses = $this->Course_model->order_by_column('c_name');
                         <select id="search-branch" name="branch" class="form-control">
                             <option value="">Select</option>
                             <?php foreach ($branches as $row) { ?>
-                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                             <?php } ?>
                         </select>
                     </div>

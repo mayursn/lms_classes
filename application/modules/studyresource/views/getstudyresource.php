@@ -33,7 +33,7 @@ $this->load->model('admission_plan/Admission_plan_model');
                 <td><?php echo $row->study_title; ?></td>	
                 <td><?php
                    $get_branch =$this->Branch_location_model->get($row->branch_id);
-                   echo $get_branch->branch_name.' - '.$get_branch->branch_location;
+                   echo $get_branch->branch_name;
                     ?>
                 </td>	
                 <td><?php

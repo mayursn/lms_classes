@@ -11,7 +11,7 @@
                             <select class="form-control filter-rows" name="branch" id="filter-branch">
                                 <option value="">Select</option>
                                 <?php foreach ($branch as $rows) { ?>
-                                    <option value="<?php echo $rows->branch_id; ?>"><?php echo $rows->branch_name.' - '.$rows->branch_location; ?></option>                                    
+                                    <option value="<?php echo $rows->branch_id; ?>"><?php echo $rows->branch_name; ?></option>                                    
                                 <?php } ?>
                             </select>
                         </div>	

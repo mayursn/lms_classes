@@ -43,7 +43,7 @@ $delete = delete_permission($permission, 'Subject');
                                 <td></td>	
                                 <td><?php echo $row->subject_name; ?></td>												
                                 <td><?php echo $row->subject_code; ?></td>
-                                <td><?php echo $row->branch_name.' - '.$row->branch_location; ?> </td>
+                                <td><?php echo $row->branch_name; ?> </td>
                                 <td><?php echo $row->c_name; ?> </td>
                                 <td><?php echo $row->admission_duration; ?> </td>
                                   <?php 

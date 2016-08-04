@@ -40,7 +40,7 @@ $delete = delete_permission($permission, 'Class');
                         </tbody>
                     </table>
                 <?php } ?>
-<script>
+<script type="text/javascript">
 $(document).ready(function () {
     $('#datatable-list').DataTable({
         "columnDefs": [{

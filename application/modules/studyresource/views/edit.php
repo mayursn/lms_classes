@@ -27,7 +27,7 @@ $row = $this->Study_resources_model->get($param2);
                                     $branch = $this->db->get('branch_location')->result();
                                     foreach ($branch as $rowdegree) {
                                         ?>
-                                        <option value="<?php echo  $rowdegree->branch_id ?>" <?php  if($row->branch_id==$rowdegree->branch_id){ echo "selected=selected"; }?>><?php echo  $rowdegree->branch_name.' - '.$rowdegree->branch_location; ?></option>
+                                        <option value="<?php echo  $rowdegree->branch_id ?>" <?php  if($row->branch_id==$rowdegree->branch_id){ echo "selected=selected"; }?>><?php echo  $rowdegree->branch_name; ?></option>
                                         <?php
                                     }
                                     ?>

@@ -23,7 +23,7 @@
                                     $branch = $this->db->get('branch_location')->result();
                                     foreach ($branch as $rowdegree) {
                                         ?>
-                                        <option value="<?php echo  $rowdegree->branch_id ?>"><?php echo  $rowdegree->branch_name.' - '.$rowdegree->branch_location; ?></option>
+                                        <option value="<?php echo  $rowdegree->branch_id ?>"><?php echo  $rowdegree->branch_name; ?></option>
                                         <?php
                                     }
                                     ?>

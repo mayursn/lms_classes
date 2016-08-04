@@ -32,7 +32,7 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                         <select class="form-control" id="search-branch"name="branch">
                             <option value="">Select</option>                            
                             <?php foreach ($branch as $row) { ?>
-                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -94,7 +94,7 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                                     <td><?php echo $row->title; ?></td>
                                     <td><?php 
                                    $branch_array = $this->Branch_location_model->get($row->branch_id);
-                                   echo $branch_array->branch_name.' - '.$branch_array->branch_location;
+                                   echo $branch_array->branch_name;
                                     ?></td>
                                     <td><?php 
                                    $course_array = $this->Course_model->get($row->course_id);

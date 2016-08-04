@@ -28,7 +28,7 @@ $delete = delete_permission($permission, 'Exam_Schedual');
             ?>
             <tr>
                 <td><?php echo $counter; ?></td>
-                <td><?php echo $row->branch_name.' - '.$row->branch_location;; ?></td>
+                <td><?php echo $row->branch_name; ?></td>
                 <td><?php echo $row->c_name; ?></td>
                 <td><?php echo $row->admission_duration; ?></td>                
                 <td><?php echo $row->em_name; ?></td>
@@ -38,7 +38,7 @@ $delete = delete_permission($permission, 'Exam_Schedual');
                 <?php if($update || $delete){ ?>
                 <td class="menu-action">
                     <?php  if($update ){?>
-                    <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/modal_edit_exam_time_table/<?php echo $row->exam_time_table_id; ?>');"  data-toggle="tooltip" data-placement="top" ><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
+                    <a href="#" onclick="showAjaxModal('<?php echo base_url(); ?>modal/popup/examschedual_edit/<?php echo $row->exam_time_table_id; ?>');"  data-toggle="tooltip" data-placement="top" ><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span></a>
                     <?php } ?>
                     <?php if($delete){ ?>
                     <a href="#" onclick="confirm_modal('<?php echo base_url(); ?>examschedual/delete/<?php echo $row->exam_time_table_id; ?>');"  data-toggle="tooltip" data-placement="top"><span class="label label-danger mr6 mb6"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span></a>

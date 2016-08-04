@@ -34,7 +34,7 @@ $delete = delete_permission($permission, 'Exam_Schedual');
                         <select class="form-control" id="search-branch"name="branch">
                             <option value="">Select</option>
                             <?php foreach ($branch as $row) { ?>
-                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name.' - '.$row->branch_location; ?></option>
+                                <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -89,7 +89,7 @@ $delete = delete_permission($permission, 'Exam_Schedual');
                             <?php foreach ($time_table as $row) { ?>
                                 <tr>
                                     <td></td>
-                                    <td><?php echo $row->branch_name.' - '.$row->branch_location; ?></td>
+                                    <td><?php echo $row->branch_name; ?></td>
                                     <td><?php echo $row->c_name; ?></td>
                                     <td><?php echo $row->admission_duration; ?></td>                                    
                                     <td><?php echo $row->em_name; ?></td>

@@ -48,7 +48,7 @@ $subjects = $this->Subject_manager_model->subject_list_admission_plan($branch_id
                             <option value="">Select</option>
                             <?php foreach ($branch as $d) { ?>
                                 <option value="<?php echo $d->branch_id; ?>"
-                                        <?php if ($d->branch_id == $edit_data->schedule_branch) echo 'selected'; ?>><?php echo $d->branch_name.' - '.$d->branch_location; ?></option>
+                                        <?php if ($d->branch_id == $edit_data->branch_id) echo 'selected'; ?>><?php echo $d->branch_name; ?></option>
                                     <?php } ?>
                         </select>
                     </div>

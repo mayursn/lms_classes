@@ -98,7 +98,7 @@ foreach ($edit_data as $row):
                             <select name="branch" class="form-control" id="branch">
                                 <option value="">Select</option>
                                 <?php foreach ($branch as $rows) { ?>
-                                    <option value="<?php echo $rows->branch_id; ?>" <?php if($row['branch_id']==$rows->branch_id){ echo "selected=selected"; } ?>><?php echo $rows->branch_name.' - '.$rows->branch_location; ?></option>
+                                    <option value="<?php echo $rows->branch_id; ?>" <?php if($row['branch_id']==$rows->branch_id){ echo "selected=selected"; } ?>><?php echo $rows->branch_name; ?></option>
                                 <?php } ?>                                
                             </select>
                         </div>
