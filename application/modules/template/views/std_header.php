@@ -61,7 +61,7 @@
         <div id="header">
             <nav class="navbar navbar-default" role=navigation>
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="<?php echo base_url(); ?>">
+                    <a class="navbar-brand" href="<?php echo base_url().'student/dashboard'; ?>">
                         <img src="<?php echo base_url(); ?>assets/img/logo.png" alt="logo">
                     </a>
                 </div>
