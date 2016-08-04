@@ -2,6 +2,7 @@
 $edit_data = $this->db->get_where('subject_association', array('sa_id' => $param2))->result_array();
 $this->load->model('branch/Branch_location_model');
 $this->load->model('admission_plan/Admission_plan_model');
+$admission_plan = $this->Admission_plan_model->get_all();
 $branch = $this->Branch_location_model->get_all();
 $professor = $this->db->get('professor')->result_array();
 foreach ($edit_data as $row):

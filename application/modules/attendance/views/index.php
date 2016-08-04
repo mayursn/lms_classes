@@ -17,7 +17,7 @@
                 <div class="row filter-row">
                     <div class=panel-heading>
                             <h4 class=panel-title><?php echo "Take Attendance"; ?></h4>                            
-                        </div>
+                    </div>
                     <form id="attendance-routine" action="#" method="post" class="form-groups-bordered form-horizontal validate">
                          <div class="form-group">
                             <label class="col-sm-2 control-label">Branch<span style="color:red">*</span></label>
@@ -149,7 +149,7 @@
                         </div>  
                         <div class="form-group">
                             <div class="col-sm-6 col-md-offset-2">
-                                <input id="search-filter-attendance" type="submit" value="Submit" class="btn btn-info vd_bg-green"/>
+                                <input id="search-filter-attendance" type="submit" value="Search" class="btn btn-info vd_bg-green"/>
                             </div>
                         </div>
                     </form>

@@ -28,7 +28,7 @@ $delete = delete_permission($permission, 'Exam_Schedual');
             ?>
             <tr>
                 <td><?php echo $counter; ?></td>
-                <td><?php echo $row->branch_name; ?></td>
+                <td><?php echo $row->branch_name.' - '.$row->branch_location;; ?></td>
                 <td><?php echo $row->c_name; ?></td>
                 <td><?php echo $row->admission_duration; ?></td>                
                 <td><?php echo $row->em_name; ?></td>

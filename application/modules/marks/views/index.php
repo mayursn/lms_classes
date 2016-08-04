@@ -91,7 +91,7 @@ $delete = delete_permission($permission, 'Exam_Marks');
                                             </tr>
                                             <tr>
                                                 <td><?php echo $show_exam_details->em_name; ?></td>
-                                                <td><?php echo $show_exam_details->branch_name; ?></td>
+                                                <td><?php echo $show_exam_details->branch_name.' - '.$show_exam_details->branch_location;; ?></td>
                                                 <td><?php echo $show_exam_details->c_name; ?></td>
                                                 <td><?php echo $show_exam_details->admission_duration; ?></td>
                                                 
@@ -280,7 +280,7 @@ $delete = delete_permission($permission, 'Exam_Marks');
     $(document).ready(function () {
         //course by degree
                 
-$('#search-exam').on('change', function () {
+    $('#search-exam').on('change', function () {
             var branch_id = $('#search-branch').val();
             var course_id = $('#search-course').val();
             var admission_plan_id = $('#search-admission_plan').val();            
@@ -363,8 +363,8 @@ $('#search-exam').on('change', function () {
             $.ajax({
                 url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
                 type: 'get',
-                success: function (content) {
-                    var admission_plan = jQuery.parseJSON(content);
+                success: function (content) {                    
+                    var admission_plan = jQuery.parseJSON(content);                    
                     $.each(admission_plan, function (key, value) {
                         $('#search-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
                     });

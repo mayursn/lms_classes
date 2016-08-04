@@ -40,3 +40,18 @@ $delete = delete_permission($permission, 'Class');
                         </tbody>
                     </table>
                 <?php } ?>
+<script>
+$(document).ready(function () {
+    $('#datatable-list').DataTable({
+        "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+        "order": [[1, 'asc']],
+        "language": {
+            "emptyTable": "No data available"
+        }
+    });
+    });
+</script>

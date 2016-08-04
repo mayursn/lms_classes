@@ -70,7 +70,7 @@ $delete = delete_permission($permission, 'Student');
 
                    
  <?php if ($create || $read || $update || $delete) { ?>
-<table id="datatable-list" class="table table-striped table-bordered table-responsive text-center" cellspacing=0 width=100% >
+                        <table id="datatable-list" class="table table-striped table-bordered table-responsive text-center" cellspacing=0 width=100%  style="display: none;">
     <thead>
         <tr>
             <th>No</th>	
@@ -86,7 +86,10 @@ $delete = delete_permission($permission, 'Student');
     </thead>
 
     <tbody>
-        <?php foreach ($student as $row): ?>
+        <?php $student = array(); ?>
+        <?php 
+        if(count($student)){
+        foreach (@$student as $row): ?>
             <tr>
                 <td></td>
                 <td>
@@ -121,7 +124,8 @@ $delete = delete_permission($permission, 'Student');
                     <a href="<?php echo base_url()?>student/student_profile/<?php echo $row->std_id; ?>" data-toggle="tooltip" data-placement="top"><span class="label label-primary mr6 mb6"><i class="fa fa-pencil" aria-hidden="true"></i>Student Profile</span></a>
                 </td>											
             </tr>
-        <?php endforeach; ?>																			
+        <?php endforeach; 
+        }?>																			
     </tbody>
 </table>
                          </div>

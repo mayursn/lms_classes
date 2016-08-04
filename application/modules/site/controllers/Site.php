@@ -680,17 +680,20 @@ SELECT STR_TO_DATE(todo_datetime,'%Y-%m-%d') as todo_date FROM todo_list)")->res
     
     function fake_insert()
     {
-        $branch ='2' ;
-        $course = '';
-        $class = '';
-        $admission_plan = '';
+        echo "Branch ".$branch ='4' ;
+        echo "<br>";
+        echo "Course ".$course ='5';
+        echo "<br>";
+        echo "Class ".$class  ='2';
+        echo "<br>";
+        echo "Admission Plan ".$admission_plan = '4';
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        
         require 'vendor/autoload.php';
         $faker = Faker\Factory::create();
-        
-        
-        
-          
-            for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 30; $i++) {
                     $email = explode("@",$faker->safeEmail);
                     $fake_email = $email[0].$i.'@'.$email[1];
                     $male_female = (rand(1, 100) > 50) ? 'male' : 'female';
@@ -700,7 +703,7 @@ SELECT STR_TO_DATE(todo_datetime,'%Y-%m-%d') as todo_date FROM todo_list)")->res
                 'role_name' => 'Student'
             ));
            
-            echo $user_id = $this->User_model->insert(array(
+             $user_id = $this->User_model->insert(array(
                 'first_name' => $faker->firstName($male_female),
                 'last_name' => $faker->lastName,
                 'email' => $fake_email,
@@ -713,12 +716,11 @@ SELECT STR_TO_DATE(todo_datetime,'%Y-%m-%d') as todo_date FROM todo_list)")->res
                 'role_id' => '3',
                 'is_active' => '1' 
             ));
-          echo "<br>";
-            $user_id = $this->db->insert_id();
+          
+          
           $get_user =  $this->db->get_where('user',array('user_id'=>$user_id))->row();
-          echo "<prE>";
-          print_r($get_user);
-          echo $std_id = $this->db->insert('student', array(
+       
+          $std_id = $this->db->insert('student', array(
                 'user_id' => $user_id,
                 'email' => $get_user->email,
                 'std_first_name'    => $get_user->first_name,
@@ -736,12 +738,15 @@ SELECT STR_TO_DATE(todo_datetime,'%Y-%m-%d') as todo_date FROM todo_list)")->res
                 'std_mobile'    => $get_user->mobile,
                 'std_status'=>'1'
             ));
-          echo "<br>";
-           echo $roll_no = date('Y') . $branch . $course . $std_id;
-          
-         $array = array("std_roll"=>$roll_no);
-          $this->load->model('student/Student_model');
-          $this->Student_model->update($std_id,$array);
+            $std_id = $this->db->insert_id();
+            echo $std_id;
+             $roll_number = date('Y').$branch.$course.$std_id;
+          $res = $this->db->get_where('student',array("std_id"=>$std_id))->result();        
+            $array = array("std_roll"=>$roll_number);
+            $this->db->where("user_id",$user_id);
+             $this->db->update('student',$array);
+            echo $this->db->last_query();            
+            
                      }
               
         

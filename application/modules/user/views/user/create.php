@@ -16,7 +16,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                     <?php echo form_open(base_url() . 'user/user/create', array('class' => 'form-horizontal form-groups-bordered validate', 'role' => 'form', 'id' => 'user-create-form', 'target' => '_top')); ?>
                     <div class="padded">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">First Name</label>
+                            <label class="col-sm-4 control-label">First Name <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="first_name" id="first_name"/>
                             </div>
@@ -28,13 +28,13 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Last Name</label>
+                            <label class="col-sm-4 control-label">Last Name <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="last_name" id="last_name"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Email</label>
+                            <label class="col-sm-4 control-label">Email <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="email" class="form-control" name="email" 
                                        autocomplete="off" id="email" value=""/>
@@ -43,7 +43,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Password</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control" value="" name="password" id="password"/>
+                                <input type="password" class="form-control" value="12345" readonly="" name="password" id="password"/>
                             </div>	
                         </div>
                         <div class="form-group">
@@ -56,15 +56,15 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Mobile</label>
+                            <label class="col-sm-4 control-label">Mobile <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="mobile" id="mobile"/>
+                                <input type="number" maxlength="10" class="form-control" name="mobile" id="mobile"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Phone</label>
+                            <label class="col-sm-4 control-label">Phone <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="phone" id="phone"/>
+                                <input  type="number" maxlength="10" class="form-control" name="phone" id="phone"/>
                             </div>	
                         </div>
                         <div class="form-group">
@@ -74,9 +74,9 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Zip Code</label>
+                            <label class="col-sm-4 control-label">Zip Code <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="zip_code" id="zip_code"/>
+                                <input type="number" maxlength="6" class="form-control" name="zip_code" id="zip_code"/>
                             </div>	
                         </div>
                         <div class="form-group">
@@ -86,7 +86,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Role</label>
+                            <label class="col-sm-4 control-label">Role <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select id="role" class="form-control" name="role">
                                     <option value="">Select</option>
@@ -120,12 +120,52 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
 
         $("#user-create-form").validate({
             rules: {
-                role_name: "required",
-                status: "required",
+                first_name: "required",
+                last_name: "required",
+                email: {
+                            required: true,
+                            email: true,
+                            remote: {
+                                url: "<?php echo base_url(); ?>user/check_user_email",
+                                type: "post",
+                                data: {
+                                     email: function () {
+                                        return $("#email").val();
+                                    },
+                                }
+                            }
+                        },
+                'mobile': {
+                        required:true,
+                        phoneUS: true,
+                },
+                'phone': {
+                        required:true,
+                        phoneUS: true,
+                },
+                city: "required",
+                zip_code: "required",
+                role: "required",
             },
             messages: {
-                role_name: "Enter role name",
-                status: "Select status",
+                 first_name: "Enter first name",
+                last_name: "Enter last name",
+                email: {
+                    required: "Enter email id",
+                    email: "Enter valid email id",
+                    remote: "Email id already exists",
+                },
+                'mobile': {
+                        required:"Enter mobile no",
+                        phoneUS: "Enter valid mobile no",                       
+                },
+                'phone':{
+                        required:"Enter mobile no",
+                        phoneUS: "Enter valid phone no",                       
+                },
+                city: "Enter city",
+                zip_code: "Enter zip code",
+                role: "Select role",
             }
         });
     });

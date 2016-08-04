@@ -189,7 +189,7 @@ class Exam extends MY_Controller {
 
     function update($param2) {
         if ($_POST) {
-            if ($this->form_validation->run('exam_insert_update') != FALSE) {
+            
                 $data = array(
                     'em_name' => $this->input->post('exam_name', TRUE),
                     'em_type' => $this->input->post('exam_type', TRUE),
@@ -210,11 +210,7 @@ class Exam extends MY_Controller {
                 $exam = $this->Exam_manager_model->get($param2);
                 $exam_mode = $this->input->post('exammode');               
                 $this->flash_notification("Exam successfully updated");
-                redirect(base_url('exam'));
-            } else {
-                $page_data['edit_error'] = validation_errors();
-                redirect(base_url('exam'));
-            }
+                redirect(base_url('exam'));            
         }
     }
     

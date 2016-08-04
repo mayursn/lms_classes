@@ -20,7 +20,7 @@ $user = $this->User_model->with('role')->get($param2);
                     <input type="hidden" name="txtuserid" id="txtuserid" value="<?php echo $user->user_id;?>">
                     <div class="padded">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">First Name</label>
+                            <label class="col-sm-4 control-label">First Name  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="first_name" id="first_name"
                                        value="<?php echo $user->first_name; ?>"/>
@@ -34,14 +34,14 @@ $user = $this->User_model->with('role')->get($param2);
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Last Name</label>
+                            <label class="col-sm-4 control-label">Last Name  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="last_name" id="last_name"
                                        value="<?php echo $user->last_name; ?>"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Email</label>
+                            <label class="col-sm-4 control-label">Email  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="email" class="form-control" name="email" 
                                        autocomplete="off" id="email" value="<?php echo $user->email ?>" />
@@ -65,30 +65,30 @@ $user = $this->User_model->with('role')->get($param2);
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Mobile</label>
+                            <label class="col-sm-4 control-label">Mobile  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="mobile" id="mobile"
+                                <input type="number" maxlength="10" class="form-control" name="mobile" id="mobile"
                                        value="<?php echo $user->mobile; ?>"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Phone</label>
+                            <label class="col-sm-4 control-label">Phone  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="phone" id="phone"
+                                <input type="number" maxlength="10" class="form-control" name="phone" id="phone"
                                        value="<?php echo $user->phone; ?>"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">City</label>
+                            <label class="col-sm-4 control-label">City  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="city" id="city"
                                        value="<?php echo $user->city; ?>"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Zip Code</label>
+                            <label class="col-sm-4 control-label">Zip Code  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="zip_code" id="zip_code"
+                                <input type="number" maxlength="6" class="form-control" name="zip_code" id="zip_code"
                                        value="<?php echo $user->zip_code; ?>"/>
                             </div>	
                         </div>
@@ -99,7 +99,7 @@ $user = $this->User_model->with('role')->get($param2);
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Role</label>
+                            <label class="col-sm-4 control-label">Role  <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <select id="role" class="form-control" name="role">
                                     <option value="">Select</option>
@@ -164,8 +164,14 @@ $user = $this->User_model->with('role')->get($param2);
                                 }
                             }
                         },
-                mobile: "required",
-                phone: "required",
+                'mobile': {
+                        required:true,
+                        phoneUS: true,
+                },
+                'phone': {
+                        required:true,
+                        phoneUS: true,
+                },
                 city: "required",
                 zip_code: "required",
                 role: "required",
@@ -178,8 +184,14 @@ $user = $this->User_model->with('role')->get($param2);
                     email: "Enter valid email id",
                     remote: "Email id already exists",
                 },
-                mobile: "Enter mobile no",
-                phone: "Enter phone",
+                'mobile': {
+                        required:"Enter mobile no",
+                        phoneUS: "Enter valid mobile no",                       
+                },
+                'phone':{
+                        required:"Enter mobile no",
+                        phoneUS: "Enter valid phone no",                       
+                },
                 city: "Enter city",
                 zip_code: "Enter zip code",
                 role: "Select role",

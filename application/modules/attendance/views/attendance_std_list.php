@@ -75,7 +75,7 @@
                         </div>  
                         <div class="form-group">
                             <div class="col-sm-6 col-md-offset-2">
-                                <input id="search-filter-attendance" type="submit" value="Submit" class="btn btn-info vd_bg-green"/>
+                                <input id="search-filter-attendance" type="submit" value="Search" class="btn btn-info vd_bg-green"/>
                             </div>
                         </div>
                     </form>
@@ -88,7 +88,7 @@
                         <table class="table table-condensed ex1">
                             <tr>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Branch</strong></td>
-                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $branch_name->branch_name; ?></td>
+                                <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $branch_name->branch_name.' - '.$branch_name->branch_location; ?></td>
                                 <td class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><strong>Course</strong></td>
                                 <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><?php echo $course_name->c_name; ?></td>
                             </tr>
