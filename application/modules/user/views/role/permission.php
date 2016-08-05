@@ -128,7 +128,7 @@ $user_role_permission = ['0', '0', '0', '0'];
                                     </td>
                                     <td>
                                         <input  class="read-permission" type="checkbox" name="read_<?php echo $row->module_id; ?>" id="read_<?php echo $row->module_id; ?>"
-                                            <?php echo $readcheck; ?>   <?php if($user_role_permission[1] == 1) echo 'checked'; ?>/>Read</td>
+                                            <?php echo $readcheck; ?>   <?php if($user_role_permission[1] == 1) echo 'checked'; ?> onclick="read_check()" />Read</td>
                                     <td>
                                         <input class="update-permission" type="checkbox" name="update_<?php echo $row->module_id; ?>" id="update_<?php echo $row->module_id; ?>"
                                                <?php if($user_role_permission[2] == 1) echo 'checked'; ?> onclick="readpermission(<?php echo $row->module_id; ?>); update_check()"/>Update</td>

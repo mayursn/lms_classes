@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" style="display: none;">
                                         <label class="col-sm-3 control-label">Due Fees</label>
                                         <div class="col-sm-9">
                                             <input type="text" readonly="" id="due_fees" name="due_fees" class="form-control"/>
@@ -157,8 +157,7 @@
             var due_fee = 0;
             $('#total_fees').val('');
             $('#due_fees').val('');
-            var student_id = "<?php echo $student_detail->std_id; ?>";
-            var semester_id = "<?php echo $student_detail->semester_id; ?>";
+            var student_id = "<?php echo $student_detail->std_id; ?>";           
             var course_id = "<?php echo $student_detail->course_id; ?>";
             var fees_structure_id = $(this).val();
 
@@ -174,19 +173,19 @@
                     }
                 });
 
-                $.ajax({
-                    url: '<?php echo base_url(); ?>fees/course_semester_paid_fee/' + fees_structure_id,
-                    type: 'get',
-                    success: function (content) {
-                        var total_paid_amount = jQuery.parseJSON(content);
-                        var due_amount = Number($('#total_fees').val());
-                        if (total_paid_amount > 0) {
-                            due_amount = Number($('#total_fees').val()) - total_paid_amount;
-                        }
-                        $('#due_fees').val(Math.abs(total_fee));
-                        due_fee = due_amount;
-                    }
-                });
+//                $.ajax({
+//                    url: '<?php echo base_url(); ?>fees/course_semester_paid_fee/' + fees_structure_id,
+//                    type: 'get',
+//                    success: function (content) {
+//                        var total_paid_amount = jQuery.parseJSON(content);
+//                        var due_amount = Number($('#total_fees').val());
+//                        if (total_paid_amount > 0) {
+//                            due_amount = Number($('#total_fees').val()) - total_paid_amount;
+//                        }
+//                        $('#due_fees').val(Math.abs(total_fee));
+//                        due_fee = due_amount;
+//                    }
+//                });
             }, 1500);
 
             setTimeout(function () {
@@ -213,7 +212,22 @@
                 //title:{required: true},
                 date: "required",
                 semester: "required",
-                fees_structure: "required",
+                fees_structure: 
+                         {
+                            required: true,
+                            remote: {
+                                url: "<?php echo base_url(); ?>fees/check_student_paidfee",
+                                type: "post",
+                                data: {
+                                     fees_structure: function () {
+                                        return $("#fees_structure").val();
+                                    },
+                                     student_id: function () {
+                                        return <?php echo $this->session->userdata('std_id');?>;
+                                    },
+                                }
+                            }
+                        },
                 amount: {
                     required: true,
                     number: true,
@@ -225,7 +239,11 @@
                 //title: "Title is required",
                 date: "Date is required",
                 semester: "Semester is required",
-                fees_structure: "Fees structure is required",
+                fees_structure: 
+                    {
+                    required: "Select fee",
+                    remote: "You are already paid this fee",
+                },
                 amount: {
                     required: "Amount is required",
                     number: "Only enter number",
