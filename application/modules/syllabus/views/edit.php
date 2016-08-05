@@ -26,7 +26,7 @@ $admission_plan = $this->Admission_plan_model->order_by_column('admission_durati
                             <div class="">
                                     <span style="color:red">* <?php echo "is ".ucwords("mandatory field");?></span> 
                                 </div>   
-                            <?php echo form_open(base_url() . 'syllabus/update/' . $row->syllabus_id, array('class' => 'form-horizontal form-groups-bordered validate', 'id' => 'frmeditsyllabus', 'target' => '_top', 'enctype' => 'multipart/form-data')); ?>
+                            <?php echo form_open(base_url() . 'syllabus/update/' . $row->syllabus_id, array('class' => 'form-horizontal form-groups-bordered validate', 'id' => 'frmeditsyllabus', 'target' => '_top', 'enctype' => 'multipart/form-data','method'=>'POST')); ?>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"><?php echo ucwords("Syllabus title");?><span style="color:red">*</span></label>
                                 <div class="col-sm-8">

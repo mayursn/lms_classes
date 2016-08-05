@@ -176,16 +176,23 @@ $user_role_permission = ['0', '0', '0', '0'];
 </style>
 
 <script>
+    function read_check()
+    {
+        if($('.read-permission:checked').length== $('.read-permission').length)
+        {
+            $('#readall').attr('checked', true);
+        }
+        else
+        {
+            $('#readall').attr('checked', false);
+        }
+    }
     function readpermission(id)
     {
       if($('#create_'+id).is(":checked") || $('#update_'+id).is(":checked") || $('#delete_'+id).is(":checked"))
       {
             $('#read_'+id).attr('checked', true);
         }
-//        else
-//        {
-//             $('#read_'+id).attr('checked', false);
-//        }
     }
     
     function readcheckall()
@@ -195,11 +202,6 @@ $user_role_permission = ['0', '0', '0', '0'];
             $('.read-permission').prop('checked', true);
             $('#readall').attr('checked', true);
         }
-//        else
-//        {
-//            $('.read-permission').prop('checked', false);
-//            $('#readall').attr('checked', false);
-//        }
     }
     function create_check()
     {
@@ -211,7 +213,6 @@ $user_role_permission = ['0', '0', '0', '0'];
         else
         {
             $('.all-create').prop('checked', false);
-            $('.all-read').prop('checked', false);
         }
     }
     function update_check()
@@ -224,7 +225,6 @@ $user_role_permission = ['0', '0', '0', '0'];
         else
         {
             $('.all-update').prop('checked', false);
-            $('.all-read').prop('checked', false);
         }
         
     }
@@ -238,7 +238,6 @@ $user_role_permission = ['0', '0', '0', '0'];
         else
         {
             $('.all-delete').prop('checked', false);
-            $('.all-read').prop('checked', false);
         }
     }
     

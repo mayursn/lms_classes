@@ -89,8 +89,6 @@ class Syllabus extends MY_Controller {
 
     function update($param2 = '') {
         if ($_POST) {
-
-
             $syllabus = $this->Smart_syllabus_model->get($param2);
 
             if ($_FILES['syllabusfile']['name'] != "") {
@@ -118,13 +116,14 @@ class Syllabus extends MY_Controller {
             }
 
             $insert['syllabus_title'] = $this->input->post('title');
-            $insert['syllabus_degree'] = $this->input->post('degree');
+            $insert['branch_id'] = $this->input->post('branch');
             $insert['syllabus_course'] = $this->input->post('course');
-            $insert['syllabus_sem'] = $this->input->post('semester');
+            $insert['admission_plan_id'] = $this->input->post('admission_plan');
             $insert['syllabus_desc'] = $this->input->post('description');
             $insert['update_date'] = date('Y-m-d H:i:s');
 
             $this->Smart_syllabus_model->update($param2, $insert);
+            
             $this->flash_notification("Syllabus successfully updated");
             redirect(base_url() . 'syllabus/', 'refresh');
         }

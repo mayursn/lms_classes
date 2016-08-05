@@ -40,6 +40,7 @@ if ($message != '') {
             timeOut: 5000
         });
 <?php } ?>
+$(".toaster").css({'top':"62px"});
 </script> 
 <?php include 'modal.php'; ?>
 </body>
