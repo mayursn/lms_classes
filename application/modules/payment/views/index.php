@@ -72,7 +72,7 @@ $delete = delete_permission($permission, 'Payment');
                     <?php } ?>
                 </div>
 
-                <div class="col-md-12" id="all-student-payment-records">
+            
                     <?php if($create || $read || $update || $delete){ ?>
                     <table id="fee-datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                         <thead>
@@ -119,8 +119,8 @@ $delete = delete_permission($permission, 'Payment');
                     <?php } ?>
                         </tbody>
                     </table>
-                            <?php } ?>														
-                </div>                
+                    <?php } ?>														
+                               
                 
                 <div class="col-md-12" id="filtered-student-payment-records"></div>
                 
@@ -131,8 +131,6 @@ $delete = delete_permission($permission, 'Payment');
     <!-- col-lg-12 end here -->
 </div>
 <!-- End .row -->
-</div>
-<!-- End contentwrapper -->
 </div>
 </div>
 <!-- End #content -->
