@@ -41,10 +41,10 @@ class Reports_model extends MY_Model {
      * @return array
      */
     function department_wise_student() {
-        return $this->db->select('COUNT(*) AS Total, d_name')
+        return $this->db->select('COUNT(*) AS Total, c_name')
                 ->from('student')
-                ->join('degree', 'degree.d_id = student.std_degree')
-                ->group_by('std_degree')
+                ->join('course', 'course.course_id = student.course_id')
+                ->group_by('student.course_id')
                 ->having('Total > 0')
                 ->get()->result();
     }

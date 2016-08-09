@@ -36,6 +36,7 @@ class Reports extends MY_Controller {
         
         // department wise student count
         $this->data['department_wise_student'] = $this->Reports_model->department_wise_student();
+       
         
         $this->data['title'] = 'Reports';
         $this->data['page'] = 'reports';

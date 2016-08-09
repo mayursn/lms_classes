@@ -173,7 +173,7 @@ $(function () {
             xAxis: {
                 categories: [
                     <?php foreach($department_wise_student as $row) { ?>
-                    '<?php echo $row->d_name; ?>',                    
+                    '<?php echo $row->c_name; ?>',                    
                     <?php } ?>
                 ],
                 crosshair: true
