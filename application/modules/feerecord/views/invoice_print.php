@@ -61,7 +61,7 @@
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Address:</strong>   303, 3rd Floor, Sigma 2, Opp. Sales India, <br/><span style="margin-left: 25px;"> Opp Sunrise park, Vastrapur,</span></li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>City: </strong>Ahmedabad</li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Region/State: </strong>Gujarat</li>
-                                <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Zip/Postal Code: </strong>380015</li>
+                                <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Zip/Postal Code: </strong>380052</li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Phone:</strong> <strong class=color-red>+919909978808</strong></li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Email: </strong> <strong class=color-red>sales@searchnative.in</strong></li>
                             </ul>
