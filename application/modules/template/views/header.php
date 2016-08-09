@@ -675,7 +675,7 @@
                                         </li>
                                     <?php } ?>
                                     <?php if (check_permission($permission, 'Report')) { ?>
-                                        <li >
+                                        <li>
                                             <a <?php echo active_single_menu('report_chart', $page); ?> href="<?php echo base_url(); ?>reports">
                                                 <i class="s16 fa fa-bar-chart"></i>
                                                 <span class=txt>Reports</span>
