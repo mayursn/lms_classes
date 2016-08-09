@@ -55,7 +55,7 @@
                                 <select class="form-control" name="class" id="create-class" required="">
                                     <option value="">Select</option>                
                                     <?php foreach($class as $cl): ?>
-                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_id; ?></option>
+                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_name; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -126,7 +126,7 @@
                                 <select class="form-control" name="class" id="filter-class" required="">
                                     <option value="">Select</option>                
                                     <?php foreach($class as $cl): ?>
-                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_id; ?></option>
+                                    <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_name; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

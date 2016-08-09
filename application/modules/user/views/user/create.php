@@ -160,7 +160,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                         phoneUS: "Enter valid mobile no",                       
                 },
                 'phone':{
-                        required:"Enter mobile no",
+                        required:"Enter phone no",
                         phoneUS: "Enter valid phone no",                       
                 },
                 city: "Enter city",

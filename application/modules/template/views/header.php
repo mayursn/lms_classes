@@ -254,7 +254,7 @@
                                             <?php } ?>
                                             <?php if (check_permission($permission, 'Course')) { ?>
                                                 <li>
-                                                    <a id="link-branch" href="<?php echo base_url(); ?>courses">
+                                                    <a id="link-course" href="<?php echo base_url(); ?>courses">
                                                         <i class="s16 fa fa-exchange"></i>
                                                         <span class="txt">Course</span>
                                                     </a>

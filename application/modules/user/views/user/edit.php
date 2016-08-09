@@ -189,7 +189,7 @@ $user = $this->User_model->with('role')->get($param2);
                         phoneUS: "Enter valid mobile no",                       
                 },
                 'phone':{
-                        required:"Enter mobile no",
+                        required:"Enter phone no",
                         phoneUS: "Enter valid phone no",                       
                 },
                 city: "Enter city",
