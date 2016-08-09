@@ -73,85 +73,25 @@ $professor = $this->db->get('professor p')->result();
 
 <script type="text/javascript">
 
-        $('#course').on('change', function () {
-            var course_id = $(this).val();
-            
-            get_admission_plan(course_id);
-        });
         
-        function get_admission_plan(course_id)
-    {
-     $('#admission_plan').find('option').remove().end();
-        $('#admission_plan').append('<option value="">Select</option>');
-        $.ajax({
-            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
-            type: 'GET',
-            success: function (content) {
-                var admission_plan = jQuery.parseJSON(content);                
-                console.log(admission_plan);
-                $.each(admission_plan, function (key, value) {
-                    $('#admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
-                });
-            }
-        });
-    }
     $.validator.setDefaults({
         submitHandler: function (form) {
             form.submit();
         }
     });
 
-    $().ready(function () {
-          $("#subname").change(function () {
-            $('#semester').val($("#semester option:eq(0)").val());
-        });
-        $("#course").change(function () {
-            $('#semester').val($("#semester option:eq(0)").val());
-        });
-        $("#subcode").change(function () {
-            $('#semester').val($("#semester option:eq(0)").val());
-        });
-
+    $(document).ready(function () {
+          
         $("#frmsubjectdetail").validate({
             rules: {
-                degree: "required",
-                course: 
-                        {
-                            required:true,
-                            remote: {
-                                        url: "<?php echo base_url(); ?>subject/checksubjects",
-                                        type: "post",
-                                        data: {
-                                            degree: function () {
-                                                return $("#degree").val();
-                                            },
-                                            course: function () {
-                                                return $("#course").val();
-                                            },
-                                            subjectid: function () {
-                                                return <?php echo $this->uri->segment(4);?>
-                                            }
-                                        }
-                                    }
-                },
-                semester: "required",
-                'professor[]':
-                        {
-                            required: true,
-                        },
+                branch: "required",
+                admission_plan: "required",
+                professor : "required",                
             },
             messages: {
-                degree: "Select department",
-                course: 
-                {
-                    required:"Select branch",
-                    remote:"Subject already exists for this branch",
-                },
-                semester: "Select semester",
-                'professor[]':
-                        {
-                            required: "Select Professor",
-                        },
+                branch: "Select branch",
+                admission_plan : "Select admission plan",                
+                professor : "Select professor",                
             }
         });
     });

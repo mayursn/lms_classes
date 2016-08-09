@@ -139,6 +139,7 @@ class Subject extends MY_Controller {
     function subject_detail_create($param1="")
     {
          if ($_POST) {
+             
             $data['branch_id'] = $this->input->post('branch');            
             $data['admission_plan_id'] = $this->input->post('admission_plan');            
             $data['sm_id'] = $param1;

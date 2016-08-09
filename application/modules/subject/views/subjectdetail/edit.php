@@ -76,45 +76,6 @@ foreach ($edit_data as $row):
 
 <script type="text/javascript">
 
- $('#degree').on('change', function () {
-            var department_id = $(this).val();
-            department_branch(department_id);
-        });
-         $('#course').on('change', function () {
-            var branch_id = $(this).val();
-            var department = $('#degree').val();
-            semester_from_branch(branch_id);
-        });
-         function department_branch(department_id) {
-            $('#course').find('option').remove().end();
-            $('#course').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>branch/department_branch/' + department_id,
-                type: 'GET',
-                success: function (content) {
-                    var branch = jQuery.parseJSON(content);
-                    console.log(branch);
-                    $.each(branch, function (key, value) {
-                        $('#course').append('<option value=' + value.course_id + '>' + value.c_name + '</option>');
-                    });
-                }
-            });
-        }
-         function semester_from_branch(branch) {
-            $('#semester').find('option').remove().end();
-            $('#semester').append('<option value>Select</option>');
-            $.ajax({
-                url: '<?php echo base_url(); ?>semester/semester_branch/' + branch,
-                type: 'GET',
-                success: function (content) {
-                    var semester = jQuery.parseJSON(content);
-                    $.each(semester, function (key, value) {
-                        $('#semester').append('<option value=' + value.s_id + '>' + value.s_name + '</option>');
-                    });
-                }
-            });
-        } 
-        
     $.validator.setDefaults({
         submitHandler: function (form) {
             form.submit();
@@ -134,47 +95,14 @@ foreach ($edit_data as $row):
         
         $("#frmsubjectdetail").validate({
             rules: {
-                degree: "required",
-                course: 
-                {
-                   required:true,
-                   remote: {
-                               url: "<?php echo base_url(); ?>subject/checksubjects/edit",
-                               type: "post",
-                               data: {
-                                   degree: function () {
-                                       return $("#degree").val();
-                                   },
-                                   course: function () {
-                                       return $("#course").val();
-                                   },
-                                   subjectid: function () {
-                                       return <?php echo $this->uri->segment(5);?>;
-                                   },
-                                    editid: function () {
-                                         return <?php echo $this->uri->segment(4);?>;
-                                     }
-                               }
-                           }
-                },
-                semester: "required",
-                'professor[]':
-                        {
-                            required: true,
-                        },
+                branch: "required",
+                admission_plan: "required",
+                professor : "required",                
             },
             messages: {
-                degree: "Select department",
-                course: 
-                 {
-                    required:"Select branch",
-                    remote:"Subject already exists for this branch",
-                },
-                semester: "Select semester",
-                'professor[]':
-                        {
-                            required: "Select Professor",
-                        },
+                branch: "Select branch",
+                admission_plan : "Select admission plan",                
+                professor : "Select professor",                
             }
         });
     });
