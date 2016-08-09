@@ -58,7 +58,7 @@
                                 <li>
                                     <h3>Lore Brain</h3>
                                 </li>
-                                <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Address:</strong> 207, campus corner 2 , Opp. Prahladnagar Garden, <br/><span style="margin-left: 25px;"></span>Anandnagar road, Prahladnagar, Ahmedabad 380015</li>
+                                <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Address:</strong>   303, 3rd Floor, Sigma 2, Opp. Sales India, <br/><span style="margin-left: 25px;"> Opp Sunrise park, Vastrapur,</span></li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>City: </strong>Ahmedabad</li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Region/State: </strong>Gujarat</li>
                                 <li><i class="s16 icomoon-icon-arrow-right-3"></i><strong>Zip/Postal Code: </strong>380015</li>

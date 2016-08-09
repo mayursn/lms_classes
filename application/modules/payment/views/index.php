@@ -134,6 +134,7 @@ $delete = delete_permission($permission, 'Payment');
 </div>
 <!-- End contentwrapper -->
 </div>
+</div>
 <!-- End #content -->
 
 <script>
