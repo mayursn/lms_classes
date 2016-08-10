@@ -333,5 +333,11 @@ class Exam extends MY_Controller {
         redirect(base_url().'exam/internal');
     }
     
+   function getexam($id)
+   {
+       $exam=  $this->Exam_manager_model->get($id);
+       echo json_encode($exam);
+   }
+    
     
 }

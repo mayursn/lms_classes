@@ -94,9 +94,10 @@ jQuery('#addnewtodo').on('click', function (event) {
         if ($(this).is(':checked'))
         {
 
-            $(this).closest('li.todo-task-item').addClass('task-done');
+            $(this).closest('li.todo-task-item').addClass('task-done');            
             var id = $(this).val(); // todo id
             var dataString = "id=" + id + "&status=0";
+            $('#getupdatecheck'+id).addClass('hidden');
 
             $.ajax({
                 type: "POST",
@@ -108,11 +109,10 @@ jQuery('#addnewtodo').on('click', function (event) {
             });
 
         } else {
-            $(this).closest('li.todo-task-item').removeClass('task-done');
-
+            $(this).closest('li.todo-task-item').removeClass('task-done');            
             var id = $(this).val(); // todo id
             var dataString = "id=" + id + "&status=1";
-
+            $('#getupdatecheck'+id).removeClass('hidden');
             $.ajax({
                 type: "POST",
                 url: base_url+"todo/changestatus",

@@ -123,7 +123,12 @@
 </script>
 
 <script type="text/javascript">
-
+  $( "#exam_date" ).focusin(function() {
+         $(this).prop('readonly', true);
+      });
+      $( "#exam_date" ).focusout(function() {
+         $(this).prop('readonly', false);
+      });
     $(document).ready(function () {
         $('#start_time').timepicker({
             upArrowStyle: 'fa fa-angle-up',
@@ -167,6 +172,29 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $("#exam").change(function(){
+    var id= $(this).val();
+    if(id!="")
+    {
+        $.ajax({
+              url: '<?php echo base_url(); ?>exam/getexam/'+id,
+              type: 'post',
+              dataType:'json',
+              success: function (content) {
+                  var startdate= new Date(content.em_date);
+                  var enddate= new Date(content.em_end_time);
+                    $("#exam_date").datepicker("remove");
+                    
+                  $('#exam_date').datepicker({
+                        format:js_date_format,
+                        autoclose: true,
+                        startDate: startdate,
+                        endDate:enddate,
+                    });
+              }
+          })
+    }
+})
         $.validator.addMethod("greaterThan",
                 function (value, element, param) {
                     var $min = $(param);
@@ -194,35 +222,7 @@
             downArrowStyle: 'fa fa-angle-down',
             minuteStep: 30
         });
-        $("#exam_time_table_form").validate({
-            rules: {
-                degree: "required",
-                course: "required",
-                batch: "required",
-                semester: "required",
-                exam: "required",
-                subject: "required",
-                exam_date: "required",
-                start_time: "required",
-                end_time: {
-                    required: true,
-                    greaterThan: '#start_time'
-                }
-            },
-            messages: {
-                degree: "Please select department",
-                course: "Please select branch",
-                batch: "Please select batch",
-                semester: "Please select semester",
-                exam: "Please select exam",
-                subject: "Please select subject",
-                exam_date: "Please enter date",
-                start_time: "Please enter start time",
-                end_time: {
-                    required: "Please enter end time",
-                }
-            }
-        });
+  
     });
 </script>
 

@@ -78,7 +78,6 @@
             <ul id=profileTab class="nav nav-tabs">
                 <li class="active"><a href="#change-password" data-toggle=tab>Change Password</a></li>
                <?php 
-               
                if($this->session->userdata('role_name')!="Student")
                {
                ?> <li><a href="#editprofile" data-toggle=tab>Edit Profile</a></li>
@@ -94,8 +93,8 @@ if($this->session->userdata('role_name')=='Student')
             </ul>
             <div id="mytab" class=tab-content style="overflow-y: scroll;height:400px">
                 <div class="tab-pane fade active in" id="change-password">
-                    <?php                    
-                    $message = $this->session->flashdata('flash_message');
+                    <?php
+                    $message = $this->session->flashdata('message');
                     if ($message != '') {
                         ?>
                         <div class="alert alert-success">
@@ -181,7 +180,7 @@ if($this->session->userdata('role_name')=='Student')
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Mobile Phone<span style="color:red">*</span></label>
                             <div class="col-lg-9">
-                                <input type="number" maxlength="11" class="form-control" name="mobile" id="mobile" value="<?php echo $profile[0]->mobile; ?>"/>
+                                <input class="form-control" name="mobile" id="mobile" value="<?php echo $profile[0]->mobile; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -193,12 +192,12 @@ if($this->session->userdata('role_name')=='Student')
                          <div class="form-group">
                             <label class="col-sm-3 control-label">Zip Code<span style="color:red">*</span></label>
                             <div class="col-lg-9">
-                                <input type="number" maxlength="6" class="form-control" name="zip" id="zip" value="<?php echo $profile[0]->zip_code; ?>"/>
+                                <input class="form-control" name="zip" id="zip" value="<?php echo $profile[0]->zip_code; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><?php echo ucwords("Profile Photo"); ?></label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-3 control-label"><?php echo ucwords("Profile Photo"); ?></label>
+                            <div class="col-sm-9">
                                 <input type="file" class="form-control" name="userfile" id="userfile"/>
                                 <span id="imgerror" style="color:red;"></span>
                             </div>
@@ -279,7 +278,12 @@ if($this->session->userdata('role_name')=='Student')
 <script>
 
     $(document).ready(function () {
-      
+         jQuery.validator.addMethod("phoneUS", function(phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, ""); 
+                return this.optional(element) || phone_number.length > 9 &&
+                        phone_number.match(/^[0-9]{3}[0-9]{3}[0-9]{4}$/);
+        }, "Please specify a valid phone number");
+        
         $("#frmchangepassword").validate({
             rules: {
                 password: 
@@ -327,30 +331,24 @@ if($this->session->userdata('role_name')=='Student')
                 lname: "required",
                 email: "required",
                 gender: "required",
-                'mobile': {
-                        required:true,
-                        phoneUS: true,
-                },
+                mobile: {
+                            required: true,
+                            phoneUS: true,
+                        },
                 city: "required",
-                'zip': {
-                    required:true,
-                    mixlength:6
-                },
+                zip: "required",
             },
             messages: {
                 fname: "Enter first name",
                 lname: "Enter last name",
                 email: "Enter email",
                 gender: "Select gender",
-                'mobile': {
-                        required:"Enter mobile no",
-                        phoneUS: "Enter valid mobile no",                       
-                },
+                mobile: {
+                        required: "Enter mobile no",
+                        phoneUS: "Enter valid mobile number",
+                    },
                 city: "Enter city",
-                'zip':{
-                    required:"Enter zip code",
-                    mixlength:'Enter valid zip code'
-                },
+                zip: "Please enter valid zip code",
             }
         });
          $("#frmstudentprofile").validate({

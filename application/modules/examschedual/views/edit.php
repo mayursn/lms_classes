@@ -108,8 +108,8 @@ $subjects = $this->Subject_manager_model->subject_list_admission_plan($branch_id
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><?php echo ucwords("Date"); ?><span style="color:red">*</span></label>
                     <div class="col-sm-8">
-                        <input readonly="" type="text" required=""  name="exam_date" class="form-control datepicker-normal-edit"
-                               value="<?php echo date_formats($edit_data->em_date); ?>"/>
+                        <input readonly="" type="text" required=""  name="exam_date"  id="exam_date"  class="form-control datepicker-normal-edit"
+                               value="<?php echo date_formats($edit_data->em_date); ?>"  />
                     </div>
                 </div>
                 <div class="form-group">
@@ -215,7 +215,39 @@ $subjects = $this->Subject_manager_model->subject_list_admission_plan($branch_id
 
 <script type="text/javascript">
     $(function () {
-var js_date_format = '<?php echo js_dateformat(); ?>';
+ $( "#exam_date" ).focusin(function() {
+         $(this).prop('readonly', true);
+      });
+      $( "#exam_date" ).focusout(function() {
+         $(this).prop('readonly', false);
+      });
+      
+  var js_date_format = '<?php echo js_dateformat(); ?>';
+    $("#edit_exam").change(function(){
+    var id= $(this).val();
+    $('#exam_date').val('');
+    if(id!="")
+    {
+        $.ajax({
+              url: '<?php echo base_url(); ?>exam/getexam/'+id,
+              type: 'post',
+              dataType:'json',
+              success: function (content) {
+                  var startdate= new Date(content.em_date);
+                  var enddate= new Date(content.em_end_time);
+                    $("#exam_date").datepicker("remove");
+                    
+                  $('#exam_date').datepicker({
+                        format:js_date_format,
+                        autoclose: true,
+                        startDate: startdate,
+                        endDate:enddate,
+                    });
+              }
+          })
+    }
+})
+
         $(".datepicker-normal-edit").datepicker({
             format: js_date_format, startDate : new Date(),
             changeMonth: true,
