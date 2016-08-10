@@ -24,7 +24,7 @@ class Branch extends MY_Controller {
     function index() {
         $this->data['title'] = 'Branch';
         $this->data['page'] = 'branch';
-        $this->data['branch'] = $this->Branch_location_model->order_by_column('branch_name');
+        $this->data['branch'] = $this->Branch_location_model->get_all_branch();
         $this->__template('branch/index', $this->data);
     }
 

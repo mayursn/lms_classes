@@ -93,16 +93,21 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                                     <td></td>
                                     <td><?php echo $row->title; ?></td>
                                     <td><?php 
-                                   $branch_array = $this->Branch_location_model->get($row->branch_id);
-                                   echo $branch_array->branch_name;
+                                   echo $row->branch_name;
+                                   
+                                   
+                                   
                                     ?></td>
                                     <td><?php 
-                                   $course_array = $this->Course_model->get($row->course_id);
-                                   echo $course_array->c_name;
+                                    
+                                   
+                                        echo $row->c_name;
+                                   
                                     ?></td>
                                     <td><?php
-                                    $plan_array = $this->Admission_plan_model->get($row->admission_plan_id);
-                                    echo $plan_array->admission_duration;
+                                   
+                                    echo $row->admission_duration;
+                                    
                                     ?></td>
                                     <td><?php 
                                     $class_array = $this->Class_model->get($row->class_id);

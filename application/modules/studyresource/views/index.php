@@ -19,7 +19,7 @@ $this->load->model('admission_plan/Admission_plan_model');
                 <?php } ?>
                 <div class="row filter-row">
                     <?php if ($create || $read || $update || $delete) { ?>
-                        <form action="#" method="post" id="searchform">
+                        <form action="#" method="post" id="studysearchform">
                             <div class="form-group col-sm-3 validating">
                                 <label>Branch</label>
                                 <select id="search-branch" name="branch" class="form-control">
@@ -83,19 +83,28 @@ $this->load->model('admission_plan/Admission_plan_model');
                                         <td>
                                             <?php
                                            $branch = $this->Branch_location_model->get($row->branch_id);
+                                           if($branch)
+                                           {
                                            echo $branch->branch_name;
+                                           }
                                             ?>
                                         </td>	
                                         <td>
                                             <?php
                                             $course_array = $this->Course_model->get($row->course_id);
-                                            echo $course_array->c_name;
+                                            if($course_array)
+                                            {
+                                                echo $course_array->c_name;
+                                            }
                                             ?>
                                         </td>
                                         <td>
                                             <?php
                                            $plan = $this->Admission_plan_model->get($row->admission_plan_id);
-                                           echo $plan->admission_duration;
+                                           if($plan)
+                                           {
+                                                echo $plan->admission_duration;
+                                           }
                                             ?>
                                         </td>	                                  
 
@@ -136,7 +145,79 @@ $this->load->model('admission_plan/Admission_plan_model');
 </div>
 <!-- End #content -->
 
+<script>
+ $(document).ready(function () {
+     var form = $("#studysearchform");
+
+        $("#studysearchform #btnsubmit").click(function () {
+              $("#studysearchform").validate({
+        rules: {
+            txtdemo:"required",
+            branch: "required",
+            course: "required",
+            admission_plan: "required"
+        },
+        messages: {
+            txtdemo:"enter",
+            branch: "Select branch",
+            course: "Select course",
+            admission_plan: "Select admission plan"
+        }
+    });
+            if (form.valid() == true)
+            {
+            var branch = $("#search-branch").val();
+            var course = $("#search-course").val();
+            var admission_plan = $("#search-admission_plan").val();            
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>studyresource/getstudyresource/",
+                data: {'branch': branch, 'course': course, 'admission_plan': admission_plan},
+                success: function (response)
+                {
+                    $("#getresponse").html(response);
+                }
+
+
+            });
+            return false;
+        }
+        });
+    });
+</script>
 <script type="text/javascript">
+    $(document).ready(function () {
+         $('#search-course').on('change', function () {
+            var course_id = $(this).val();
+            
+            get_admission_plan(course_id);        
+          });
+    function get_admission_plan(course_id)
+    {
+     $('#search-admission_plan').find('option').remove().end();
+        $('#search-admission_plan').append('<option value>Select</option>');
+        $.ajax({
+            url: '<?php echo base_url(); ?>courses/get_admission_plan/' + course_id,
+            type: 'GET',
+            success: function (content) {
+                var admission_plan = jQuery.parseJSON(content);
+                
+                console.log(admission_plan);
+                $.each(admission_plan, function (key, value) {
+                    $('#search-admission_plan').append('<option value=' + value.admission_plan_id + '>' + value.admission_duration + '</option>');
+                });
+            }
+        });
+    }
+ 
+    });
+    $(document).ready(function () {
+        $('#studyresource-tables').dataTable({"language": {"emptyTable": "No data available"}});
+
+    });
+</script>
+<script type="text/javascript">
+    /*
     $(document).ready(function () {
 
 
@@ -185,4 +266,5 @@ $this->load->model('admission_plan/Admission_plan_model');
         $('#studyresource-tables').dataTable({"language": {"emptyTable": "No data available"}});
 
     });
+    */
 </script>

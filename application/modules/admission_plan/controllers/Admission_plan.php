@@ -24,7 +24,7 @@ class Admission_plan extends MY_Controller {
     function index() {
         $this->data['title'] = 'Admission Plan';
         $this->data['page'] = 'admission_plan';
-        $this->data['admission_plan'] = $this->Admission_plan_model->get_all();
+        $this->data['admission_plan'] = $this->Admission_plan_model->get_all_plan();
         $this->__template('admission_plan/index', $this->data);
     }
 
@@ -76,6 +76,7 @@ class Admission_plan extends MY_Controller {
      * Check admission type
      */
     function check_admission_plan() {
+        $this->db->where('admission_plan_status','1');
         $data = $this->db->get_where('admission_plan', array('admission_duration' => $this->input->post('admission_plan')))->result();
         if (count($data) > 0) {
             echo "false";

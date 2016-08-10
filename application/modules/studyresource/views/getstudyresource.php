@@ -33,18 +33,26 @@ $this->load->model('admission_plan/Admission_plan_model');
                 <td><?php echo $row->study_title; ?></td>	
                 <td><?php
                    $get_branch =$this->Branch_location_model->get($row->branch_id);
+                   if($get_branch)
+                   {
                    echo $get_branch->branch_name;
+                   }
                     ?>
                 </td>	
                 <td><?php
                     $get_course = $this->Course_model->get($row->course_id);
+                    if($get_course){
                     echo $get_course->c_name;
+                    }
                     ?>
                 </td>
                 <td>
                     <?php
                     $get_plan = $this->Admission_plan_model->get($row->admission_plan_id);
-                    echo $get_plan->admission_duration;
+                    if($get_plan)
+                    {
+                        echo $get_plan->admission_duration;
+                    }
                     ?>
                 </td>	                
              <td><a href="<?php echo base_url() . 'uploads/project_file/' . $row->study_filename; ?>" download=""  title="<?php echo $row->study_filename; ?>"><i class="fa fa-download"></i></a></td>	

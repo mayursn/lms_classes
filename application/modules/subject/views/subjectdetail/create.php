@@ -5,7 +5,7 @@ $this->load->model('admission_plan/Admission_plan_model');
 
 $branch = $this->Branch_location_model->order_by_column('branch_name');
 $courses = $this->Course_model->order_by_column('c_name');
-$admission_plan = $this->Admission_plan_model->order_by_column('admission_duration');
+$admission_plan = $this->Admission_plan_model->get_many_by(array('admission_plan_status'=>'1'));
 
 $professor = $this->db->get('professor p')->result();
 ?>

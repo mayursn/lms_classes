@@ -25,7 +25,7 @@ class Subject extends MY_Controller {
         }
         $this->data['title'] = 'Subject';
         $this->data['page'] = 'subject';
-        $this->data['subject'] = $this->Subject_manager_model->order_by_column('subject_name');
+        $this->data['subject'] = $this->Subject_manager_model->get_all_subject();
        
         $this->__template('subject/index', $this->data);
     }
@@ -129,6 +129,7 @@ class Subject extends MY_Controller {
             //$data['admission_plan_id']= implode(",",$_POST['admission_plan']);
             $data['subject_name'] = $this->input->post('subname');
             $data['subject_code'] = $this->input->post('subcode');
+            $data['sm_status'] = $this->input->post('status');
             $this->Subject_manager_model->update($id, $data);
             $this->flash_notification('Subject is successfully updated.');
         }

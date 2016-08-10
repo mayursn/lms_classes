@@ -101,7 +101,10 @@ $courses = $this->Course_model->order_by_column('c_name');
                                     </td>
 
                                     <td> <?php $plan =  $this->Admission_plan_model->get($row->admission_plan_id); 
-                                    echo $plan->admission_duration;
+                                    if($plan)
+                                    {
+                                        echo $plan->admission_duration;
+                                    }
                                     ?></td>	
                                     <td><?php echo wordwrap($row->syllabus_desc, 30, "<br>\n"); ?></td>
                                     <td id="downloadedfile"><a href="<?php echo base_url() . 'uploads/syllabus/' . $row->syllabus_filename; ?>" download="" title="download"><i class="fa fa-download"></i></a></td>	                                                  

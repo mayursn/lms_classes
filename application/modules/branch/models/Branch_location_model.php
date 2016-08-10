@@ -8,6 +8,7 @@ class Branch_location_model extends MY_Model {
     
     public $before_create = array('timestamps');   
     public $before_update = array('update_timestamps');
+    public $before_get = array('check_status');
 
     /**
      * Set the timestamp
@@ -33,6 +34,16 @@ class Branch_location_model extends MY_Model {
         
         $branch['updated_date'] = date('Y-m-d H:i:s');
         return $branch;
+    }
+    
+    function get_all_branch()
+    {
+        return $this->db->get($this->_table)->result();
+    }
+    
+    function check_status()
+    {
+        $this->db->where('branch_status','1');
     }
 
 

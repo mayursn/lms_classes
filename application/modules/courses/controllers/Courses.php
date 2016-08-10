@@ -24,7 +24,7 @@ class courses extends MY_Controller {
     function index() {
         $this->data['title'] = 'Course';
         $this->data['page'] = 'course';
-        $this->data['course'] = $this->Course_model->order_by_column('c_name');
+        $this->data['course'] = $this->Course_model->get_all_course();
         $this->__template('courses/index', $this->data);
     }
 
@@ -95,8 +95,11 @@ class courses extends MY_Controller {
       $this->load->model('admission_plan/Admission_plan_model');
       $plans = explode(",",$admission_plan->admission_plan_id);
       foreach($plans as $plan):
-          $plan_array = $this->Admission_plan_model->get($plan);
-          $json[] = $plan_array;
+          $plan_array = $this->db->get_where('admission_plan',array('admission_plan_id'=>$plan,'admission_plan_status'=>'1'))->row();
+          if(!empty($plan_array))
+          {
+            $json[] = $plan_array;
+          }
       endforeach;
       echo json_encode($json);
     }

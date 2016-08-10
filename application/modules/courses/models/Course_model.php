@@ -7,6 +7,7 @@ class Course_model extends MY_Model {
     protected $primary_key = 'course_id';    
     public $before_create = array('timestamps');    
     public $before_update = array('update_timestamps');
+    public $before_get = array('check_status');
 
     /**
      * Set the timestamp
@@ -34,4 +35,13 @@ class Course_model extends MY_Model {
         return $branch;
     }
     
+    function get_all_course()
+    {
+        return $this->db->get($this->_table)->result();
+    }    
+    function check_status()
+    {
+        $this->db->where('course_status','1');
+    }
 }
+

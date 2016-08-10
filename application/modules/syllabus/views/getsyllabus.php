@@ -55,6 +55,7 @@ $delete = delete_permission($permission, 'Syllabus');
                 <td>
                     <?php
                     foreach ($admission_plan as $plan) {
+                        
                         if ($plan->admission_plan_id == $row->admission_plan_id) {
                             echo $plan->admission_duration;
                         }

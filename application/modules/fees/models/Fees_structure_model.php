@@ -25,15 +25,12 @@ class Fees_structure_model extends MY_Model {
      * @return array
      */
     function get_all_fees_structure() {
-        
-        if($this->session->userdata('professor_id'))
-        {
-            $degree_id = $this->session->userdata('professor_department');
-            $this->db->where('degree_id', $degree_id);
-            $this->db->or_where('degree_id ', 'All'); 
-        }
+                
         return $this->db->select()
-                        ->from('fees_structure')                      
+                        ->from('fees_structure')   
+                        ->join('branch_location','branch_location.branch_id=fees_structure.branch_id')
+                        ->join('course','course.course_id=fees_structure.course_id')
+                        ->join('admission_plan','admission_plan.admission_plan_id=fees_structure.admission_plan_id')
                         ->get()
                         ->result();
     }

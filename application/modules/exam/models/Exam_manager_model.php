@@ -7,6 +7,7 @@ class Exam_manager_model extends MY_Model {
     protected $primary_key = 'em_id';
     
     public $before_create = array('timestamps');
+     public $before_get = array('check_status');
     
     /**
      * Set timestamp field
@@ -29,7 +30,7 @@ class Exam_manager_model extends MY_Model {
                         ->join('course', 'course.course_id = exam_manager.course_id')                        
                         ->join('admission_plan', 'admission_plan.admission_plan_id = exam_manager.admission_plan_id')
                         ->join('branch_location', 'branch_location.branch_id = exam_manager.branch_id')
-                        ->order_by('em_date', 'DESC')
+                        ->order_by('em_date', 'DESC')                        
                         ->get()
                         ->result();
     }
@@ -209,6 +210,11 @@ return $this->db->select('exam_manager.*, exam_type.*, course.*, admission_plan.
                         ))
                         ->get()
                         ->result();
+    }
+    function check_status()
+    {
+        $this->db->where('em_status','1');
+ 
     }
      
 }

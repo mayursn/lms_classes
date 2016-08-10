@@ -8,6 +8,7 @@ class Subject_manager_model extends MY_Model {
     
     public $before_create = array('timestamps');
     public $before_update = array('update_timestamps');
+    public $before_get = array('check_status');
     
     /**
      * Set timestamp field
@@ -37,12 +38,12 @@ class Subject_manager_model extends MY_Model {
     
     function subjectdetail($id)
     {
-         $this->db->select('sa.*,sm.subject_name,sm.subject_code,b.*');
-             $this->db->where('sm.sm_id', $id);             
-             $this->db->from('subject_association sa');             
-             $this->db->join('branch_location b','b.branch_id=sa.branch_id');             
-             $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id'); 
-             return $this->db->get()->result();
+            $this->db->select('sa.*,sm.subject_name,sm.subject_code,b.*');
+            $this->db->where('sm.sm_id', $id);             
+            $this->db->from('subject_association sa');             
+            $this->db->join('branch_location b','b.branch_id=sa.branch_id');             
+            $this->db->join('subject_manager sm','sm.sm_id=sa.sm_id'); 
+            return $this->db->get()->result();
              
     }
     
@@ -101,5 +102,15 @@ class Subject_manager_model extends MY_Model {
         $this->db->join("subject_association sa",'sa.sm_id=sm.sm_id');
         return  $this->db->get('subject_manager sm')->result();
      
+    }
+    
+    function get_all_subject()
+    {
+        return $this->db->get($this->_table)->result();
+    }
+    
+    function check_status()
+    {
+        
     }
 }

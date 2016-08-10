@@ -39,7 +39,9 @@ $delete = delete_permission($permission, 'Course');
                                     $plan_id = explode(",",$row->admission_plan_id);
                                     foreach ($plan_id as $id):
                                     $plan =  $this->Admission_plan_model->get($id); 
+                                    if($plan){
                                     echo $plan->admission_duration." <br/>\n";
+                                    }
                                     endforeach;
                                     ?></td>                                    
                                     <td>
