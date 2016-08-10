@@ -75,10 +75,12 @@ class Todo extends MY_Controller {
             $title = $this->input->post('title');
             $todo_date = $this->input->post('todo_date');
             $todo_time = $this->input->post('todo_time');
+            $todo_time = $this->input->post('todo_time');            
             $datetime = $todo_date . ' ' . $todo_time;
             $datetime = strtotime($datetime);
             $data['todo_datetime'] = date('Y-m-d H:i:s', $datetime);          
             $data['todo_title'] = $title;
+            $data['todo_status'] = '1';
             $id = $this->input->post('todo_id');
             $this->Todo_list_model->update( $id, $data);
            
