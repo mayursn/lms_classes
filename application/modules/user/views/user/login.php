@@ -67,7 +67,7 @@
                                 <!-- col-md-12 end here -->
                                 <div class="col-md-12">
                                     <div class="input-group input-icon">
-                                        <input name="email" id=username class=form-control placeholder=""> <span class=input-group-addon><i class="fa fa-user" aria-hidden="true"></i></span>
+                                        <input name="email" id=username class=form-control placeholder="" value="<?php if(isset($cookie_email)){ echo $cookie_email; } ?>"> <span class=input-group-addon><i class="fa fa-user" aria-hidden="true"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                 <!-- col-md-12 end here -->
                                 <div class="col-md-12">
                                     <div class="input-group input-icon">
-                                        <input type="password" name="password" id="password" class=form-control placeholder=""> <span class=input-group-addon><i class="fa fa-lock s16"></i></span>
+                                        <input type="password" name="password" id="password" class=form-control placeholder="" value="<?php if(isset($cookie_password)){ echo $cookie_password; } ?>"> <span class=input-group-addon><i class="fa fa-lock s16"></i></span>
                                     </div>
                                     <span class="help-block text-right">
                                         <a id="forgot-password-link" href="#forgot-password" data-toggle="modal">Forgot password ?</a>
@@ -89,7 +89,7 @@
                             <div class="form-group mb0">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">
                                     <div class=checkbox-custom>
-                                        <input type=checkbox name=remember id="remember" value="option">
+                                        <input type=checkbox name=remember id="remember" <?php if(isset($cookie_email)){ echo "checked=checked"; } ?> value="option">
                                         <label for="remember">Remember me ?</label>
                                     </div>
                                 </div>

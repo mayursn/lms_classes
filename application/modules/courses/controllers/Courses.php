@@ -93,7 +93,10 @@ class courses extends MY_Controller {
     {
       $admission_plan  = $this->Course_model->get($course_id);
       $this->load->model('admission_plan/Admission_plan_model');
+      $json = '';
       $plans = explode(",",$admission_plan->admission_plan_id);
+      if(!empty($plans))
+      {
       foreach($plans as $plan):
           $plan_array = $this->db->get_where('admission_plan',array('admission_plan_id'=>$plan,'admission_plan_status'=>'1'))->row();
           if(!empty($plan_array))
@@ -101,6 +104,7 @@ class courses extends MY_Controller {
             $json[] = $plan_array;
           }
       endforeach;
+      }
       echo json_encode($json);
     }
     

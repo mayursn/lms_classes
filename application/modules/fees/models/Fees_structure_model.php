@@ -31,6 +31,7 @@ class Fees_structure_model extends MY_Model {
                         ->join('branch_location','branch_location.branch_id=fees_structure.branch_id')
                         ->join('course','course.course_id=fees_structure.course_id')
                         ->join('admission_plan','admission_plan.admission_plan_id=fees_structure.admission_plan_id')
+                        ->join('class','class.class_id=fees_structure.class_id')
                         ->get()
                         ->result();
     }

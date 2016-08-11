@@ -580,51 +580,7 @@
         </div>
     </div>
     <!-- To do list End div-->  
-    <!-- Recent Activities -->
-    <div class="col-lg-6 col-md-12 col-xs-12">
-        <div id="supr1" class="panel panel-default toggle">
-            <!-- Start .panel -->
-            <div class=panel-heading>
-                <h4 class=panel-title>
-                    Recent Activities
-                </h4>           
-                <div class="panel-controls panel-controls-right"> <a href="#" class="toggle panel-minimize"><i class="minia-icon-arrow-up-3"></i></a>
-                </div>
-            </div>
-            <div class=panel-body>
-                <div class="scroll_bar_professor">  
-                    <table class="table table-striped table-bordered table-responsive dataTable no-footer table-hover table-reflow">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Date/time </th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>                         
-                            <?php
-                            $r = 0;
-                            foreach (@$recent_activity as $activity):
-                                ?>
-                                <tr>
-                                    <th scope="row"><?php
-                                        $r++;
-                                        echo $r;
-                                        ?></th>
-                                    <td>
-                                        <span class="date"><?php echo date_formats($activity->activity_datetime); ?></span>
-                                        <span class="time"><?php echo date("h:i A", strtotime($activity->activity_datetime)); ?></span>
-                                    </td>
-                                    <td class="text-left"><?php echo ucwords($activity->activity); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- End Recent Activities -->
-        </div>
-    </div>
+    
 
     <!-- col-lg-12 end here -->
 </div>
