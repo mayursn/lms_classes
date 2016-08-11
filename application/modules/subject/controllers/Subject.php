@@ -227,6 +227,7 @@ class Subject extends MY_Controller {
         $this->db->where('sa.branch_id',$branch);
         $this->db->where('sa.admission_plan_id',$admission_plan);
         $this->db->join("subject_association sa",'sa.sm_id=sm.sm_id');
+        $this->db->where('sm.sm_status','1');
         $res =  $this->db->get('subject_manager sm')->result();
         echo json_encode($res);
     }
