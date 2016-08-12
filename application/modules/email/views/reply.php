@@ -22,6 +22,7 @@
                     <label class="col-sm-2 control-label"><?php echo ucwords("user"); ?></label>
                     <div class="col-sm-5">
                         <input type="hidden" readonly="" name="email[]" class="form-control hide" value="<?php echo $sender->user_id; ?>"/>
+                        <input type="hidden" readonly="" name="reply" class="form-control hide" value="<?php echo $param; ?>" />
                         <input type="text" class="form-control" value="<?php echo $sender->first_name . ' ' . $sender->last_name .' ('. $sender->email .')'; ?>"/>
                     </div>
                 </div>                

@@ -40,19 +40,32 @@ class Email extends MY_Controller {
                 $this->load->model('user/User_model');
                 $users = $this->User_model->get_all();
             }*/
+            
             if(empty($_POST['email']))
             {
                 $this->flash_notification("Enter Email address");
+                if(isset($_POST['reply']))
+                {
+                    redirect(base_url().'email/reply/'.$_POST['reply']); 
+                }
                 redirect(base_url().'email/compose'); 
             }
             if(empty($_POST['subject']))
             {
                 $this->flash_notification("Enter subject");
+                if(isset($_POST['reply']))
+                {
+                    redirect(base_url().'email/reply/'.$_POST['reply']); 
+                }
                 redirect(base_url().'email/compose'); 
             }
             if(empty($_POST['message']))
             {
                 $this->flash_notification("Enter message");
+                if(isset($_POST['reply']))
+                {
+                    redirect(base_url().'email/reply/'.$_POST['reply']); 
+                }
                 redirect(base_url().'email/compose'); 
             }
             $this->Email_model->insert(array(
@@ -133,6 +146,7 @@ class Email extends MY_Controller {
         $this->load->model('user/User_model');
         $this->data['title'] = 'Email reply';
         $this->data['page'] = 'email_reply';
+         $this->data['param'] = $id;
         $this->data['email'] = $this->Email_model->get($id);
         $this->data['sender'] = $this->User_model->get($this->data['email']->email_from);       
         $this->__template('email/reply', $this->data);
