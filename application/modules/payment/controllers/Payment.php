@@ -134,7 +134,7 @@ class Payment extends MY_Controller {
      * @param string $fee_structure
      */
     function make_payment_student_list($branch = '', $course = '', $admission_plan = '', $class = '', $fee_structure = '') {
-        $this->data['student_fees'] = $this->Student_fees_model->make_payment_student_list($branch, $course, $admission_plan, $class, $fee_structure);
+        $this->data['student_fees'] = $this->Student_fees_model->make_payment_student_list($branch, $course, $admission_plan, $class, $fee_structure);        
 
         $this->load->view('payment/make_payment_student_list', $this->data);
     }

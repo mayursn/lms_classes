@@ -74,6 +74,7 @@ $delete = delete_permission($permission, 'Payment');
 
             
                     <?php if($create || $read || $update || $delete){ ?>
+                <div class="col-md-12" id="filtered-student-payment-records">
                     <table id="fee-datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                         <thead>
                             <tr>
@@ -119,10 +120,11 @@ $delete = delete_permission($permission, 'Payment');
                     <?php } ?>
                         </tbody>
                     </table>
+                     </div>
                     <?php } ?>														
                                
                 
-                <div class="col-md-12" id="filtered-student-payment-records"></div>
+               
                 
             </div>
         </div>

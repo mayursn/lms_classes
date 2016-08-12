@@ -27,10 +27,11 @@ class Email extends MY_Controller {
      * Email compose
      */
     function compose() {
+        
         $this->load->model('department/Degree_model');
         $this->load->model('user/Role_model');
 
-        if ($_POST) {
+        if ($_POST) {            
             $attachments = $this->attachments();
             $subject = $_POST['subject'];
             $message = trim($_POST['message']);

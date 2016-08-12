@@ -198,7 +198,7 @@ class Marks extends MY_Controller {
                     'admission_plan_id' => $admission_plan_id                    
                 ));
             
-        }
+        }        
         
         $this->__template('marks/index', $this->data);
     }
