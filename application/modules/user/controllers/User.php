@@ -40,6 +40,7 @@ class User extends MY_Controller {
            
             $email = trim($this->input->post('email'));
             $password = $this->__hash(trim($this->input->post('password')));
+            $c_password = $_POST['password'];
             if(isset($_POST['remember']))
             {
                 $remember = $_POST['remember'];
@@ -48,11 +49,12 @@ class User extends MY_Controller {
                 $remember = '';
             }
            
-            $this->process_login($email, $password,$remember);
+            $this->process_login($email, $password,$remember,$c_password);
         }
         
         $this->data['cookie_email'] = get_cookie('email');
         $this->data['cookie_password'] = get_cookie('password');       
+        
         $this->data['title'] = 'User Login';        
         $this->load->view('user/user/login', $this->data);
     }
@@ -62,7 +64,7 @@ class User extends MY_Controller {
      * @param string $email
      * @param string $passowrd
      */
-    function process_login($email = '', $passowrd = '',$remember='') {
+    function process_login($email = '', $passowrd = '',$remember='',$c_password) {
         if ($email && $passowrd) {
             $user = $this->User_model->with('role')
                     ->get_by(array(
@@ -75,6 +77,7 @@ class User extends MY_Controller {
             if ($user) {
             if(!empty($remember))
             {
+               
                 // set cookie
                 $cookie = array(
                         'name'   => 'email',
@@ -83,12 +86,12 @@ class User extends MY_Controller {
                  set_cookie($cookie);
                  $cookie = array(
                         'name'   => 'password',
-                        'value'  => trim($passowrd),
+                        'value'  => trim($c_password),
                         'expire' => time()+86500 );
                  set_cookie($cookie);
-                $cookie_email = get_cookie('email');                      
+                $cookie_email = get_cookie('email');                                    
                 $cookie_password = get_cookie('password');
-                if($cookie_email!=$email && $cookie_password!=$passowrd)
+                if($cookie_email!=$email && $cookie_password!=$c_password)
                 {                   
                     delete_cookie("email"); 
                     delete_cookie("password"); 
@@ -98,7 +101,8 @@ class User extends MY_Controller {
             else{                
                 $cookie_email = get_cookie('email');
                 $cookie_password = get_cookie('password');
-                if($cookie_email!=$email && $cookie_password!=$passowrd)
+                
+                if($cookie_email==$email && $cookie_password==$c_password)
                 {
                     delete_cookie("email"); 
                     delete_cookie("password"); 
