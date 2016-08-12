@@ -24,7 +24,7 @@
                                     <?php foreach ($branch as $row) { ?>
                                         <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
                                     <?php } ?>
-                                </select>
+                                </select>                                
                             </div>
                         </div>
                         <div class="form-group">
@@ -125,13 +125,9 @@
                                     <table id="class-routine-list" class="table table-bordered table-responsive">
                                         <thead>
                                             <tr>
-                                                <td>No</td>
-                                                <th>Student</th>
-                                                <th>Status</th>
-                                                <th>Branch</th>                                                
-                                                <th>Course</th>
-                                                <th>Admission Plan</th>                                                                                                                                                                                               
-                                                
+                                                <th width="30%">No</th>
+                                                <th width="30%">Student</th>
+                                                <th width="30%">Status</th>
                                             </tr>
                                         </thead>
 
@@ -141,12 +137,9 @@
                                             foreach ($attendance as $routine) {
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $counter++; ?></td>
-                                                    <td><?php echo $routine->std_first_name.' '.$routine->std_last_name; ?></td>
-                                                      <td><?php if($routine->is_present=='1'){ echo "P"; }else{ echo "A"; } ?></td>
-                                                    <td><?php echo $routine->branch_name; ?></td>
-                                                    <td><?php echo $routine->c_name; ?></td>
-                                                    <td><?php echo $routine->admission_duration; ?></td>                                                                                                                                                                                                         
+                                                    <td width="30%"><?php echo $counter++; ?></td>
+                                                    <td width="30%"><?php echo $routine->std_first_name.' '.$routine->std_last_name; ?></td>
+                                                    <td width="30%"><?php if($routine->is_present=='1'){ echo "P"; }else{ echo "A"; } ?></td>                                                    
                                                   
                                                 </tr>
                                             <?php } ?>

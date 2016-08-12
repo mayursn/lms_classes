@@ -252,11 +252,18 @@ class Attendance extends MY_Controller {
             $this->data['admission_duration'] = $this->Admission_plan_model->get($_POST['admission_plan']);            
              $this->data['date'] = $_POST['date'];
             $branch = $_POST['branch'];
+            $this->data['branch_id'] = $_POST['branch'];
+            
             $course = $_POST['course'];
+            $this->data['course_id'] = $_POST['course'];
             $admission_plan = $_POST['admission_plan'];
+            $this->data['admission_plan_id'] = $admission_plan;
             $class = $_POST['class'];
+            $this->data['class_id'] = $class;
             $subject = $_POST['subject'];
+            $this->data['subject_id'] = $subject;
             $date = $_POST['date'];
+            $this->data['date_id'] = $date;
             $this->data['page'] = 'attendance';
             $this->data['title'] = 'Attendance';
         //$this->db->join('branch_location','branch_location.branch_id=attendance.branch_id');

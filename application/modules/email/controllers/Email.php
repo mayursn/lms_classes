@@ -40,7 +40,21 @@ class Email extends MY_Controller {
                 $this->load->model('user/User_model');
                 $users = $this->User_model->get_all();
             }*/
-            
+            if(empty($_POST['email']))
+            {
+                $this->flash_notification("Enter Email address");
+                redirect(base_url().'email/compose'); 
+            }
+            if(empty($_POST['subject']))
+            {
+                $this->flash_notification("Enter subject");
+                redirect(base_url().'email/compose'); 
+            }
+            if(empty($_POST['message']))
+            {
+                $this->flash_notification("Enter message");
+                redirect(base_url().'email/compose'); 
+            }
             $this->Email_model->insert(array(
                 'email_from' => $this->session->userdata('user_id'),
                 'email_to' => implode(",", $_POST['email']),

@@ -5,6 +5,10 @@
     .select2-container-multi .select2-choices .select2-search-field input{
         padding: 0px;
     }
+    .error{
+        color: #ed7a53;
+        font-weight: 700;
+    }
 </style><!-- Start .row -->
 <div class=row>                      
 
@@ -13,7 +17,7 @@
         <div class="panel-default">
         <div class="panel-body">                              
             <form class="form-horizontal" role="form" action="<?php echo base_url(); ?>email/compose" method="post" 
-                  enctype="multipart/form-data">                               
+                  enctype="multipart/form-data" onsubmit="return replyvalid();">                               
                 <div class="form-group email_box">
                     <label class="col-sm-2 control-label"><?php echo ucwords("user"); ?></label>
                     <div class="col-sm-5">
@@ -25,14 +29,16 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><?php echo ucwords("Subject"); ?></label>
                     <div class="col-sm-5">
-                        <textarea class="form-control" name="subject" required=""><?php echo $email->subject; ?></textarea>
+                        <textarea class="form-control" name="subject" id="subject"><?php echo $email->subject; ?></textarea>
+                        <span class="subject-error error"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><?php echo ucwords("external email"); ?></label>
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" name="cc"/>
+                        <input type="text" class="form-control" name="cc" id="cc-email" />
+                        <span class="cc-email-error error"></span>
                     </div>
                 </div>
 
@@ -40,6 +46,7 @@
                     <label class="col-sm-2 control-label"><?php echo ucwords("Message"); ?></label>
                     <div class="col-sm-9">
                         <textarea id="cke_editor2" name="message" class="width-100 form-control"  rows="15" placeholder="Write your message here"></textarea>                                              
+                        <span class="message-error error"></span>
                     </div>
                 </div>
 
@@ -85,6 +92,49 @@
 </style>
 
 <script type="text/javascript">
+    
+    function replyvalid()
+    {
+        var subject = $("#subject").val();
+        var cc_email = $("#cc-email").val();
+        
+        if(subject=='')
+                {
+                      $(".subject-error").html('Please enter subject');
+                      return false;
+                }
+                else
+                {
+                      $(".subject-error").html('');
+                }
+                 if(cc_email!='')
+                {
+                    var x = cc_email;
+                    var atpos = x.indexOf("@");
+                    var dotpos = x.lastIndexOf(".");
+                    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+                        $(".cc-email-error").html('Please enter valid email');
+                        return false;
+                    }
+                    else{
+                        $(".cc-email-error").html('');
+                    }
+                }
+                else
+                {
+                      $(".cc-email-error").html('');
+                }
+                 var messageLength = CKEDITOR.instances['cke_editor2'].getData().replace(/<[^>]*>/gi, '').length;
+                if( !messageLength ) {
+                    
+                    $(".message-error").html('Please enter a message');
+                    return false;
+                }
+                else{
+                    $(".message-error").html('');
+                }
+    }
+    
     $(".email_select2").select2();
     $("#check_all_user").click(function () {
         if ($("#check_all_user").is(':checked')) {
