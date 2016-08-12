@@ -77,19 +77,20 @@ class User extends MY_Controller {
             if ($user) {
             if(!empty($remember))
             {
+              
                
                 // set cookie
                 $cookie = array(
                         'name'   => 'email',
                         'value'  => trim($email),
                         'expire' => time()+86500 );
-                 set_cookie($cookie);
+                set_cookie($cookie);
                  $cookie = array(
                         'name'   => 'password',
                         'value'  => trim($c_password),
                         'expire' => time()+86500 );
                  set_cookie($cookie);
-                $cookie_email = get_cookie('email');                                    
+                $cookie_email = get_cookie('email');                                                     
                 $cookie_password = get_cookie('password');
                 if($cookie_email!=$email && $cookie_password!=$c_password)
                 {                   
