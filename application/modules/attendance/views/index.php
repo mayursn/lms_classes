@@ -22,7 +22,7 @@
                          <div class="form-group">
                             <label class="col-sm-2 control-label">Branch<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="branch" id="branch" required="">
+                                <select class="form-control" name="branch" id="branch" >
                                     <option value="">Select</option>
                                     <?php foreach ($branch as $row) { ?>
                                         <option value="<?php echo $row->branch_id; ?>"><?php echo $row->branch_name; ?></option>
@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Course<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="course" id="course" required="">
+                                <select class="form-control" name="course" id="course" >
                                     <option  value="">Select</option>
                                     <?php  foreach($course as $crs): ?>
                                     <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Admission Plan<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="admission_plan" id="admission_plan" required="">
+                                <select class="form-control" name="admission_plan" id="admission_plan" >
                                     <option value="">Select</option>
                                 </select>
                             </div>
@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Class<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="class" id="create-class" required="">
+                                <select class="form-control" name="class" id="create-class" >
                                     <option value="">Select</option>                
                                     <?php foreach($class as $cl): ?>
                                     <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_name; ?></option>
@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Subject<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="subject" id="subject" required="">
+                                <select class="form-control" name="subject" id="subject" >
                                     <option value="">Select</option>                                                    
                                 </select>
                             </div>
@@ -104,7 +104,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Course<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="course" id="filter-course" required="">
+                                <select class="form-control" name="course" id="filter-course" >
                                     <option  value="">Select</option>
                                     <?php  foreach($course as $crs): ?>
                                     <option value="<?php echo $crs->course_id; ?>"><?php echo $crs->c_name; ?></option>
@@ -115,7 +115,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Admission Plan<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="admission_plan" id="filter-admission_plan" required="">
+                                <select class="form-control" name="admission_plan" id="filter-admission_plan" >
                                     <option value="">Select</option>
                                 </select>
                             </div>
@@ -123,7 +123,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Class<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="class" id="filter-class" required="">
+                                <select class="form-control" name="class" id="filter-class" >
                                     <option value="">Select</option>                
                                     <?php foreach($class as $cl): ?>
                                     <option value="<?php echo $cl->class_id; ?>"><?php echo $cl->class_name; ?></option>
@@ -134,7 +134,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Subject<span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="subject" id="filter-subject" required="">
+                                <select class="form-control" name="subject" id="filter-subject">
                                     <option value="">Select</option>                                                    
                                 </select>
                             </div>
@@ -142,7 +142,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Date <span style="color:red">*</span></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="date" id="filter-date" required="">
+                                <select class="form-control" name="date" id="filter-date">
                                     <option value="">Select</option>                                                    
                                 </select>
                             </div>
@@ -329,22 +329,38 @@
 
         $("#attendance-routine").validate({
             rules: {
-                'department': "required",
+                'course': "required",
                 'branch': "required",
-                'batch': "required",
-                'semester': "required",
+                'admission_plan': "required",                
                 'class': "required",
                 'date': "required",
-                'class_routine': "required",
+                'subject': "required",
             },
             messages: {
-                'department': "Select department",
+                'course': "Select course",
                 'branch': "Select branch",
-                'batch': "Select batch",
-                'semester': "Select semester",
+                'admission_plan': "Select admission plan",                
                 'class': "Select class",
                 'date': "Select date",
-                'class_routine': "Select class routine"
+                'subject': "Select subject"
+            }
+        });
+        $("#attendance-list-filter").validate({
+            rules: {
+                'course': "required",
+                'branch': "required",
+                'admission_plan': "required",                
+                'class': "required",
+                'date': "required",
+                'subject': "required",
+            },
+            messages: {
+                'course': "Select course",
+                'branch': "Select branch",
+                'admission_plan': "Select admission plan",                
+                'class': "Select class",
+                'date': "Select date",
+                'subject': "Select subject"
             }
         });
   var js_format = '<?php echo js_dateformat(); ?>';

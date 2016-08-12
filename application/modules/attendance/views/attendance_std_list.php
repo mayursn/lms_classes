@@ -177,24 +177,22 @@
         $('#class-routine-list').DataTable({});
         "use strict";
 
-        $("#attendance-routine").validate({
+         $("#attendance-list-filter").validate({
             rules: {
-                'department': "required",
+                'course': "required",
                 'branch': "required",
-                'batch': "required",
-                'semester': "required",
+                'admission_plan': "required",                
                 'class': "required",
                 'date': "required",
-                'class_routine': "required",
+                'subject': "required",
             },
             messages: {
-                'department': "Select department",
+                'course': "Select course",
                 'branch': "Select branch",
-                'batch': "Select batch",
-                'semester': "Select semester",
+                'admission_plan': "Select admission plan",                
                 'class': "Select class",
                 'date': "Select date",
-                'class_routine': "Select class routine"
+                'subject': "Select subject"
             }
         });
   var js_format = '<?php echo js_dateformat(); ?>';
