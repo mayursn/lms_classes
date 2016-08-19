@@ -325,6 +325,10 @@ if($this->session->userdata('role_name')=='Student')
                     },
             }
         });
+         jQuery.validator.addMethod("zipcode", function(value, element) {
+                return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
+              }, "Enter valid zip code");
+         
          $("#frmchangeprofile").validate({
             rules: {
                 fname: "required",
@@ -336,7 +340,10 @@ if($this->session->userdata('role_name')=='Student')
                             phoneUS: true,
                         },
                 city: "required",
-                zip: "required",
+                zip:{
+                       required:true,
+                        zipcode: true,
+                    },
             },
             messages: {
                 fname: "Enter first name",
@@ -348,7 +355,9 @@ if($this->session->userdata('role_name')=='Student')
                         phoneUS: "Enter valid mobile number",
                     },
                 city: "Enter city",
-                zip: "Please enter valid zip code",
+                zip: {
+                        required:"Enter zipcode",
+                    },
             }
         });
          $("#frmstudentprofile").validate({

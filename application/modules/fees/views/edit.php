@@ -151,11 +151,17 @@ $admission_plan = $this->Admission_plan_model->order_by_column('admission_durati
                 course: "required",
                 class: "required",
                 admission_plan: "required",
-                edit_fees: "required",
+                edit_fees:{
+                    required: true,
+                    currency: ['$', false]
+                },
                 start_date: "required",
                 end_date: "required",
                 expiry_date: "required",
-                penalty: "required"
+                penalty: {
+                    required: true,
+                    currency: ['$', false]
+                },
             },
             messages: {
                 edit_title: "Please enter title",
@@ -163,11 +169,17 @@ $admission_plan = $this->Admission_plan_model->order_by_column('admission_durati
                 course: "Please select course",
                 admission_plan: "Please select admission plan",
                 class: "Please select class",
-                edit_fees: "Please enter fee",
+                edit_fees: {
+                    required: "Please Enter  Fee",
+                    currency: "Please Enter Valid Amount"
+                },
                 start_date: "Please enter start date",
                 end_date: "Please enter end date",
                 expiry_date: "Please enter expiry date",
-                penalty: "Please enter penalty"
+                penalty: {
+                    required: "Enter  penalty",
+                    currency: "Enter Valid Amount"
+                },
             }
         });
     });

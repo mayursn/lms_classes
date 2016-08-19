@@ -76,12 +76,12 @@ class Admission_plan extends MY_Controller {
      * Check admission type
      */
     function check_admission_plan() {
-        $this->db->where('admission_plan_status','1');
+        //$this->db->where('admission_plan_status','1');
         $data = $this->db->get_where('admission_plan', array('admission_duration' => $this->input->post('admission_plan')))->result();
         if (count($data) > 0) {
-            echo "false";
+            echo 'false';
         } else {
-            echo "true";
+            echo 'true';
         }
     }
     

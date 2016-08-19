@@ -49,7 +49,7 @@
                                 type: "post",
                                 data: {
                                     admission_plan: function () {
-                                        return $("#at_name").val();
+                                        return $("#admission_plan").val();
                                     },
                                 }
                             }
@@ -60,9 +60,9 @@
                 admission_plan:
                         {
                             required: "Enter Admission Plan",
-                            remote: "Record is already present in the system",
+                            remote: "Admission plan already exists",
                         },
-                at_status: "Please slect admission status",
+                at_status: "Select admission status",
             }
         });
     });

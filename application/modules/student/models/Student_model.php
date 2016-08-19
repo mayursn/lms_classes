@@ -85,7 +85,7 @@ class Student_model extends MY_Model {
     function get_timline_todolist()
     {
         $this->db->select('todo_id,todo_title,todo_datetime');
-        return $this->db->get_where('todo_list',array('todo_role'=>'student','todo_role_id'=>$this->session->userdata('std_id')))->result();
+        return $this->db->get_where('todo_list',array('todo_role'=>'student','user_role_id'=>$this->session->userdata('user_id')))->result();
       //  return $this->db->get_where('todo_list',array('todo_datetime >='=> date('Y-m-d H:m:s'),'todo_role'=>'student','todo_role_id'=>$this->session->userdata('student_id')))->result();
     }
     function get_timline_event()

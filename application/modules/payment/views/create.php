@@ -100,8 +100,7 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                         <div id="fees_main" class="form-group">
                             <label class="col-sm-4 control-label">Amount<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" name="fees" id="fees" class="form-control" placeholder="In dollar" required=""/>
-                            </div>
+                                <input type="text" name="fees" id="fees" class="form-control" placeholder="" required=""/>                            </div>
                         </div>
                         <div id="fees_main" class="form-group">
                             <label class="col-sm-4 control-label">Cheque Number<span style="color:red">*</span></label>
@@ -124,7 +123,7 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                         <div id="fees_main" class="form-group">
                             <label class="col-sm-4 control-label">Date<span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" name="date" id="date" class="form-control datepicker" required=""/>
+                                <input type="text" name="date" id="date" class="form-control datepicker" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -170,15 +169,16 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                 admission_plan: "required",
                 class: "required",
                 student: "required",
-                fees: {
+                fees:  {
                     required: true,
-                    number: true,
+                    currency: ['$', false]
                 },
                 semester: "required",
                 fees_structure: "required",
                 cheque_number: "required",
                 bank_name: "required",
-                ac_holder_name: "required"
+                ac_holder_name: "required",
+                date:"required",
             },
             messages: {
                 branch:"Please select branch",
@@ -187,13 +187,15 @@ $plan = $this->Admission_plan_model->order_by_column('admission_duration');
                 class: "Please select class",
                 student: "Please select student",
                 fees: {
-                    required: "Please enter fee amount"
+                    required: "Enter fee amount",
+                    currency: "Enter Valid Amount"
                 },
                 semester: "Please select semester",
                 fees_structure: "Please select fees structure",
                 cheque_number: "Please enter cheque number",
                 bank_name: "Please enter bank name",
-                ac_holder_name: "Please enter a/c holder name"
+                ac_holder_name: "Please enter a/c holder name",
+                date:"Select date",
             }
         });
     });

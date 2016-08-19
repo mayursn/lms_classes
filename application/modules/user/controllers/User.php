@@ -53,7 +53,7 @@ class User extends MY_Controller {
         }
         
         $this->data['cookie_email'] = get_cookie('email');
-        $this->data['cookie_password'] = get_cookie('password');       
+        $this->data['cookie_password'] = get_cookie('password');      
         
         $this->data['title'] = 'User Login';        
         $this->load->view('user/user/login', $this->data);
@@ -77,25 +77,52 @@ class User extends MY_Controller {
             if ($user) {
             if(!empty($remember))
             {
-              
                
                 // set cookie
-                $cookie = array(
+                $cookie_email_set = array(
                         'name'   => 'email',
                         'value'  => trim($email),
                         'expire' => time()+86500 );
-                set_cookie($cookie);
-                 $cookie = array(
+                 set_cookie($cookie_email_set);
+                 $cookie_password_set = array(
                         'name'   => 'password',
                         'value'  => trim($c_password),
                         'expire' => time()+86500 );
-                 set_cookie($cookie);
-                $cookie_email = get_cookie('email');                                                     
+                 set_cookie($cookie_password_set);
+                
+                $cookie_email = get_cookie('email');                                    
                 $cookie_password = get_cookie('password');
+                
                 if($cookie_email!=$email && $cookie_password!=$c_password)
-                {                   
+                {      
+                    $cookie_email_set = array(
+                        'name'   => 'email',
+                        'value'  => trim($email),
+                        'expire' => time()+86500 );
+                 set_cookie($cookie_email_set);
+                 $cookie_password_set = array(
+                        'name'   => 'password',
+                        'value'  => trim($c_password),
+                        'expire' => time()+86500 );
+                 set_cookie($cookie_password_set);
+                
+//                      $cookie_email_set = array(
+//                    'name'   => 'email',
+//                    'value'  => '',
+//                    'expire' => '0');
+// 
+//                    delete_cookie($cookie_email_set);
+//                    
+//                    $cookie_password_set = array(
+//                        'name'   => 'password',
+//                        'value'  => '',
+//                        'expire' => '0'
+//                        );
+//
+//                    delete_cookie($cookie_password_set);
                     delete_cookie("email"); 
                     delete_cookie("password"); 
+                   
                 }
 
             }
@@ -105,8 +132,28 @@ class User extends MY_Controller {
                 
                 if($cookie_email==$email && $cookie_password==$c_password)
                 {
-                    delete_cookie("email"); 
-                    delete_cookie("password"); 
+//                    $cookie_email_set = array(
+//                    'name'   => 'email',
+//                    'value'  => '',
+//                    'expire' => '0');
+// 
+//                    delete_cookie($cookie_email_set);
+//                    
+//                    $cookie_password_set = array(
+//    'name'   => 'password',
+//    'value'  => '',
+//    'expire' => '0'
+//    );
+// 
+//delete_cookie($cookie_password_set);
+                  //  delete_cookie("email"); 
+                 //   delete_cookie("password"); 
+                   
+                     
+                     
+                   // delete_cookie("email"); 
+                   // delete_cookie("password"); 
+                   // delete_cookie("rememebr"); 
                 }
             }
                 if ($user->role->role_id == "3") {

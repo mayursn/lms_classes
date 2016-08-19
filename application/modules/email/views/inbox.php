@@ -10,7 +10,7 @@ $this->load->model('email/Email_model');
         <div class="panel-default">
             <div class=panel-body>
 
-                <table id="inbox-datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
+                <table id="datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
                     <thead>
                         <tr>
                             <th>No</th>
@@ -59,9 +59,3 @@ $this->load->model('email/Email_model');
 <!-- End contentwrapper -->
 </div>
 <!-- End #content -->
-
-<script>
-$(document).ready(function(){
-    $('#inbox-datatable-list').dataTable({"language": { "emptyTable": "No data available" }});
-});
-</script>

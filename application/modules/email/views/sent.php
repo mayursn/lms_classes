@@ -3,10 +3,10 @@
 
     <div class=col-lg-12>
         <!-- col-lg-12 start here -->
-        <div class="panel-default">
+        <div class="panel-default toggletoggle">
             <div class="panel-body">
 
-                <table id="email-datatable-list" class="table table-striped table-bordered table-responsive" cellspacing=0 width=100%>
+                <table class="table table-striped table-responsive table-bordered" id="datatable-list" >
                     <thead>
                         <tr>
                             <th>No</th>
@@ -55,8 +55,8 @@
                         }
                         ?>                                
                     </tbody>
-                </table>
-                <!--                        Pagination-->
+                 </table>
+                <!--Pagination-->
             </div>
             <!-- panel-body  -->
 
@@ -69,8 +69,3 @@
 </div>
 </div></div>
 <!-- Middle Content End --> 
-<script>
-    $(document).ready(function () {
-        $('#email-datatable-list').DataTable({"language": {"emptyTable": "No data available"}});
-    });
-</script>

@@ -81,12 +81,12 @@ class Branch extends MY_Controller {
      */
     function check_branch() {
         $data = $this->db->get_where('branch_location', array('branch_name' => $this->input->post('course'),
-                    'branch_location' => $this->input->post('branch_location')))->result();
+                    ))->result();
 
         if (count($data) > 0) {
-            echo "false";
+            echo 'false';
         } else {
-            echo "true";
+            echo 'true';
         }
     }
     

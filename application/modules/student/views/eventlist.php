@@ -2,7 +2,7 @@
 $this->db->select('event_id,event_name,event_date');
 $dataevent = $this->db->get_where('event_manager', array('date(event_date)' => $param2))->result_array();
 $this->db->select('todo_id,todo_title,todo_datetime');
-$datatodo = $this->db->get_where('todo_list', array('date(todo_datetime)' => $param2, 'todo_role' => 'student', 'todo_role_id' => $this->session->userdata('std_id')))->result_array();
+$datatodo = $this->db->get_where('todo_list', array('date(todo_datetime)' => $param2, 'todo_role' => 'student', 'user_role_id' => $this->session->userdata('user_id')))->result_array();
 ?>
 <div class=row>                      
     <div class=col-lg-12>

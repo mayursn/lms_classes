@@ -58,13 +58,13 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Mobile <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="number" maxlength="10" class="form-control" name="mobile" id="mobile"/>
+                                <input type="text" class="form-control" name="mobile" id="mobile"/>
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Phone <span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Phone <span style="color:red"></span></label>
                             <div class="col-sm-8">
-                                <input  type="number" maxlength="10" class="form-control" name="phone" id="phone"/>
+                                <input  type="text" maxlength="10" class="form-control" name="phone" id="phone"/>
                             </div>	
                         </div>
                         <div class="form-group">
@@ -76,7 +76,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Zip Code <span style="color:red">*</span></label>
                             <div class="col-sm-8">
-                                <input type="number" maxlength="6" class="form-control" name="zip_code" id="zip_code"/>
+                                <input type="text" class="form-control" name="zip_code" id="zip_code"/>
                             </div>	
                         </div>
                         <div class="form-group">
@@ -118,10 +118,20 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
 
     $().ready(function () {
 
+         jQuery.validator.addMethod("phoneUS", function(phone_number, element) {
+           phone_number = phone_number.replace(/\s+/g, ""); 
+               return this.optional(element) || phone_number.length > 9 &&
+                       phone_number.match(/^[0-9]{3}[0-9]{3}[0-9]{4}$/);
+       }, "Please specify a valid phone number");
+       
+        jQuery.validator.addMethod("zip_code", function (value, element) {
+            return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
+        }, 'Enter valid zip code');
+
         $("#user-create-form").validate({
             rules: {
                 first_name: "required",
-                last_name: "required",
+                //last_name: "required",
                 email: {
                             required: true,
                             email: true,
@@ -136,35 +146,38 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             }
                         },
                 'mobile': {
-                        required:true,
-                        phoneUS: true,
-                },
+                            required: true,
+                             phoneUS: true,
+                        },
                 'phone': {
-                        required:true,
                         phoneUS: true,
                 },
                 city: "required",
-                zip_code: "required",
+                zip_code: {
+                            required: true,
+                            zip_code: true,
+                        },
                 role: "required",
             },
             messages: {
                  first_name: "Enter first name",
-                last_name: "Enter last name",
+               // last_name: "Enter last name",
                 email: {
                     required: "Enter email id",
                     email: "Enter valid email id",
                     remote: "Email id already exists",
                 },
                 'mobile': {
-                        required:"Enter mobile no",
-                        phoneUS: "Enter valid mobile no",                       
-                },
+                            required: "Enter mobile no",
+                            phoneUS: "Enter valid mobile number",
+                        },
                 'phone':{
-                        required:"Enter phone no",
                         phoneUS: "Enter valid phone no",                       
                 },
                 city: "Enter city",
-                zip_code: "Enter zip code",
+                zip_code:  {
+                            required: "Enter zip code",
+                        },
                 role: "Select role",
             }
         });

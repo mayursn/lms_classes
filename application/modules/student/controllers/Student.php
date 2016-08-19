@@ -70,7 +70,24 @@ class Student extends MY_Controller {
         // $this->data['timeline'] = $this->Student_model->get_timline();
         $this->data['timline_todolist'] = $this->Student_model->get_timline_todolist();
         $this->data['timline_event'] = $this->Student_model->get_timline_event();
-        $this->data['timelinecount'] = $this->Student_model->get_timeline_date_count();
+        $this->data['timelinecount1'] = $this->Student_model->get_timeline_date_count();
+        if($this->data['timelinecount1']!='')
+        {
+             foreach($this->data['timelinecount1'] as $dt)
+            {
+                $dtd[]=strtotime($dt);
+            }
+             array_multisort($dtd);
+        foreach($dtd as $dt1)
+            {
+                $this->data['timelinecount'][]=date('Y-m-d',$dt1);
+            }
+        }
+        else
+        {
+            $this->data['timelinecount']=array();
+        }
+        
          $user_id = $this->session->userdata('std_id');
         $this->data['growth']  = $this->Student_model->get_growth($user_id);
         $this->data['page'] = 'dashboard';

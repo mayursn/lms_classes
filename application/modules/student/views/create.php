@@ -214,9 +214,12 @@ $class = $this->Class_model->order_by_column('class_name');
             changeYear: true,
         });
 
-        jQuery.validator.addMethod("mobile_no", function (value, element) {
-            return this.optional(element) || /^[0-9-+]+$/.test(value);
-        }, 'Please enter a valid contact no.');
+         jQuery.validator.addMethod("phoneUS", function(phone_number, element) {
+                phone_number = phone_number.replace(/\s+/g, ""); 
+                    return this.optional(element) || phone_number.length > 9 &&
+                            phone_number.match(/^[0-9]{3}[0-9]{3}[0-9]{4}$/);
+            }, "Enter valid mobile number");
+
         jQuery.validator.addMethod("email_id", function (value, element) {
             return this.optional(element) || /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(value);
         }, 'Please enter a valid email address.');
@@ -226,8 +229,8 @@ $class = $this->Class_model->order_by_column('class_name');
         }, 'Please enter a valid character.');
 
         jQuery.validator.addMethod("zip_code", function (value, element) {
-            return this.optional(element) || /^[0-9]+$/.test(value);
-        }, 'Please enter a valid zip code.');
+            return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
+        }, 'Enter valid zip code');
 
         $("#frmstudent").validate({
             rules: {
@@ -266,9 +269,7 @@ $class = $this->Class_model->order_by_column('class_name');
                 mobileno:
                         {
                             required: true,
-                            maxlength: 11,
-                            mobile_no: true,
-                            minlength: 10,
+                           phoneUS: true,
                         },
                 parentname: {
                     required: true,
@@ -276,9 +277,7 @@ $class = $this->Class_model->order_by_column('class_name');
                 },
                 parentcontact: {
                     required: true,
-                    maxlength: 11,
-                    mobile_no: true,
-                    minlength: 10,
+                    phoneUS: true,
                 },
                 parent_email_id: {
                     email_id: true,
@@ -338,9 +337,6 @@ $class = $this->Class_model->order_by_column('class_name');
                 mobileno:
                         {
                             required: "Enter mobile no",
-                            maxlength: "Enter maximum 10 digit number",
-                            mobile_no: "Enter valid mobile number",
-                            minlength: "Enter minimum 10 digit number",
                         },
                 parentname: {
                     required: "Enter parent name",
@@ -348,9 +344,6 @@ $class = $this->Class_model->order_by_column('class_name');
                 },
                 parentcontact: {
                     required: "Enter mobile no",
-                    maxlength: "Enter maximum 10 digit number",
-                    mobile_no: "Enter valid mobile number",
-                    minlength: "Enter minimum 10 digit number",
                 },
                 parent_email_id: {
                     email_id: "Enter valid email id",

@@ -138,7 +138,10 @@ $class = $this->Class_model->order_by_column('class_name');
                 start_date: "required",
                 end_date: "required",
                 expiry_date: "required",
-                penalty: "required"
+                penalty:  {
+                    required: true,
+                    currency: ['$', false]
+                },
             },
             messages: {
                 branch: "Please select branch",
@@ -153,7 +156,10 @@ $class = $this->Class_model->order_by_column('class_name');
                 start_date: "Please enter start date",
                 end_date: "Please enter end date",
                 expiry_date: "Please enter expiry date",
-                penalty: "Please enter penalty"
+                penalty: {
+                    required: "Enter  penalty",
+                    currency: "Enter Valid Amount"
+                },
             }
         });
     });

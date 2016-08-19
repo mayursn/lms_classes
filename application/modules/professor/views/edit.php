@@ -143,6 +143,18 @@ $course = $this->db->get('course')->result();
             autoclose: true,
             endDate: new Date()
         });
+
+         $(document).ready(function () {
+        jQuery.validator.addMethod("zip_code", function (value, element) {
+            return this.optional(element) || /^\d{6}(?:-\d{4})?$/.test(value);
+        }, 'Enter valid zip code');
+
+          jQuery.validator.addMethod("phoneUS", function(phone_number, element) {
+                phone_number = phone_number.replace(/\s+/g, ""); 
+                    return this.optional(element) || phone_number.length > 9 &&
+                            phone_number.match(/^[0-9]{3}[0-9]{3}[0-9]{4}$/);
+            }, "Enter valid mobile number");
+
         $("#professor-form").validate({
             rules: {
                 professor_name: "required",
@@ -162,10 +174,16 @@ $course = $this->db->get('course')->result();
                     }
                 },
                 password: "required",
-                mobile: "required",
+                mobile: {
+                            required: true,
+                           phoneUS: true,
+                        },
                 address: "required",
                 city: "required",
-                zip_code: "required",
+                zip_code: {
+                            required: true,
+                            zip_code: true,
+                        },
                 dob: "required",
                 occupation: "required",
                 designation: "required",
@@ -182,10 +200,14 @@ $course = $this->db->get('course')->result();
                     remote: "Email id already exists",
                 },
                 password: "Enter password",
-                mobile: "Enter mobile",
+                mobile:{
+                            required: "Enter mobile no",
+                        },
                 address: "Enter address",
                 city: "Enter city",
-                zip_code: "Enter zipcode",
+                zip_code:  {
+                            required: "Enter zip code",
+                        },
                 dob: "Select date of birth",
                 occupation: "Enter occupation",
                 designation: "Enter designation",
@@ -196,6 +218,8 @@ $course = $this->db->get('course')->result();
                 },
             }
         });
+
+    });
 
       
     </script>
