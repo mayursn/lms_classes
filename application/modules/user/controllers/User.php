@@ -132,28 +132,6 @@ class User extends MY_Controller {
                 
                 if($cookie_email==$email && $cookie_password==$c_password)
                 {
-//                    $cookie_email_set = array(
-//                    'name'   => 'email',
-//                    'value'  => '',
-//                    'expire' => '0');
-// 
-//                    delete_cookie($cookie_email_set);
-//                    
-//                    $cookie_password_set = array(
-//    'name'   => 'password',
-//    'value'  => '',
-//    'expire' => '0'
-//    );
-// 
-//delete_cookie($cookie_password_set);
-                  //  delete_cookie("email"); 
-                 //   delete_cookie("password"); 
-                   
-                     
-                     
-                   // delete_cookie("email"); 
-                   // delete_cookie("password"); 
-                   // delete_cookie("rememebr"); 
                 }
             }
                 if ($user->role->role_id == "3") {
@@ -432,7 +410,7 @@ class User extends MY_Controller {
      */
     function create() {
         if ($_POST) {
-            $this->User_model->insert(array(
+          $uid= $this->User_model->insert(array(
                 'first_name' => $_POST['first_name'],
                 'middle_name' => $_POST['middle_name'],
                 'last_name' => $_POST['last_name'],
@@ -447,6 +425,17 @@ class User extends MY_Controller {
                 'role_id' => $_POST['role'],
                 'is_active' => 1
             ));
+             if($_POST['role']=='2')
+                {
+                    $dataprofessor=array('user_id'=>$uid,
+                            'name'=>$_POST['first_name'],
+                            'email'=>$_POST['email'],
+                            'password' => $this->__hash($_POST['password']),
+                            'mobile'=>$this->input->post('mobile'),
+                            'city'=>$_POST['city'],
+                            'zip'=>$_POST['zip_code']);
+                    $this->Professor_model->insert($dataprofessor);
+                }
             $this->flash_notification('New user is successfully created.');
         }
 
@@ -478,6 +467,15 @@ class User extends MY_Controller {
                 'role_id' => $_POST['role'],
                 'is_active' => $_POST['status']
             ));
+            if($_POST['role']=='2')
+                {
+                    $dataprofessor=array('name'=>$_POST['first_name'],
+                            'email'=>$_POST['email'],
+                            'mobile'=>$this->input->post('mobile'),
+                            'city'=>$_POST['city'],
+                            'zip'=>$_POST['zip_code']);
+                    $this->Professor_model->update_by(array('user_id'=>$id),$dataprofessor);
+                }
             $this->password_compare_and_update($id, $_POST['password']);
             $this->flash_notification('User is successfully updated.');
         }

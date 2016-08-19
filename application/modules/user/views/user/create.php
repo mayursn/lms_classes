@@ -28,7 +28,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Last Name <span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Last Name <span style="color:red"></span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="last_name" id="last_name"/>
                             </div>	
@@ -68,7 +68,7 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">City</label>
+                            <label class="col-sm-4 control-label">City <span style="color:red">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="city" id="city"/>
                             </div>	
@@ -145,11 +145,11 @@ $roles = $this->db->where_not_in('role_name', array('Student', 'Professor'))->or
                                 }
                             }
                         },
-                'mobile': {
+                mobile: {
                             required: true,
                              phoneUS: true,
                         },
-                'phone': {
+                phone: {
                         phoneUS: true,
                 },
                 city: "required",

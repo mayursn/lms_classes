@@ -34,7 +34,7 @@ $user = $this->User_model->with('role')->get($param2);
                             </div>	
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Last Name  <span style="color:red">*</span></label>
+                            <label class="col-sm-4 control-label">Last Name  <span style="color:red"></span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="last_name" id="last_name"
                                        value="<?php echo $user->last_name; ?>"/>
